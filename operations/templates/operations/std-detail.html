@@ -1,0 +1,60 @@
+{%extends 'operations/main.html'%}
+{% block content %}
+
+
+<table class='table table-bordered'>
+ <tr>
+   <td style="text-align: center;"><b>Image</b></td>
+ </tr>
+ <tr>
+ <td style="text-align: center;"><img src="{{std.profile_pic.url}}" height="300" width="300"></td>
+ </tr>
+ <table class='table table-bordered'>
+ <p style="text-align: center;"><b>Student Information</b></p>
+   <tr>
+   <td>First Name</td>
+   <td>{{std.first_name}}</td>
+ </tr>
+ <tr>
+   <td>Last Name</td>
+   <td>{{std.last_name}}</td>
+ </tr>
+ <tr>
+   <td>UserName</td>
+   <td>{{std.username}}</td>
+ </tr>
+ <tr>
+   <td>Email</td>
+   <td>{{std.email}}</td>
+ </tr>
+ <tr>
+   <td>Contact</td>
+   <td>{{std.contact}}</td>
+ </tr> 
+ </table>
+ </table>
+                               
+
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

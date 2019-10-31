@@ -1,0 +1,37 @@
+{%extends 'operations/main.html'%}
+{% load static %}
+{% block content %}
+
+<!-- page content area main -->
+
+<h2>Search Result</h2>
+<table class='table table-bordered'>
+  <tr>
+    <th>ID</th>
+    <th>Books Name</th>
+    <th>Author Name</th>
+    <th>Book File</th>
+    {% if request.user.Role == 'Student'%}
+    <th>Book File</th>
+    {% endif %}
+  </tr>
+  
+  
+  {% for book in result %}
+  <tr>
+    <td>{{book.id}}</td>
+    <td>{{book.name}}</td>
+    <td>{{book.author_name}}</td>
+    <td><a href="{{book.book.url}}"><button class="btn btn-primary">Read</button></a></td>
+
+    {% if request.user.Role == 'Student'%}
+    <td><a href=""><button>Send view request</button></a> </td>
+    {% endif %}
+
+ </tr>     
+ {% endfor %}
+ </table>
+
+ 
+ <!-- /page content -->
+ {% endblock %}

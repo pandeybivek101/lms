@@ -1,0 +1,11 @@
+{% extends 'account/baselogin.html'%}
+{%block content %}
+<p><b>Do you want to Return ? <b></p>
+<form action="{% url 'returnbooks' object.id %}" method="POST">
+    {% csrf_token %}
+	<input type="" name="" hidden="">
+	<p><button class="btn btn-danger">Return</button>
+	<a class="btn btn-primary" href="{% url 'issuedbooks' %}">Cancel</a>
+	</p>
+</form>
+{% endblock %}

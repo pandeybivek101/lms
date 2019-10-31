@@ -1,0 +1,11 @@
+    {%extends 'operations/main.html'%}
+    {%block content%}
+    <!-- page content area main -->
+    <form method="POST" action="{%url 'edit-ebook' object.id %}" class="col-lg-8" enctype="multipart/form-data">
+    	{% csrf_token %}
+    	{{form.as_p}}
+    	<button class="btn btn-primary">Update</button>
+    </form>   
+</form>
+
+{%endblock%}

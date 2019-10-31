@@ -1,0 +1,81 @@
+{%extends 'operations/main.html'%}
+{% load static %}
+{% block content %}
+
+<!-- page content area main -->
+
+<h2>Display Books</h2>
+<div class="dropdown">
+  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+  Catagory
+  </button>
+  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+    {% for item in catagory %}
+    <a class="dropdown-item" href="{% url 'book-catagory' item.catagory  %}">{{item.catagory}}</a>
+    {% endfor %}
+  </div>
+</div>
+{% if books %}
+
+<table class='table table-bordered'>
+  <tr>
+    <th>ID</th>
+    <th>Books Name</th>
+    <th>Books Image</th>
+    <th>Author Name</th>
+    <th>Publication Name</th>
+    {% if request.user.Role == 'Librarian' %}
+    <th>Books Quantity</th>
+    <th>Barcode</th>
+    <th>Edit/Delete</th>
+    {% endif %}
+
+    {% if request.user.Role == 'Student' %}
+    <th>Availability</th>
+    {% endif %}
+    <th>Detail</th>
+  </tr>
+  
+  
+  {% for book in books.all %}
+  <tr>
+    <td>{{book.id}}</td>
+    <td>{{book.books_name}}</td>
+    <td><img src="{{book.books_image.url}}" height=100 width=100></td>
+    <td>{{book.books_author_name}}</td>
+    <td>{{book.books_publication_name}}</td>
+
+    {% if request.user.Role == 'Librarian'%}
+    <td>{{book.available_quantity}}</td> 
+
+    {% if book.barcode %}
+    <td>
+    <a href="{{book.barcode.url}}"><button class="btn btn-warning">View BarCode</button></a>
+    </td>
+    {% else %}
+    <td>
+    <a href="{% url 'book-barcode' book.id %}"><button class="btn btn-warning">Generate BarCode</button></a>
+    </td>
+    {% endif %}
+     <td>
+     <a href="{% url 'editbook' book.id %}"><button class="btn btn-warning">Edit</button></a>
+     <a href="{% url 'deletebook' book.id %}"><button class="btn btn-danger">Delete</button></a>
+   </td>
+
+   {% endif %}
+   {% if request.user.Role == 'Student' %}
+   {%if book.available_quantity > 0 %}
+   <td style='color: blue;'><b>Available</b></td>
+   {% else %}
+   <td style="color: red;"><b>Unavailable</b><br/>
+   <a href="{% url 'notifyme' book.id%}">Notify on Available</a>
+   </td>
+   {%endif%}
+    {% endif %}
+<td><a href="{% url 'detail-book' book.id%}">detail</a></td>
+ </tr>     
+ {% endfor %}
+ 
+ {% endif %}
+ <!-- /page content -->
+ {% endblock %}

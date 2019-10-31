@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+<form method="POST" enctype="multipart/form-data" action="{% url 'uinfo' %}" class="form-control" >
+	{%csrf_token%}
+	{{form2.as_p}}
+   <input type="submit" name="submit">
+</form>
+</body>
+</html>

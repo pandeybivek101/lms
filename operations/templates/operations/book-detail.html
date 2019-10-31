@@ -1,0 +1,80 @@
+{%extends 'operations/main.html'%}
+{% block content %}
+
+
+<table class='table table-bordered'>
+ <tr>
+   <td style="text-align: center;"><b>Image</b></td>
+ </tr>
+ <tr>
+ <td style="text-align: center;"><img src="{{book.books_image.url}}" height="300" width="300"></td>
+ </tr>
+ <table class='table table-bordered'>
+ <p style="text-align: center;"><b>Book Information</b></p>
+   <tr>
+   <td>Book Name</td>
+   <td>{{book.books_name}}</td>
+ </tr>
+ <tr>
+   <td>Author Name</td>
+   <td>{{book.books_author_name}}</td>
+ </tr>
+ <tr>
+   <td>Publication Name</td>
+   <td>{{book.books_publication_name}}</td>
+ </tr>
+ <tr>
+   <td>Purchase Date</td>
+   <td>{{book.books_purchase_date|date:"M d, Y"}}</td>
+ </tr>
+ <tr>
+   <td>Book Price</td>
+   <td>{{book.books_price}}</td>
+ </tr> 
+ <tr>
+   <td>Total Quantity</td>
+   <td>{{book.books_quantity}}</td>
+ </tr>
+<tr>
+   <td>Available Quantity</td>
+   <td>{{book.available_quantity}}</td>
+ </tr>
+ <tr>
+   <td>Barcode</td>
+   <td><img src="{{book.barcode.url}}" height="100" width="100"></td>
+ </tr>
+<tr>
+   <td>Catagory</td>
+   <td>{{book.catagory}}</td>
+ </tr>
+ <tr>
+   <td>Added by</td>
+   <td>{{book.added_by}}</td>
+ </tr>
+ </table>
+ </table>
+                               
+
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

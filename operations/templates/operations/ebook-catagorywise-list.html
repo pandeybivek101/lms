@@ -1,0 +1,49 @@
+{%extends 'operations/main.html'%}
+{% load static %}
+{% block content %}
+
+<!-- page content area main -->
+{% if ebooks%}
+<h2>Display EBooks</h2>
+<table class='table table-bordered'>
+  <tr>
+    <th>ID</th>
+    <th>Books Name</th>
+    <th>Author Name</th>
+    {% if request.user.Role == 'Librarian'%}
+    <th>Book File</th>
+    {% endif %}
+
+    {% if request.user.Role == 'Student'%}
+    <th>Action</th>
+    {% endif %}
+  </tr>
+  
+  
+  {% for book in ebooks %}
+  <tr>
+    <td>{{book.id}}</td>
+    <td>{{book.name}}</td>
+    <td>{{book.author_name}}</td>
+
+    {% if request.user.Role == 'Librarian'%}
+    <td><a href="{{book.book.url}}"><button class="btn btn-primary">Read</button></a></td>
+    {% endif %}
+
+    
+
+
+    {% if request.user.Role == 'Student'%}
+    <td><a href="{% url 'view-request' book.id%}"><button class="btn btn-primary">Send view request</button></a> </td>
+    {% endif %}
+
+  </tr>     
+  {% endfor %}
+</table>
+{% else %}
+<h1>No EBooks Uploaded</h1>
+{% endif %}
+
+
+<!-- /page content -->
+{% endblock %}

@@ -1,0 +1,28 @@
+{%extends 'operations/main.html'%}
+{% block content %}
+<h2>My Readable Ebooks</h2>
+{% if readable_book%}
+<table class='table table-bordered'>
+  <tr>
+    <th>ID</th>
+    <th>Books Name</th>
+    <th>Author Name</th>
+    <th>Valid Till</th>
+    <th>Book File</th>
+  </tr>
+
+  {% for book in readable_book %}
+  <tr>
+    <td>{{book.ebook.id}}</td>
+    <td>{{book.ebook.name}}</td>
+    <td>{{book.ebook.name}}</td>
+    <td>{{book.readable_upto|date:"M d, Y"}}</td>
+    <td><a href="{{book.ebook.book.url}}"><button class="btn btn-primary">Read</button></a></td>
+  </tr>     
+  {% endfor %}
+  {%else%}
+  <h1>No EBooks </h1>
+  {% endif %}
+  {% endblock%}}
+
+

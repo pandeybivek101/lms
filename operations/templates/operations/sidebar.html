@@ -1,0 +1,44 @@
+<div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+    <div class="menu_section">
+        <h3>General</h3>
+        
+        {% if request.user.Role == 'Librarian' %}
+        <ul class="nav side-menu">
+
+            <li><a href="{%url 'liststd'%}"><i class="fa fa-home"></i> All Students info <span class="fa fa-chevron-down"></span></a></li>
+
+            <li><a href="{%url 'addbooks'%}"><i class="fa fa-edit"></i> Add Books <span class="fa fa-chevron-down"></span></a></li>
+
+            <li><a href="{%url 'add-ebooks'%}"><i class="fa fa-edit"></i> Add EBooks <span class="fa fa-chevron-down"></span></a></li>
+
+            <li><a href="{%url 'view-ebook-request'%}"><i class="fa fa-home"></i> Ebook Request <span class="fa fa-chevron-down"></span></a></li>
+
+            <li><a href=" {%url 'displaybooks' %}"><i class="fa fa-table"></i> Display Books <span class="fa fa-chevron-down"></span></a></li>
+
+            <li><a href="{% url 'issuebooks'%}"><i class="fa fa-table"></i> Issue Books <span class="fa fa-chevron-down"></span></a></li>
+
+            <li><a href="{% url 'issuedbooks'%}"><i class="fa fa-table"></i>Return Books<span class="fa fa-chevron-down"></span></a></li>
+
+            <li><a href="{%url 'addnotice'%}"><i class="fa fa-edit"></i> Add notice <span class="fa fa-chevron-down"></span></a></li>
+
+            <li><a href="{%url 'listnotices'%}"><i class="fa fa-edit"></i> List Notices <span class="fa fa-chevron-down"></span></a></li>
+
+            <li><a href="{%url 'list-ebooks' %}"><i class="fa fa-edit"></i>List Ebooks<span class="fa fa-chevron-down"></span></a></li>
+        </ul>
+        {% endif %}
+
+        {% if request.user.Role == 'Student' %}
+        <ul class="nav side-menu">
+
+            <li><a href="{% url 'myissuedbook' %}"><i class="fa fa-edit"></i>My Issued Books<span class="fa fa-chevron-down"></span></a></li>
+
+            <li><a href=" {%url 'list-ebooks' %}"><i class="fa fa-table"></i> Ebook List<span class="fa fa-chevron-down"></span></a></li>
+
+            <li><a href="{% url 'readable-book'%}"><i class="fa fa-edit"></i>MY Readable Ebooks<span class="fa fa-chevron-down"></span></a></li>
+
+            <li><a href=" {%url 'displaybooks' %}"><i class="fa fa-table"></i> Display Books <span class="fa fa-chevron-down"></span></a></li>
+
+        </ul>
+        {% endif %}
+    </div>
+</div>

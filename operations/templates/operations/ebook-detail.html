@@ -1,0 +1,56 @@
+{%extends 'operations/main.html'%}
+{% block content %}
+
+
+<table class='table table-bordered'>
+ <tr>
+   <td style="text-align: center;"><b>Image</b></td>
+ </tr>
+ <tr>
+ <td style="text-align: center;"><img src="{{ebook.cover_image}}" height="300" width="300"></td>
+ </tr>
+ <table class='table table-bordered'>
+ <p style="text-align: center;"><b>EBook Information</b></p>
+   <tr>
+   <td>Name</td>
+   <td>{{ebook.name}}</td>
+ </tr>
+ <tr>
+   <td>Author Name</td>
+   <td>{{ebook.author_name}}</td>
+ </tr>
+ <tr>
+   <td>Added Date</td>
+   <td>{{ebook.added_date|date:"M d, Y"}}</td>
+ </tr>
+ <tr>
+   <td>Catagory</td>
+   <td>{{ebook.catagory}}</td>
+ </tr>
+ </table>
+ </table>
+                               
+
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,59 @@
+{%extends 'operations/main.html'%}
+{% block content %}
+
+
+<table class='table table-bordered'>
+   <tr>
+       <th>ID</th>
+       <th>Firstname</th>
+       <th> Lastname </th>
+       <th> Username</th>
+       <th> Contact</th>
+       <th>Get Barcode</th>
+       <th>Action</th>
+       <th>detail</th>
+   </tr>
+
+   {% for std in stdrecord%}
+   <tr>
+    <td>{{std.id}}</td>
+    <td>{{std.first_name}}</td>
+    <td>{{std.last_name}}</td>
+    <td>{{std.username}}</td>
+    <td>{{std.contact}}</td>
+    {% if std.barcode %}
+    <td><a href="{{std.barcode.url}}"><button class="btn btn-warning">Get BarCode</button></a></td>
+    {%else %}
+    <td><a href="{% url 'st-barcode' std.id %}"><button class="btn btn-warning">BarCode</button></a></td>
+    {% endif %}
+    <td>
+    <a href="{% url 'deletestd' std.id%}"><button class="btn btn-danger">Delete</button></a>
+    </td>
+    <td><a href="{% url 'std-detail' std.id%}">detail</a></td>
+        {% endfor %}
+    </tr>                                 
+</table>
+
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

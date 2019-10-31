@@ -1,0 +1,30 @@
+{% extends 'account/baselogin.html'%}
+{% block content %}
+<form action="{% url 'login' %}" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div>
+        <input type="text" name="username" class="form-control" placeholder="Username" required=""/>
+    </div>
+    <div>
+        <input type="password" name="password" class="form-control" placeholder="Password" required=""/>
+    </div>
+    <div>
+
+        <input class="btn btn-default submit" type="submit" name="submit1" value="Login">
+        <a class="reset_pass" href="#">Lost your password?</a>
+    </div>
+
+    <div class="clearfix"></div>
+
+    <div class="separator">
+        <p class="change_link">New to site?
+            <a href=""> Create Account </a>
+        </p>
+
+        <div class="clearfix"></div>
+        <br/>
+
+
+    </div>
+</form>
+{%endblock%}

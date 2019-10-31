@@ -1,0 +1,34 @@
+{%extends 'operations/main.html'%}
+{% load static %}
+{% block content %}
+
+
+<h2>Display Notices</h2>
+{% if notices %}
+<table class='table table-bordered'>
+  <tr>
+    <th>Title</th>
+    <th>Description</th>
+    <th>Posted Date</th>
+    <th>Edit/Delete</th>
+  </tr>
+  
+  
+  {% for notice in notice.all %}
+  <tr>
+   <td>{{notice.title}}</td>
+   <td>{{notice.Description}}</td> 
+   <td>{{notice.Postedon}}</td> 
+   <td>
+     <a href="{%url 'editnotice' notice.id %}"><button class="btn btn-warning">Edit</button></a>
+     <a href="{%url 'deletenotice' notice.id %}"><button class="btn btn-danger">Delete</button></a>
+   </td>
+ </tr>     
+ {% endfor %}
+ {% else%}
+<h1>No Notices</h1>
+ {% endif %}
+ 
+ 
+ <!-- /page content -->
+ {% endblock %}
