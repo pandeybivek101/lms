@@ -1,12 +1,15 @@
 {% extends 'account/baselogin.html'%}
 {% load crispy_forms_tags %}
 {% block content %}
-{% if errors%}
 
-<div class="alert alert-danger col-lg-6 col-lg-push-3">
-    <strong style="color:white">Invalid</strong> Username Or Password.
+{% if messages %}
+  {% for message in messages %}
+  <div class="alert alert-primary" role="alert">
+    <div class="alert alert-danger col-lg-6 col-lg-push-3">
+   <strong style="color:white">{{message}}</strong>
 </div>
-{% endif%}
+  {% endfor %}
+  {% endif %}
 <form action="{% url 'login' %}" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     {{form.as_p}}
@@ -28,4 +31,5 @@
 
 </div>
 </form>
+
 {%endblock%}

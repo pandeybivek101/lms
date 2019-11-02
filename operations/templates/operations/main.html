@@ -45,8 +45,9 @@
                     <br/>
 
                     <!-- sidebar menu -->
+                    {% block sidebar%}
                     
-                    {%include 'operations/sidebar.html' %}
+                    {% endblock sidebar %}
                 </div>
             </div>
             <!-- top navigation -->
@@ -154,10 +155,11 @@
 
 <!-- Custom Theme Scripts -->
 <script src="{%static 'js/custom.min.js' %}"></script>
+{% block js %}
+
+{% endblock js %}
 {% block chartjs%}
 
 {% endblock chartjs %}
 </body>
 </html>
-
-

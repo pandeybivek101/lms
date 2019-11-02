@@ -1,4 +1,3 @@
-
 {%load static %}
 <!DOCTYPE html>
 <html>
@@ -149,7 +148,6 @@
         }));
         messageInputDom.value = '';
     };
-
     function fetchMessages() {
       chatSocket.send(JSON.stringify({'command': 'fetch_messages' }));
     }

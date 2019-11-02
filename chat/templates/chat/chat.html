@@ -1,17 +1,18 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8"/>
-    <title>Chat Rooms</title>
-</head>
-<body>
-    What chat room would you like to enter?<br/>
-    <input id="room-name-input" type="text" size="100"/><br/>
-    <input id="room-name-submit" type="button" value="Enter"/>
+{% extends 'operations/main.html'%}
+{%block content %}
+What chat room would you like to enter?<br/>
+<input id="room-name-input" type="text" size="100"/><br/>
+<input id="room-name-submit" type="button" value="Enter"/>
+{% endblock %}
 
-    <script>
-        document.querySelector('#room-name-input').focus();
-        document.querySelector('#room-name-input').onkeyup = function(e) {
+
+{% block sidebar %}
+{% include 'chat/chatlist.html'%}
+{% endblock sidebar %}
+{% block js %}
+<script>
+    document.querySelector('#room-name-input').focus();
+    document.querySelector('#room-name-input').onkeyup = function(e) {
             if (e.keyCode === 13) {  // enter, return
                 document.querySelector('#room-name-submit').click();
             }
@@ -21,5 +22,4 @@
             window.location.pathname = '/chat/' + roomName + '/';
         };
     </script>
-</body>
-</html> 
+    {% endblock js %}

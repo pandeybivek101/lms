@@ -5,7 +5,9 @@ from django.contrib.auth import logout
 from django.contrib.auth import authenticate, login
 from django.conf import settings
 from .models import User
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+
 
 # Create your views here.
 def URegister(request):
@@ -31,6 +33,9 @@ def StudentInfo(request):
 			data.student=User.objects.filter().latest('id')
 			data.save()
 			return redirect('login')
+		else:
+			messages.success(request, f'Invalid Username Or Password')
+
 	else:
 		form1=StudentForm()
 	return render(request, 'account/sinfo.html', {'form1':form1})

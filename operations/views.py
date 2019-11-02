@@ -27,6 +27,7 @@ from django.conf import settings
 from django.urls import reverse_lazy
 from PIL import Image
 import PyPDF2
+from django.db.models import Q
 from django.core.files.base import ContentFile
 
 
@@ -48,10 +49,33 @@ def ListEbooks(request):
 def Home(request):
     count_lst=[]
     cat_lst=[]
+    erh_lst=[]
+    curr_date=datetime.datetime.utcnow().replace(tzinfo=pytz.UTC)
+    year=curr_date.year
     for i in range(1, 13):
-        issued_data=IssueBooks.objects.filter(issued_date__month=i)
+        issued_data=IssueBooks.objects.filter(
+            issued_date__year=year, 
+            issued_date__month=i
+            )
         count=issued_data.count()
-    return render(request,'operations/home.html', {'count_lst':count_lst})
+        count_lst.append(count)
+        erh=EbookRequestHistory.objects.filter(action_date__year=year,
+            action_date__month=i, 
+            action='Allowed').count()
+        erh_lst.append(erh)
+    tot_issue=IssueBooks.objects.all().count()
+    non_fined=IssueBooks.objects.filter(fine=0).count()
+    fined=IssueBooks.objects.filter(fine__gt=0).count()
+    non_fined_per=float('%.2f' % ((non_fined / tot_issue)*100))
+    fined=float('%.2f' % (100-non_fined_per))
+    context={
+    'count_lst':count_lst,
+    'non_fined_per':non_fined_per,
+    'fined':fined,
+    'erh_lst':erh_lst,
+    }
+
+    return render(request,'operations/home.html', context)
 
 
 @login_required    

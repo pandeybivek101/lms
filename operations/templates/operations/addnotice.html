@@ -1,7 +1,5 @@
     {%extends 'operations/main.html'%}
     {%block content%}
-
-    
     <!-- page content area main -->
 
     <form method="POST" action="{%url 'addnotice'%}" class="col-lg-8" enctype="multipart/form-data">
@@ -11,3 +9,8 @@
     </form>
 
     {%endblock%}
+
+
+    {% block sidebar%}
+ {%include 'operations/sidebar.html'%}
+ {% endblock sidebar %}
