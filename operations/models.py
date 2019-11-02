@@ -35,7 +35,12 @@ class IssueBooks(models.Model):
 	issued_date=models.DateTimeField(auto_now_add=True)
 	return_date=models.DateTimeField()
 	fine=models.IntegerField(default=0)
+	returned=models.BooleanField(default=0)
+	returned_date=models.DateTimeField(blank=True, null=True)
 	issued_by=models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='User', null=True)
+
+	def count_issued(self):
+		count=self.object.count()
 
 	def __init__(self, *args ,**kwargs):
 		super(IssueBooks ,self).__init__(*args, **kwargs)
@@ -77,7 +82,9 @@ class EbookRequestHistory(models.Model):
 class Notice(models.Model):
 	title=models.CharField(max_length=20)
 	Description=models.TextField()
-	Postedon=models.DateField(auto_now=True)
+	Postedon=models.DateField(auto_now_add=True)
+	opened=models.BooleanField(default=False)
+	posted_by=models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
 
 	def Summary(self):
 		return self.Description[:10]

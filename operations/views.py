@@ -28,7 +28,6 @@ from django.urls import reverse_lazy
 from PIL import Image
 import PyPDF2
 from django.core.files.base import ContentFile
-#from django.core.mail import EmailMessage
 
 
 
@@ -47,7 +46,12 @@ def ListEbooks(request):
 
 @login_required
 def Home(request):
-    return render(request,'operations/main.html')
+    count_lst=[]
+    cat_lst=[]
+    for i in range(1, 13):
+        issued_data=IssueBooks.objects.filter(issued_date__month=i)
+        count=issued_data.count()
+    return render(request,'operations/home.html', {'count_lst':count_lst})
 
 
 @login_required    
@@ -88,7 +92,7 @@ def DisplayBooks(request):
 @login_required
 def ListNotices(request):
     notice=Notice.objects.all()
-    return render(request, 'operations/listnotice.html',{'notice':notice})
+    return render(request, 'operations/notice-list.html',{'notice':notice})
 
 
 @login_required
@@ -139,8 +143,8 @@ class EditBook(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 @login_required
 @role_required(allowed_roles=['Librarian'])
 def Notices(request):
-    notices=Notice.objects.all()
-    return render(request, 'operations/main.html', {'notices':notices})
+    notices=Notice.objects.all().order_by('-pub_date')
+    return render(request, 'operations/notice-list.html', {'notices':notices})
 
 
 @login_required
@@ -150,8 +154,10 @@ def AddNotice(request):
         form=NoticeForm(request.POST)
         if form.is_valid():
             try:
-                form.save()
-                return redirect('main')
+                data=form.save(commit=False)
+                data.posted_by=request.user
+                data.save()
+                return redirect('home')
             except:
                 pass
     else:
@@ -266,21 +272,31 @@ def IssueBook(request):
 @role_required(allowed_roles=['Librarian'])
 def ReturnBooks(request, pk):
     rtnbook=IssueBooks.objects.get(pk=pk)
-    rtnbook.delete()
+    rtnbook.returned=True
+    rtnbook.returned_date=datetime.datetime.utcnow().replace(tzinfo=pytz.UTC)
+    rtnbook.save()
     bookitem=AddBooks.objects.get(id=rtnbook.book.id)
     if bookitem.available_quantity < bookitem.books_quantity:
         bookitem.available_quantity=bookitem.available_quantity+1
         notify=NotifyMeModel.objects.filter(book=bookitem).first()
-        if notify:
+        '''if notify:
             send_mail(
                 'for your request',
                 'you have requested for book'+' '+notify.book.books_name+' '+'which is now available',
                 'pandeyvivak25@gmail.com',
-                ['sparrowc60@gmail.com'],
+                [notify.student.email],
                 fail_silently=False,
             )
-            notify.delete()
-            print('msg sent')
+            account_sid='AC53c1f5d6d5d4f8df9264e52dd8e951dd'
+            account_token='29a8e10f4e096543a1f2517c0a3b1ad3'
+            client=Client(account_sid, account_token)
+            client.messages.create(
+                to='9844700852',
+                from_='+19252593370',
+                body='hy'
+
+                )
+            notify.delete()'''
     else:
         bookitem.available_quantity=bookitem.books_quantity
     bookitem.save()
@@ -292,11 +308,12 @@ def ReturnBooks(request, pk):
 
 
 
-
-class IssuedBook(ListView):
-    template_name='operations/issued_list.html'
-    model=IssueBooks
-    context_object_name='issueditems'
+def IssuedBook(request):
+    issueditems=IssueBooks.objects.filter(returned=False)
+    return render(request, 
+        'operations/issued_list.html', 
+        {'issueditems':issueditems}
+        )
 
 
 def AddEbooks(request):
@@ -520,13 +537,6 @@ class DetailEBook(LoginRequiredMixin, DetailView):
     template_name='operations/ebook-detail.html'
     model=Ebooks
     context_object_name='ebook'
-
-    
-
-
-
-
-
 
 
 

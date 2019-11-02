@@ -22,7 +22,7 @@ urlpatterns = [
     path('issuebooks', views.IssueBook, name='issuebooks'),
     path('issuedbooks/<int:pk>/returnbooks', views.ReturnBooks, name='returnbooks'),
     #path('issuedbooks/<int:pk>/returnbooks', ReturnBooks.as_view(), name='returnbooks'),
-    path('issuedbooks',IssuedBook.as_view(), name='issuedbooks'),
+    path('issuedbooks',views.IssuedBook, name='issuedbooks'),
 
     path('addbooks', views.AddBook, name='addbooks'),
 
@@ -62,6 +62,5 @@ urlpatterns = [
     path('view-ebook-request/', views.ViewEbookRequest, name='view-ebook-request'),
     path('view-ebook-request/<int:id>/allow', views.View_Ebook_Request_allow, name='allow'),
     path('view-ebook-request/<int:id>/deny', views.View_Ebook_Request_deny, name='deny'),
-    path('readable-ebook/', views.View_my_readable_book, name='readable-book'),  
-
+    path('readable-ebook/', views.View_my_readable_book, name='readable-book'),
 ]

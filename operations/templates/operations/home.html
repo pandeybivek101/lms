@@ -1,0 +1,96 @@
+{%extends 'operations/main.html'%}
+{% block content%}
+<div class="container">
+	<div class="row" style="">
+        <div class="col-md-6">
+		<canvas id="myChart" height="200" width="300"></canvas>
+		</div>
+        <div class="col-md-6">
+        <p style="text-align: center">Chart Perresenting the Catagory Issued</p>
+        <canvas id="mydon"></canvas>
+        </div>
+	</div><br/>
+    <div class="row" style="">
+        <div class="col-md-6">
+        <canvas id="mybar" height="200" width="300"></canvas>
+        </div>
+        <div class="col-md-6">
+        <p style="text-align: center">Chart Perresenting the Catagory Issued</p>
+        good
+        </div>
+    </div><br/>
+	
+</div>
+
+{% endblock %}
+
+{% block chartjs%}
+<script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js'>
+</script>
+<script>
+var ctx = document.getElementById('myChart').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug',
+        'Sep', 'Oct', 'Nov', 'Dec'],
+        datasets: [{
+            label: '# number issued',
+            data:{{count_lst}},
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
+    }
+});
+
+
+var ctx1 = document.getElementById('mydon').getContext('2d');
+var myPieChart = new Chart(ctx1, {
+    type: 'doughnut',
+    data: {
+        labels: ['cat1', 'cat2', 'cat3'],
+        datasets: [{
+            label: 'catagory issued',
+            data:[10,11,34],
+            backgroundColor:[
+                'rgba(255, 99, 132, 1)',
+                'rgba(155, 109, 132, 2)',
+                'rgba(255, 19, 255, 2)',
+            ] ,
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+            ],
+            borderWidth: 1
+        }]
+    }
+});
+
+var ctx2 = document.getElementById('mybar').getContext('2d');
+var myLineChart = new Chart(ctx2, {
+    type: 'line',
+    data: {
+        labels: ['cat1', 'cat2', 'cat3', 'cat4', 'cat5'],
+        datasets: [{
+            label: 'catagory issued',
+            data:[10,11,34,0,55],
+        }]
+    }
+});
+</script>
+{% endblock chartjs %}

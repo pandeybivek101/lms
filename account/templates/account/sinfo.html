@@ -1,13 +1,9 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title></title>
-</head>
-<body>
+{% extends 'account/baselogin.html'%}
+{% load crispy_forms_tags %}
+{% block content %}
 <form method="POST" action="{% url 'sinfo' %}">
 	{% csrf_token %}
-	{{form1.as_p}}
-	<input type="submit" name="submit">
+	{{form1|crispy}}
+	<input  class='btn btn-info' type="submit" name="submit">
 </form>
-</body>
-</html>
+{% endblock %}

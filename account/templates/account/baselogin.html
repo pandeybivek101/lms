@@ -18,8 +18,8 @@
 
 <br>
 
-<div class="col-lg-12 text-center ">
-    <h1 style="font-family:Lucida Console">Library Management System</h1>
+<div class="col-lg-12 text-center" style="text-align: center;">
+    <h1 style="font-family:Lucida;">Library Management System</h1>
 </div>
 
 <br>
@@ -27,11 +27,7 @@
 <body class="login">
     <div class="login_wrapper">
         <section class="login_content">
-            {% if errors%}
-            <div class="alert alert-danger col-lg-6 col-lg-push-3">
-                <strong style="color:white">Invalid</strong> Username Or Password.
-            </div>
-            {% endif%}
+            
             {% block content %}
             
             {% endblock %}

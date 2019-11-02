@@ -11,7 +11,7 @@ class NoticeForm(forms.ModelForm):
 		attrs={"class":"form-control", "placeholder":"Enter Description"}), required=True)
 	class Meta:
 		model=Notice
-		fields="__all__"
+		fields=['title', 'Description']
 
 	
 	def summary(self):

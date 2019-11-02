@@ -49,7 +49,7 @@
                     {%include 'operations/sidebar.html' %}
                 </div>
             </div>
-            <!-- top navigation   -->
+            <!-- top navigation -->
             <div class="top_nav">
                 <div class="nav_menu">
                     <nav>
@@ -142,16 +142,6 @@
 <!-- /footer content -->
 </div>
 </div>
-<script type="text/javascript">
-    function myFunction() {
-      var txt;
-      if (confirm("Do you want to delete!")) {
-        window.location.href = "http://localhost:8000/issuedbooks/"+item.id+"/returnbooks";
-    } else {
-        window.location.href = "http://localhost:8000/issuedbooks";
-    }
-
-}
 </script>
 <!-- jQuery -->
 <script src="{%static 'js/jquery.min.js' %}"></script>
@@ -164,6 +154,9 @@
 
 <!-- Custom Theme Scripts -->
 <script src="{%static 'js/custom.min.js' %}"></script>
+{% block chartjs%}
+
+{% endblock chartjs %}
 </body>
 </html>
 

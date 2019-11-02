@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -40,6 +41,8 @@ INSTALLED_APPS = [
     'account',
     'operations',
     'crispy_forms',
+    'chat',
+    
 ]
 
 MIDDLEWARE = [
@@ -71,10 +74,16 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'lms.wsgi.application'
+ASGI_APPLICATION = "lms.routing.application"
 
-
-
-
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
@@ -147,3 +156,9 @@ EMAIL_HOST_PASSWORD='********' #add host password
 #must turn off 2 step verification and allow less secure app
 EMAIL_USE_TLS=True
 EMAIL_USE_SSL=False
+
+
+
+
+
+
