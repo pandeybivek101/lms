@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import *
 # Register your models here.
-
+#jjj
 class IssueBookAdmin(admin.ModelAdmin):
 	list_display=['student', 'book' ,'issued_by']
 admin.site.register(IssueBooks, IssueBookAdmin)
