@@ -74,7 +74,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'lms.wsgi.application'
-ASGI_APPLICATION = "lms.routing.application"
 
 CHANNEL_LAYERS = {
     'default': {

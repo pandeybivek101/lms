@@ -17,6 +17,7 @@ Including another URLconf
 from django.urls import path,include
 from operations import views
 from operations.views import *
+from django.conf.urls import handler404, handler500
 
 urlpatterns = [
     path('', views.Home, name='home'),
@@ -25,6 +26,7 @@ urlpatterns = [
 
 
     path('issuebooks', views.IssueBook, name='issuebooks'),
+    path('issuebooks/confirm',views.IssueBookconfirm, name='issue-confirm'),
     path('issuedbooks/<int:pk>/returnbooks', views.ReturnBooks, name='returnbooks'),
     path('issuedbooks/search-issued/', views.SearchIssued, name='search-issued'),
     path('issue-activities/', IssueActivities.as_view(), name='issue-activities'),
@@ -73,3 +75,6 @@ urlpatterns = [
     path('view-ebook-request/<int:id>/deny', views.View_Ebook_Request_deny, name='deny'),
     path('readable-ebook/', views.View_my_readable_book, name='readable-book'),
 ]
+
+handler404 = views.error_404
+handler500 = views.error_500

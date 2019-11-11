@@ -1,0 +1,73 @@
+{%extends 'operations/main.html'%}
+{% block content %}
+
+<table class='table table-bordered'>
+ <tr>
+   <td style="text-align: center;"><b>Student Image</b></td>
+   <td style="text-align: center;"><b>Book Image</b></td>
+ </tr>
+ <tr>
+ <td style="text-align: center;"><img src="{{studentinfo.profile_pic.url}}" height="300" width="300"></td>
+ <td style="text-align: center;"><img src="{{bookinfo.books_image.url}}" height="300" width="300"></td>
+ </tr>
+ <table class='table table-bordered'>
+ <tr>
+   <td>Id:{{studentinfo.id}}</td>
+   <td>Id:{{bookinfo.id}}</td>
+ </tr>
+   <tr>
+   <td>Name:{{studentinfo.first_name}} {{studentinfo.last_name}}</td>
+   <td>Name:{{bookinfo.books_name}}</td>
+ </tr>
+ <tr>
+   <td>UserName:{{studentinfo.username}}</td>
+   <td>Name:{{bookinfo.books_author_name}}</td>
+ </tr>
+ </table>
+ <tr>
+   <form method="POST" action="{% url 'issue-confirm' %}"">
+   {%csrf_token%}
+   <button class="btn btn-info">Issue</button>
+   </form>
+ </tr>
+ </table>
+                            
+
+
+{% endblock %}
+
+{% block sidebar%}
+ {%include 'operations/sidebar.html'%}
+ {% endblock sidebar %}
+
+ {% block title %}
+ <title>Issue Book Confirm | LMS </title>   
+{% endblock title %}
+
+{% block heading %}
+<h2>Issue Book Confirm </h2>
+{% endblock heading %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

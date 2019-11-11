@@ -83,7 +83,6 @@ class IssuebookForm(forms.ModelForm):
 			raise forms.ValidationError('This Book is currently unavailable')
 		else:
 			return book_id
-			
 
 	
 class EbooksForm(forms.ModelForm):

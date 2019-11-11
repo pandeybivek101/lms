@@ -47,7 +47,6 @@ def myissuedbook(request):
 class ListEbooks(ListView):
     template_name='operations/ebook-list.html'
     queryset=Ebooks.objects.all()
-    paginate_by=5
 
     def get_context_data(self, *args, **kwargs):
         context=super(ListEbooks,self).get_context_data(*args, **kwargs)
@@ -229,7 +228,7 @@ def Messagestd(request, id):
             msg.posted_to=msg_std
             msg.posted_by=request.user
             msg.save()
-            return redirect('home')
+            return redirect("/liststd/{}/detail".format(id))
     else:
         form=MessageForm()
     return render(request, 'operations/addmessage.html', {
@@ -275,26 +274,42 @@ def IssueBook(request):
         if form.is_valid():
             stdid=form.cleaned_data['student']
             bkid=form.cleaned_data['book']
-            studentinfo=User.objects.get(id=stdid)
-            bookinfo=AddBooks.objects.get(id=bkid)
-            return_date=datetime.datetime.utcnow().replace(tzinfo=pytz.UTC) + datetime.timedelta(days=30)
-            mdl=IssueBooks.objects.create(
-                student=studentinfo,
-                book=bookinfo,
-                return_date=return_date,
-                issued_by=request.user,
-            )
-            if bookinfo.available_quantity > 0:
-                bookinfo.available_quantity=bookinfo.available_quantity-1
-            else:
-                bookinfo.available_quantity = 0
-            mdl.save()
-            bookinfo.save()
-            return redirect('issuebooks')
+            request.session['issue_std_id']=stdid
+            request.session['issue_book_id']=bkid
+            return redirect('issue-confirm')
     else:
         form=IssuebookForm()
     return render(request, 'operations/issue_book.html', {
         'form':form,
+        })
+
+
+
+@login_required
+@role_required(allowed_roles=['Librarian'])
+def IssueBookconfirm(request):
+    studentinfo=User.objects.get(id=request.session['issue_std_id'])
+    bookinfo=AddBooks.objects.get(id=request.session['issue_book_id'])
+    if request.method=="POST":
+        return_date=datetime.datetime.utcnow().replace(tzinfo=pytz.UTC) + datetime.timedelta(days=30)
+        mdl=IssueBooks.objects.create(
+            student=studentinfo,
+            book=bookinfo,
+            return_date=return_date,
+            issued_by=request.user,
+            )
+        if bookinfo.available_quantity > 0:
+            bookinfo.available_quantity=bookinfo.available_quantity-1
+        else:
+            bookinfo.available_quantity = 0
+        mdl.save()
+        bookinfo.save()
+        del request.session['issue_std_id']
+        del request.session['issue_book_id']
+        return redirect('issuedbooks')
+    return render(request, 'operations/confirm_issue_book.html', {
+        'studentinfo':studentinfo,
+        'bookinfo':bookinfo,
         })
 
 
@@ -687,6 +702,16 @@ class EbookActivities(ListView, LoginRequiredMixin, UserPassesTestMixin):
             return True
         else:
             return False
+
+
+def error_404(request):
+        data = {}
+        return render(request,'operations/400.html', data)
+
+
+def error_500(request):
+        data = {}
+        return render(request,'myapp/error_500.html', data)
 
 
         

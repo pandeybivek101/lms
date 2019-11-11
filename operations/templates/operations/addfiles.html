@@ -1,16 +1,12 @@
 {%extends 'operations/main.html'%}
-{%block content%}
 {% load crispy_forms_tags %}
 
-<!-- page content area main -->
-
-<form method="POST" action="{%url 'add-ebooks' %}" class="col-lg-8" enctype="multipart/form-data">
+{% block content%}
+<form action="{% url 'add-ebooks'%}" method="POST" class="col-lg-8" enctype="multipart/form-data">
 	{% csrf_token %}
 	{{form|crispy}}
-	<button class="btn btn-primary">ADD</button>
+	<input type="submit" name="submit" class="btn btn-primary">
 </form>   
-</form>
-
 {%endblock%}
 
 {% block sidebar%}
@@ -18,10 +14,19 @@
 {% endblock sidebar %}
 
 {% block title %}
-<title>AddEBooks | LMS </title>   
+<title>Add EBooks | LMS </title>   
 {% endblock title %}
 
 {% block heading %}
-<h2>Add Ebooks </h2>
+<h2>Add EBooks </h2>
 {% endblock heading %}
+
+
+
+
+
+
+
+
+
 
