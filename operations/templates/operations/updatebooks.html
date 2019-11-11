@@ -1,8 +1,9 @@
 {%extends 'operations/main.html'%}
+{% load crispy_forms_tags %}
 {% block content%}
    <form action="{% url 'editbook' object.id %}" method="POST" class="col-lg-8" enctype="multipart/form-data">
         {% csrf_token %}
-        {{form.as_p}}
+        {{form|crispy}}
         <button class="btn btn-info">Update</button>
     </form>   
 {%endblock%}
@@ -10,3 +11,17 @@
 {% block sidebar%}
  {%include 'operations/sidebar.html'%}
  {% endblock sidebar %}
+
+{% block title %}
+ <title>Book update | LMS </title>   
+{% endblock title %}
+
+{% block heading %}
+<h2>Update Books </h2>
+{% endblock heading %}
+
+
+
+
+
+

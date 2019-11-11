@@ -1,10 +1,24 @@
 {%extends 'operations/main.html'%}
-{% load static %}
 {% block content %}
 
 <!-- page content area main -->
 
 <h2>Return Book</h2>
+{% if issueditems %}
+<table class="table">
+<form method="POST" action="{% url 'search-issued'%}">
+  {% csrf_token %}
+    <tr>
+      <td> 
+      <input class='form-control' type="text" name="issued" placeholder="Search....." autofocus></td>
+       <td>
+         <input type="submit" name="submit" class="form-control btn btn-info">
+       </td>
+     </form>
+   </tr>
+</form>
+</table>
+
 <table class='table table-bordered'>
   <tr>
     <th>ID</th>
@@ -18,23 +32,48 @@
   </tr>
   {% for item in issueditems%}
   <tr>
-  <td>{{item.id}}</td>
-  <td>{{item.book.books_name}}</td>
-  <td>{{item.book.books_author_name}}</td>
-  <td>{{item.student.first_name}} {{item.student.last_name}}</td>
-  <td>{{item.issued_date|date:"M d, Y"}}</td>
-  <td>{{item.return_date|date:"M d, Y"}}</td>
-  <td>{{item.fine}} Rs</td>
-  <td><a href="{%url 'returnbooks' item.id%}"><button class='btn btn-primary'>Return</button></a>
-    
-  </tr>
-  {% endfor%}   
- </table>
+    <td>{{item.id}}</td>
+    <td>{{item.book.books_name}}</td>
+    <td>{{item.book.books_author_name}}</td>
+    <td>{{item.student.first_name}} {{item.student.last_name}}</td>
+    <td>{{item.issued_date|date:"M d, Y"}}</td>
+    <td>{{item.return_date|date:"M d, Y"}}</td>
+    <td>{{item.fine}} Rs</td>
+    <td>
+    <form method="POST" action="{%url 'returnbooks' item.id%}">
+    {% csrf_token %}
+    <input type="number" value="{{item.id}}" hidden="true">
+    <button id='btn1' class="btn btn-info">Return</button>
+    </form>
+    </tr>
+    {% endfor%}   
+  </table>
+
+  {% else %}
+  <h1>No Issued Items</h1>
+  {% endif %}
+  <!-- /page content -->
+  {% endblock %}
+
+  {% block sidebar%}
+  {%include 'operations/sidebar.html'%}
+  {% endblock sidebar %}
+
+  {% block title %}
+  <title>Issued Books | LMS </title>   
+  {% endblock title %}
 
 
- <!-- /page content -->
- {% endblock %}
+  {% block heading %}
+  <h2>Return Books </h2>
+  {% endblock heading %}
 
- {% block sidebar%}
- {%include 'operations/sidebar.html'%}
- {% endblock sidebar %}
+{% block js %}
+<script type="text/javascript">
+  $(document).on('click', '#btn1', function(){
+    return confirm('Are you sure you want to Return this?');
+})
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+{% endblock js %}
+

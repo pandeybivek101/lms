@@ -1,19 +1,19 @@
 {%extends 'operations/main.html'%}
 {% block content %}
-
-
-<table class='table table-bordered'>
+<table class='table table-bordered' id="mytable">
+  <thead>
    <tr>
-       <th>ID</th>
-       <th>Firstname</th>
-       <th> Lastname </th>
-       <th> Username</th>
-       <th> Contact</th>
-       <th>Get Barcode</th>
-       <th>Action</th>
-       <th>detail</th>
+     <th>ID</th>
+     <th>Firstname</th>
+     <th> Lastname </th>
+     <th> Username</th>
+     <th> Contact</th>
+     <th>Get Barcode</th>
+     <th>Action</th>
+     <th>detail</th>
    </tr>
-
+ </thead>
+ <tbody>
    {% for std in stdrecord%}
    <tr>
     <td>{{std.id}}</td>
@@ -22,24 +22,45 @@
     <td>{{std.username}}</td>
     <td>{{std.contact}}</td>
     {% if std.barcode %}
-    <td><a href="{{std.barcode.url}}"><button class="btn btn-warning">Get BarCode</button></a></td>
+    <td><button onClick="printJS('{{std.barcode.url}}', 'image')" class="btn btn-warning">Print Barcode</button></td>
     {%else %}
     <td><a href="{% url 'st-barcode' std.id %}"><button class="btn btn-warning">BarCode</button></a></td>
     {% endif %}
     <td>
-    <a href="{% url 'deletestd' std.id%}"><button class="btn btn-danger">Delete</button></a>
+      <a href="{% url 'deletestd' std.id%}"><button class="btn btn-danger">Delete</button></a>
     </td>
     <td><a href="{% url 'std-detail' std.id%}">detail</a></td>
-        {% endfor %}
-    </tr>                                 
+    {% endfor %}
+  </tr>
+</tbody>                                 
 </table>
 
 
 {% endblock %}
 
 {% block sidebar%}
- {%include 'operations/sidebar.html'%}
- {% endblock sidebar %}
+{%include 'operations/sidebar.html'%}
+{% endblock sidebar %}
+
+{% block title %}
+<title>Student List | LMS </title>   
+{% endblock title %}
+
+
+{% block js %}
+<script src="print.js"></script>
+<script type="text/javascript" src='https://printjs-4de6.kxcdn.com/print.min.js'>
+</script>
+{% include 'operations/js.html'%}
+{% endblock js %}
+
+
+{% block heading %}
+<h2>Student List </h2>
+{% endblock heading %}
+
+
+
 
 
 

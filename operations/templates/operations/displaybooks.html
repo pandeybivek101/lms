@@ -3,21 +3,9 @@
 {% block content %}
 
 <!-- page content area main -->
-
-<h2>Display Books</h2>
-<div class="dropdown">
-  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    Catagory
-  </button>
-  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-    {% for item in catagory %}
-    <a class="dropdown-item" href="{% url 'book-catagory' item.catagory  %}">{{item.catagory}}</a>
-    {% endfor %}
-  </div>
-</div>
 {% if books %}
-
-<table class='table table-bordered'>
+<table class='table table-bordered' id='mytable'>
+<thead>
   <tr>
     <th>ID</th>
     <th>Books Name</th>
@@ -25,7 +13,7 @@
     <th>Author Name</th>
     <th>Publication Name</th>
     {% if request.user.Role == 'Librarian' %}
-    <th>Books Quantity</th>
+    <th>Available Quantity</th>
     <th>Barcode</th>
     <th>Edit/Delete</th>
     {% endif %}
@@ -35,22 +23,22 @@
     {% endif %}
     <th>Detail</th>
   </tr>
+  </thead>
   
-  
+  <tbody>
   {% for book in books.all %}
   <tr>
     <td>{{book.id}}</td>
     <td>{{book.books_name}}</td>
-    <td><img src="{{book.books_image.url}}" height=100 width=100></td>
+    <td><img src="{{book.books_image.url}}" height=50 width=50></td>
     <td>{{book.books_author_name}}</td>
     <td>{{book.books_publication_name}}</td>
 
     {% if request.user.Role == 'Librarian'%}
     <td>{{book.available_quantity}}</td> 
-
     {% if book.barcode %}
     <td>
-      <a href="{{book.barcode.url}}"><button class="btn btn-warning">View BarCode</button></a>
+      <button onclick="printJS('{{book.barcode.url}}', 'image')" class="btn btn-warning">Print BarCode</button>
     </td>
     {% else %}
     <td>
@@ -68,19 +56,60 @@
    <td style='color: blue;'><b>Available</b></td>
    {% else %}
    <td style="color: red;"><b>Unavailable</b><br/>
-     <a href="{% url 'notifyme' book.id%}">Notify on Available</a>
+   {% if book.id in noti_lst %}
+    <p>Notify on Available</p>
+  {% else %}
+  <a href="{% url 'notifyme' book.id%}">Notify on Available</a>
+  {% endif %}
    </td>
    {%endif%}
    {% endif %}
    <td><a href="{% url 'detail-book' book.id%}">detail</a></td>
  </tr>     
  {% endfor %}
- 
- {% endif %}
- <!-- /page content -->
- {% endblock %}
+ </tbody>
+</table>
+{% endif %}
 
 
- {% block sidebar%}
- {%include 'operations/sidebar.html'%}
- {% endblock sidebar %}
+
+<!-- /page content -->
+{% endblock %}
+
+{% block sidebar%}
+{%include 'operations/sidebar.html'%}
+{% endblock sidebar %}
+
+{% block title %}
+<title>Book List | LMS </title>   
+{% endblock title %}
+
+{% block js %}
+<script src="print.js"></script>
+<script type="text/javascript" src='https://printjs-4de6.kxcdn.com/print.min.js'>
+</script>
+{% include 'operations/js.html'%}
+{% endblock js %}
+
+
+{% block heading %}
+<h2>Books List </h2>
+<div class="container">
+  <div class="row">
+   <div class="col-md-2">
+    <div class="dropdown">
+      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Catagory
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item" href="{% url 'displaybooks' %}">All</a>
+        {% for item in catagories %}
+        <a class="dropdown-item" href="{% url 'book-catagory' item.catagory  %}">{{item.catagory}}</a>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+{% endblock heading %}
+

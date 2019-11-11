@@ -27,8 +27,13 @@ from django.conf import settings
 from django.urls import reverse_lazy
 from PIL import Image
 import PyPDF2
+import calendar
+import datetime
 from django.db.models import Q
 from django.core.files.base import ContentFile
+from account.models import Student
+from django.core.paginator import Paginator
+from django.views import View
 
 
 
@@ -39,10 +44,28 @@ def myissuedbook(request):
     return render(request, 'operations/myissuedbooks.html', {'issuedbooks':issuedbooks})
 
 
-def ListEbooks(request):
-    ebooks=Ebooks.objects.all()
-    catagory=Catagory.objects.all()
-    return render(request, 'operations/ebook-list.html', {'ebooks':ebooks, 'catagory':catagory})
+class ListEbooks(ListView):
+    template_name='operations/ebook-list.html'
+    queryset=Ebooks.objects.all()
+    paginate_by=5
+
+    def get_context_data(self, *args, **kwargs):
+        context=super(ListEbooks,self).get_context_data(*args, **kwargs)
+        ebooks=self.queryset
+        catagory=Catagory.objects.all()
+        req_list=[]
+        ebook_req=EbookRequest.objects.filter(requested_by=self.request.user)
+        readable=EbookRequestHistory.objects.filter(requested_by=self.request.user, readable=True)
+        for i in readable:
+            req_list.append(i.ebook.id)
+        for i in ebook_req:
+            req_list.append(i.ebook.id)
+        context.update({
+            'ebooks':ebooks,
+            'catagory':catagory,
+            'req_list':req_list,
+            })
+        return context
 
 
 @login_required
@@ -52,6 +75,26 @@ def Home(request):
     erh_lst=[]
     curr_date=datetime.datetime.utcnow().replace(tzinfo=pytz.UTC)
     year=curr_date.year
+    mnth=curr_date.month
+    mnth_bk=mnth-4
+    my_iss=[]
+    my_ret=[]
+    my_mnth=[]
+    for i in range(mnth_bk, mnth+1):
+        issued_data=IssueBooks.objects.filter(
+            student=request.user,
+            issued_date__year=year,
+            issued_date__month=i,
+        )
+        my_mnth.append(calendar.month_name[i])
+        my_iss.append(issued_data.count())
+        returned_data=IssueBooks.objects.filter(
+            student=request.user,
+            issued_date__year=year,
+            issued_date__month=i,
+            returned=True,
+        )
+        my_ret.append(returned_data.count())
     for i in range(1, 13):
         issued_data=IssueBooks.objects.filter(
             issued_date__year=year, 
@@ -64,25 +107,39 @@ def Home(request):
             action='Allowed').count()
         erh_lst.append(erh)
     tot_issue=IssueBooks.objects.all().count()
-    non_fined=IssueBooks.objects.filter(fine=0).count()
+    non_fined=IssueBooks.objects.filter(fine=0, returned=True).count()
     fined=IssueBooks.objects.filter(fine__gt=0).count()
+    self_user=IssueBooks.objects.filter(student=request.user)
     non_fined_per=float('%.2f' % ((non_fined / tot_issue)*100))
     fined=float('%.2f' % (100-non_fined_per))
+    msg_count=Message.objects.filter(posted_to=request.user, read=False).count()
+    print(msg_count)
     context={
     'count_lst':count_lst,
     'non_fined_per':non_fined_per,
     'fined':fined,
     'erh_lst':erh_lst,
+    'curr_date':curr_date,
+    'my_iss':my_iss,
+    'my_ret':my_ret,
+    'my_mnth':my_mnth,
+    'msg_count':msg_count
     }
 
     return render(request,'operations/home.html', context)
 
 
-@login_required    
-@role_required(allowed_roles=['Librarian'])
-def ListStd(request):
-	stdrecord=User.objects.filter(Role='Student')
-	return render(request, 'operations/liststd.html', {'stdrecord':stdrecord})
+class ListStd(LoginRequiredMixin, UserPassesTestMixin, ListView):
+    template_name='operations/liststd.html'
+    queryset=User.objects.filter(Role='Student')
+    context_object_name='stdrecord'
+    paginate_by=5
+
+    def test_func(self):
+        if self.request.user.Role=='Librarian':
+            return True
+        else:
+            return False
 
 
 @login_required
@@ -96,43 +153,35 @@ def AddBook(request):
             data.available_quantity=books_quantity
             data.added_by=request.user
             data.save()
-            return redirect('home')
+            return redirect('displaybooks')
     else:
         form=AddBooksForm()
     return render(request, 'operations/addbooks.html', {'form':form})
  
 
-@login_required
-def DisplayBooks(request):
-    books=AddBooks.objects.all()
-    catagory=Catagory.objects.all()
-    context={
-       'books':books,
-       'catagory':catagory,
-    }
-    return render(request, 'operations/displaybooks.html', context)
+class DisplayBooks(LoginRequiredMixin, ListView):
+    template_name='operations/displaybooks.html'
+    queryset=AddBooks.objects.all()
+    paginate_by = 2
 
+    def get_context_data(self, *args, **kwargs):
+        context = super(DisplayBooks, self).get_context_data(*args, **kwargs)
+        books=self.queryset
+        noti_lst=[]
+        noti_req=NotifyMeModel.objects.filter(student=self.request.user)
+        iss_qs=IssueBooks.objects.filter(student=self.request.user, returned=False)
+        for i in noti_req:
+            noti_lst.append(i.book.id)
+        for i in iss_qs:
+            noti_lst.append(i.book.id)
+        catagory=Catagory.objects.all()
+        context.update({
+            'books':books,
+            'catagory':catagory,
+            'noti_lst':noti_lst
+            })
+        return context
 
-@login_required
-def ListNotices(request):
-    notice=Notice.objects.all()
-    return render(request, 'operations/notice-list.html',{'notice':notice})
-
-
-@login_required
-@role_required(allowed_roles=['Librarian'])
-def LibRegistration(request):
-    if request.method=='POST':
-        form=LRegistrationForm(request.POST)
-        if form.is_valid():
-            try:
-                form.save()
-                return redirect('main')
-            except:
-                pass
-    else:
-        form=LRegistrationForm()
-        return render(request, 'registration.html', {'form':form})
 
 
 class DeleteBook(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
@@ -153,6 +202,13 @@ class EditBook(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = AddBooks
     template_name = 'operations/updatebooks.html'
     form_class=AddBooksForm
+
+    def form_valid(self, form):
+        book=AddBooks.objects.get(pk=self.kwargs.get('pk'))
+        issued=IssueBooks.objects.filter(book=book, returned=False).count()
+        form.instance.added_by == self.request.user
+        form.instance.available_quantity=form.instance.books_quantity-issued
+        return super().form_valid(form)
     
     def get_success_url(self):
         return reverse_lazy("displaybooks")
@@ -164,49 +220,24 @@ class EditBook(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
             return False
 
 
-@login_required
-@role_required(allowed_roles=['Librarian'])
-def Notices(request):
-    notices=Notice.objects.all().order_by('-pub_date')
-    return render(request, 'operations/notice-list.html', {'notices':notices})
-
-
-@login_required
-@role_required(allowed_roles=['Librarian'])
-def AddNotice(request):
+def Messagestd(request, id):
+    msg_std=User.objects.get(id=id)
     if request.method=='POST':
-        form=NoticeForm(request.POST)
+        form=MessageForm(request.POST)
         if form.is_valid():
-            try:
-                data=form.save(commit=False)
-                data.posted_by=request.user
-                data.save()
-                return redirect('home')
-            except:
-                pass
+            msg=form.save(commit=False)
+            msg.posted_to=msg_std
+            msg.posted_by=request.user
+            msg.save()
+            return redirect('home')
     else:
-        form=NoticeForm()
-        return render(request, 'operations/addnotice.html', {'form':form})
+        form=MessageForm()
+    return render(request, 'operations/addmessage.html', {
+        'form':form,
+        'msg_std':msg_std,
+        })
 
 
-@login_required
-@role_required(allowed_roles=['Librarian'])
-def EditNotice(request, id):
-    notice=Notice.objects.get(id=id)
-    form=NoticeForm(request.POST or None, instance=notice)
-    if form.is_valid():
-        form.save()
-        return redirect("listnotices")
-    else:
-        return render(request, 'operations/editnotice.html', {'form':form, 'notice':notice})
-
-
-@login_required
-@role_required(allowed_roles=['Librarian'])                
-def DeleteNotice(request,id):
-    notice=Notice.objects.get(id=id)
-    notice.delete()
-    return redirect("listnotices")
 
 
 class DeleteStd(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
@@ -236,30 +267,6 @@ def EditStudent(request, id):
         return render(request,'SRegistration.html', {'student':student, 'form':form})
 
 
-'''@login_required
-@role_required(allowed_roles=['Librarian'])
-def IssueBook(request):
-    if request.method=="POST":
-        stdid=request.POST['stdid']
-        bkid=request.POST['bkid']
-        studentinfo=User.objects.get(id=stdid)
-        bookinfo=AddBooks.objects.get(id=bkid)
-        return_date=datetime.datetime.utcnow().replace(tzinfo=pytz.UTC) + datetime.timedelta(days=30)
-        mdl=IssueBooks.objects.create(
-                student=studentinfo,
-                book=bookinfo,
-                return_date=return_date,
-                issued_by=request.user,
-            )
-        if bookinfo.available_quantity > 1:
-            bookinfo.available_quantity=bookinfo.available_quantity-1
-        else:
-            bookinfo.available_quantity = 0
-        mdl.save()
-        bookinfo.save()
-        return redirect('issuedbooks')
-    return render(request, 'operations/issue_book.html', {})'''
-
 @login_required
 @role_required(allowed_roles=['Librarian'])
 def IssueBook(request):
@@ -283,13 +290,12 @@ def IssueBook(request):
                 bookinfo.available_quantity = 0
             mdl.save()
             bookinfo.save()
-            return redirect('issuedbooks')
+            return redirect('issuebooks')
     else:
         form=IssuebookForm()
     return render(request, 'operations/issue_book.html', {
         'form':form,
         })
-
 
 
 @login_required
@@ -303,7 +309,7 @@ def ReturnBooks(request, pk):
     if bookitem.available_quantity < bookitem.books_quantity:
         bookitem.available_quantity=bookitem.available_quantity+1
         notify=NotifyMeModel.objects.filter(book=bookitem).first()
-        '''if notify:
+        if notify:
             send_mail(
                 'for your request',
                 'you have requested for book'+' '+notify.book.books_name+' '+'which is now available',
@@ -311,16 +317,7 @@ def ReturnBooks(request, pk):
                 [notify.student.email],
                 fail_silently=False,
             )
-            account_sid='AC53c1f5d6d5d4f8df9264e52dd8e951dd'
-            account_token='29a8e10f4e096543a1f2517c0a3b1ad3'
-            client=Client(account_sid, account_token)
-            client.messages.create(
-                to='9844700852',
-                from_='+19252593370',
-                body='hy'
-
-                )
-            notify.delete()'''
+            notify.delete()
     else:
         bookitem.available_quantity=bookitem.books_quantity
     bookitem.save()
@@ -329,9 +326,8 @@ def ReturnBooks(request, pk):
         {'rtnbook':rtnbook}
         )
 
-
-
-
+@login_required
+@role_required(allowed_roles=['Librarian'])
 def IssuedBook(request):
     issueditems=IssueBooks.objects.filter(returned=False)
     return render(request, 
@@ -340,6 +336,8 @@ def IssuedBook(request):
         )
 
 
+@login_required
+@role_required(allowed_roles=['Librarian'])
 def AddEbooks(request):
     if request.method == 'POST':
         form = EbooksForm(request.POST, request.FILES)
@@ -360,10 +358,6 @@ def printBarCode(request, id):
     if not std.barcode:
         ean = barcode.get('code128', id, writer=ImageWriter())
         filename = ean.save('std'+id)
-        #new
-        #f = open(settings.BASE_DIR+'\\'+"std"+id+".png", 'r')
-        #filename = File(f)
-        #print(filename)
         initial_path=settings.BASE_DIR+'\\'+"std"+id+".png"
         new_path=settings.BASE_DIR+'\\'+'media'+"\\"+"std"+id+".png"
         os.rename(initial_path, new_path)
@@ -375,30 +369,39 @@ def printBarCode(request, id):
 
 @login_required
 def SearchBooks(request):
-    query=request.GET.get('q')
-    if query:
-        result=Ebooks.objects.filter(Q(name__icontains = query) 
-            | Q(author_name__icontains = query))
-    else:
-        result=[]
+    query=request.POST['book']
     print(query)
-    return render(request, 'operations/ebooksearch.html', {'result':result})
+    if query:
+        books=AddBooks.objects.filter(
+            Q(books_name__icontains = query) 
+            | Q(books_author_name__icontains = query) | 
+            Q(books_publication_name__icontains = query)|
+            Q(catagory__catagory__icontains= query)|
+            Q(id__iexact= query)
+            ) 
+    else:
+        books=[]
+    return render(request, 'operations/displaybooks.html', 
+        {'books':books}
+        )
 
 
 @login_required
 def EBookRequest(request, id):
     req=Ebooks.objects.get(id=id)
-    data=EbookRequest.objects.get_or_create(ebook=req, requested_by=request.user)
+    EbookRequest.objects.get_or_create(ebook=req, requested_by=request.user)
     return redirect('list-ebooks')
 
 
 @login_required
+@role_required(allowed_roles=['Librarian'])
 def ViewEbookRequest(request):
     requests=EbookRequest.objects.all()
     return render(request, 'operations/ebook-request.html', {'requests':requests})
 
 
 @login_required
+@role_required(allowed_roles=['Librarian'])
 def View_Ebook_Request_allow(request, id):
     req=EbookRequest.objects.get(id=id)
     ebook_record=Ebooks.objects.get(id=req.ebook.id)
@@ -417,6 +420,7 @@ def View_Ebook_Request_allow(request, id):
 
 
 @login_required
+@role_required(allowed_roles=['Librarian'])
 def View_Ebook_Request_deny(request, id):
     req=EbookRequest.objects.get(id=id)
     ebook_record=Ebooks.objects.get(id=req.ebook.id)
@@ -435,23 +439,13 @@ def View_Ebook_Request_deny(request, id):
 
 
 
-'''@login_required
-def BookprintBarCode(request, id):
-    ean = barcode.get('code128', id, writer=ImageWriter())
-    filename = ean.save('book'+id)
-    return redirect('displaybooks')'''
-
-
 @login_required
+@role_required(allowed_roles=['Librarian'])
 def BookprintBarCode(request, id):
     book=AddBooks.objects.get(id=id)
     if not book.barcode:
         ean = barcode.get('code128', id, writer=ImageWriter())
         filename = ean.save('book'+id)
-        #new
-        #f = open(settings.BASE_DIR+'\\'+"std"+id+".png", 'r')
-        #filename = File(f)
-        #print(filename)
         initial_path=settings.BASE_DIR+'\\'+"book"+id+".png"
         new_path=settings.BASE_DIR+'\\'+'media'+"\\"+'book'+id+".png"
         os.rename(initial_path, new_path)
@@ -461,6 +455,7 @@ def BookprintBarCode(request, id):
 
 
 @login_required
+@role_required(allowed_roles=['Student'])
 def View_my_readable_book(request):
     change=EbookRequestHistory.objects.filter(requested_by=request.user)
     for i in change:
@@ -471,20 +466,22 @@ def View_my_readable_book(request):
     return render(request, 'operations/my-readable-book.html', {'readable_book':readable_book})
 
 
-class EBookcatagorylist(ListView):
+class EBookcatagorylist(LoginRequiredMixin, ListView):
     model = Ebooks
     template_name = 'operations/ebook-list.html'
     context_object_name = 'ebooks'
+    paginate_by=5
 
     def get_queryset(self):
         catagory = get_object_or_404(Catagory, catagory=self.kwargs.get('catagory'))
         return Ebooks.objects.filter(catagory = catagory)
 
 
-class Bookcatagorylist(ListView):
+class Bookcatagorylist(LoginRequiredMixin, ListView):
     model = AddBooks
     template_name = 'operations/displaybooks.html'
     context_object_name = 'books'
+    paginate_by=5
 
     def get_queryset(self):
         catagory = get_object_or_404(Catagory, catagory=self.kwargs.get('catagory'))
@@ -519,27 +516,6 @@ class EditEbooks(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         else:
             return False
 
-
-"""def ReadEbook(request, pk):
-    ebook=Ebooks.objects.get(id=pk)
-    pdfFileObj = open(ebook.book.path, 'rb')
-    pdfReader = PyPDF2.PdfFileReader(pdfFileObj)
-
-    for page in range(pdfReader.numPages):
-       pageObj = pdfReader.getPage(page) 
-       pageObj.extractText()
-       
-
-    pdfWriter = PyPDF2.PdfFileWriter() 
-        for page in range(pdfReader.numPages):
-            pageObj = pdfReader.getPage(page) 
-            pageObj.rotateClockwise(270)
-            pdfWriter.addPage(pageObj)
-
-            pdfWriter.write('rotated_example.pdf')
-            pdfFileObj.close() 
-            newFile.close()"""
-
 @login_required
 def NotifyMe(request, id):
     book=AddBooks.objects.get(id=id)
@@ -547,20 +523,178 @@ def NotifyMe(request, id):
         book=book)
     return redirect('displaybooks')
 
-class StdDetail(LoginRequiredMixin, DetailView):
-    template_name='operations/std-detail.html'
-    model=User
-    context_object_name='std'
+
+@login_required
+@role_required(allowed_roles=['Librarian'])
+def StdDetail(request, id):
+    std=User.objects.get(id=id)
+    course=Student.objects.filter(student=std).first()
+    book_issued=IssueBooks.objects.filter(student=std, returned=False)
+    return render(request, 'operations/std-detail.html', 
+        {
+        'std':std,
+        'course':course,
+        'book_issued':book_issued
+        })
+
 
 class DetailBook(LoginRequiredMixin, DetailView):
     template_name='operations/book-detail.html'
     model=AddBooks
-    context_object_name='book'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(DetailBook, self).get_context_data(*args, **kwargs)
+        book=AddBooks.objects.get(pk=self.kwargs.get('pk'))
+        issued=IssueBooks.objects.filter(book=book, returned=False)
+        context.update({
+            'book':book,
+            'issued':issued
+            })
+        return context
+
 
 class DetailEBook(LoginRequiredMixin, DetailView):
     template_name='operations/ebook-detail.html'
     model=Ebooks
-    context_object_name='ebook'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(DetailEBook, self).get_context_data(*args, **kwargs)
+        ebook=Ebooks.objects.get(pk=self.kwargs.get('pk'))
+        allowed=EbookRequestHistory.objects.filter(ebook=ebook, readable=True)
+        context.update({
+            'ebook':ebook,
+            'allowed':allowed
+            })
+        return context
+
+
+@login_required
+def ViewEbook(request, id):
+    if request.method != "POST":
+        return redirect('home')
+    else:
+        read=Ebooks.objects.get(id=id)
+    return render(request, 'operations/pdf.html', {'read':read})
+
+
+@login_required
+@role_required(allowed_roles=['Librarian'])
+def SearchStudent(request):
+    query=request.POST['qs']
+    if query:
+        stdrecord=User.objects.filter(
+            Q(username__icontains = query) 
+            | Q(first_name__icontains = query) | 
+            Q(id__icontains = query)
+            ) 
+    else:
+        stdrecord=[]
+    return render(request, 'operations/liststd.html', 
+        {'stdrecord':stdrecord}
+       )
+
+@login_required
+@role_required(allowed_roles=['Librarian'])
+def SearchIssued(request):
+    query=request.POST['issued']
+    if query:
+        returned_item=IssueBooks.objects.filter(returned=True)
+        issueditems=IssueBooks.objects.filter(
+            Q(student__first_name__icontains = query) 
+            | Q(student__id__iexact = query) |
+            Q(student__username__iexact = query)
+            ).exclude(id__in=returned_item)
+    else:
+        stdrecord=[]
+    return render(request, 'operations/issued_list.html', 
+        {'issueditems':issueditems}
+       )
+
+
+@login_required
+def SearchEBooks(request):
+    query=request.POST['ebk']
+    if query:
+        ebooks=Ebooks.objects.filter(
+            Q(name__icontains = query) 
+            | Q(id__iexact = query) |
+            Q(author_name__iexact = query)
+            )
+    else:
+        ebooks=[]
+    return render(request, 'operations/ebook-list.html', 
+        {'ebooks':ebooks}
+       )
+
+
+@login_required
+@role_required(allowed_roles=['Student'])
+def ViewMessage(request):
+    msgs=Message.objects.filter(posted_to=request.user).order_by('Posted_on')[::-1]
+    return render(request, 'operations/list-msg.html', {
+        'msgs':msgs,
+
+        })
+
+
+@login_required
+@role_required(allowed_roles=['Student'])
+def ViewMessageDetail(request, id):
+    msg_detail=Message.objects.get(id=id)
+    msg_detail.read=True
+    msg_detail.save()
+    return render(request, 'operations/msg-detail.html',
+        {'msg_detail':msg_detail}
+        )
+
+
+
+class IssueActivities(ListView, LoginRequiredMixin, UserPassesTestMixin):
+    template_name='operations/issue-activities.html'
+    queryset=IssueBooks.objects.all().order_by('-issued_date')
+    paginate_by=5 
+
+    def get_context_data(self, *args, **kwargs):
+        context=super(IssueActivities,self).get_context_data(*args, **kwargs)
+        activities=self.get_queryset()
+        context.update({
+            'activities':activities,
+            })
+        return context
+
+    def test_func(self):
+        if self.request.user.Role=='Librarian':
+            return True
+        else:
+            return False
+
+
+class EbookActivities(ListView, LoginRequiredMixin, UserPassesTestMixin):
+    template_name='operations/ebook-activities.html'
+    queryset=EbookRequestHistory.objects.all().order_by('-requested_date')
+    paginate_by=5
+
+    def get_context_data(self, *args, **kwargs):
+        context=super(EbookActivities,self).get_context_data(*args, **kwargs)
+        activities=self.get_queryset()
+        context.update({
+            'activities':activities,
+            })
+        return context
+
+    def test_func(self):
+        if self.request.user.Role=='Librarian':
+            return True
+        else:
+            return False
+
+
+        
+
+
+
+
+
 
 
 

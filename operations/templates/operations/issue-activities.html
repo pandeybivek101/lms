@@ -1,0 +1,65 @@
+{%extends 'operations/main.html'%}
+{% load static %}
+
+{% block content %}
+{% if activities %}
+<table class='table table-bordered' id='mytable'>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Books Name</th>
+      <th>Books Author</th>
+      <th>Issued To</th>
+      <th>Issued Date</th>
+      <th>Return Date</th>
+      <th>Fine</th>
+      <th>Activities</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in activities.all %}
+    <tr>
+      <td>{{item.id}}</td>
+      <td>{{item.book.books_name}}</td>
+      <td>{{item.book.books_author_name}}</td>
+      <td>{{item.student.first_name}} {{item.student.last_name}}</td>
+      <td>{{item.issued_date|date:"M d, Y"}}</td>
+      <td>{{item.return_date|date:"M d, Y"}}</td>
+      <td>{{item.fine}} Rs</td>
+      <td>
+        {% if item.returned == False %}
+        <a href="{%url 'returnbooks' item.id%}"><button class='btn btn-info'>Return</button></a>
+        {% endif %}
+        {% if item.returned == True %}
+        <button class='btn btn-warning'>Returned</button>
+        {% endif %}
+        {% if item.fine > 0 %}
+        <a href=""><button class='btn btn-danger'>Fined</button></a>
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor%} 
+  </tbody> 
+</table>
+{% else %}
+<h1>No Issued Items</h1>
+{% endif %}
+{% endblock %}
+
+
+{% block js %}
+{% include 'operations/js.html'%}
+{% endblock js %}
+
+{% block sidebar%}
+{%include 'operations/sidebar.html'%}
+{% endblock sidebar %}
+
+{% block title %}
+<title>Issued Books | LMS </title>   
+{% endblock title %}
+
+
+{% block heading %}
+<h2>Return Books </h2>
+{% endblock heading %}

@@ -5,35 +5,56 @@
 <!-- page content area main -->
 
 <h2>Ebook Request</h2>
+{% if requests %}
+<table class='table table-bordered' id="mytable">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Books Name</th>
+      <th>Author Name</th>
+      <th>Requested_by</th>
+      <th>Requested_date</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for book in requests%}
+    <tr>
+      <td>{{book.ebook.id}}</td>
+      <td>{{book.ebook.name}}</td>
+      <td>{{book.ebook.author_name}}</td>
+      <td>{{book.requested_by.username}}</td>  
+      <td>{{book.requested_date|date:"M d, Y"}}</td>
+      <td>
+       <a href="{% url 'allow' book.id %}"><button class="btn btn-warning">Allow</button></a>
+       <a href="{% url 'deny' book.id %}"><button class="btn btn-danger">Deny</button></a>
+     </td>
+   </tr>     
+   {% endfor %}
+ </tbody>
+</table>
 
-<table class='table table-bordered'>
-  <tr>
-    <th>ID</th>
-    <th>Books Name</th>
-    <th>Author Name</th>
-    <th>Requested_by</th>
-    <th>Requested_date</th>
-    <th>Actions</th>
-  </tr>
-  
-  {% for book in requests%}
-  <tr>
-    <td>{{book.ebook.id}}</td>
-    <td>{{book.ebook.name}}</td>
-    <td>{{book.ebook.author_name}}</td>
-    <td>{{book.requested_by.username}}</td>  
-    <td>{{book.requested_date|date:"M d, Y"}}</td>
-    <td>
-     <a href="{% url 'allow' book.id %}"><button class="btn btn-warning">Allow</button></a>
-     <a href="{% url 'deny' book.id %}"><button class="btn btn-danger">Deny</button></a>
-   </td>
- </tr>     
- {% endfor %}
- 
- </table>
- <!-- /page content -->
- {% endblock %}
+{% else %}
+<h1>No Ebooks Requests </h1>
+{% endif %}
+<!-- /page content -->
+{% endblock %}
 
- {% block sidebar%}
- {%include 'operations/sidebar.html'%}
- {% endblock sidebar %}
+{% block sidebar%}
+{%include 'operations/sidebar.html'%}
+{% endblock sidebar %}
+
+{% block title %}
+<title>EBook Request | LMS </title>   
+{% endblock title %}
+
+{% block heading %}
+<h2>Ebook Requests </h2>
+{% endblock heading %}
+
+{% block js %}
+{% include 'operations/js.html'%}
+{% endblock js %}
+
+
+

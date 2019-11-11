@@ -1,67 +1,95 @@
 {%extends 'operations/main.html'%}
 {% load static %}
 {% block content %}
-  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-  Catagory
-  </button>
-  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-    {% for item in catagory %}
-    <a class="dropdown-item" href="{% url 'ebook-catagory' item.catagory  %}">{{item.catagory}}</a>
-    {% endfor %}
-  </div>
-</div>
 <!-- page content area main -->
 
 <!-- Basic dropdown -->
 {% if ebooks%}
-<h2>Display Books</h2>
-<table class='table table-bordered'>
-  <tr>
-    <th>ID</th>
-    <th>Books Name</th>
-    <th>Author Name</th>
-    {% if request.user.Role == 'Librarian'%}
-    <th>Book File</th>
-    <th>Action</th>
-    {% endif %}
+<table class='table table-bordered' id='mytable'>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Books Name</th>
+      <th>Author Name</th>
+      {% if request.user.Role == 'Librarian'%}
+      <th>Book File</th>
+      <th>Action</th>
+      {% endif %}
 
-    {% if request.user.Role == 'Student'%}
-    <th>Action</th>
-    {% endif %}
-    <td><b>Detail</b></td>
-  </tr>
+      {% if request.user.Role == 'Student'%}
+      <th>Action</th>
+      {% endif %}
+      <td><b>Detail</b></td>
+    </tr>
+  </thead>
   
-  
-  {% for book in ebooks %}
-  <tr>
-    <td>{{book.id}}</td>
-    <td>{{book.name}}</td>
-    <td>{{book.author_name}}</td>
+  <tbody>
+    {% for book in ebooks.all %}
+    <tr>
+      <td>{{book.id}}</td>
+      <td>{{book.name}}</td>
+      <td>{{book.author_name}}</td>
 
-    {% if request.user.Role == 'Librarian'%}
-    <td><a href="{{book.book.url}}"><button class="btn btn-primary">Read</button></a></td>
-    <td><a href="{%url 'edit-ebook' book.id%}"><button class="btn btn-warning">Edit</button></a>
-     <a href="{%url 'delete-ebook' book.id%}"><button class="btn btn-danger">Delete</button></a></td>
-    {% endif %}
+      {% if request.user.Role == 'Librarian'%}
+      <td>
+        <form method="POST" action="{% url 'view' book.id %}">
+          {% csrf_token %}
+          <input type="numbers" name="q" value="{{book.id}}" hidden="true">
+          <button class="btn btn-primary">Read</button>
+        </form>
+      </td>
+      <td><a href="{%url 'edit-ebook' book.id%}"><button class="btn btn-warning">Edit</button></a>
+       <a href="{%url 'delete-ebook' book.id%}"><button class="btn btn-danger">Delete</button></a></td>
+       {% endif %}
 
-    
+       {% if request.user.Role == 'Student'%}
+       {% if book.id in req_list %}
+       <td><a href="{% url 'view-request' book.id%}"><button class="btn btn-primary" disabled="">send view request</button></a> </td>
+       {% else %}
+       <td><a href="{% url 'view-request' book.id%}"><button class="btn btn-primary">send view request</button></a> </td>
+       {% endif %}
+       {% endif %}
+       <td><a href="{% url 'detail-ebook' book.id%}">detail</a></td>
+     </tr>   
+     {% endfor %}
+   </tbody>
+ </table>
+ {% else %}
+ <h1>No EBooks Uploaded</h1>
+ {% endif %}
 
 
-    {% if request.user.Role == 'Student'%}
-    <td><a href="{% url 'view-request' book.id%}"><button class="btn btn-primary">Send view request</button></a> </td>
-    {% endif %}
-    <td><a href="{% url 'detail-ebook' book.id%}">detail</a></td>
-  </tr>   
-  {% endfor %}
-</table>
-{% else %}
-<h1>No EBooks Uploaded</h1>
-{% endif %}
+ <!-- /page content -->
+ {% endblock %}
 
-
-<!-- /page content -->
-{% endblock %}
-
-{% block sidebar%}
+ {% block sidebar%}
  {%include 'operations/sidebar.html'%}
  {% endblock sidebar %}
+
+ {% block title %}
+ <title>Ebook List | LMS </title>   
+ {% endblock title %}
+
+ {% block heading %}
+ <h2>Ebooks List </h2>
+ <div class="col-md-2">
+    <div class="dropdown">
+      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Catagory
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item" href="{% url 'list-ebooks' %}">All</a>
+        {% for item in catagories %}
+        <a class="dropdown-item" href="{% url 'ebook-catagory' item.catagory  %}">{{item.catagory}}</a>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+ {% endblock heading %}
+
+
+ {% block js %}
+ {% include 'operations/js.html'%}
+ {% endblock js %}
+
+

@@ -10,6 +10,12 @@ class AddBooks(models.Model):
 	available_quantity=models.PositiveIntegerField()
 	librarian_username=models.ForeignKey(LRegistration, on_delete=models.CASCADE)
 
+  position: fixed;
+    width: 250px;
+    overflow-y: scroll;
+    top: 300;
+    bottom: 0;
+
 
 class IssueBooks(models.Model):
 	id=models.PositiveIntegerField(primary_key=True)
@@ -34,11 +40,294 @@ class LRegistration(models.Model):
 
 
 
+name=forms.CharField(widget=forms.TextInput(
+		attrs={'class':'form-control', 'placeholder':'Enter Book Name', 'autofocus':'autofocus'}), required=True, max_length=20)
+	book=forms.CharField(widget=forms.FileInput(
+		attrs={'name':'myfile' ,'class':'form-control'}), required=True, max_length=20)
+	author_name=forms.CharField(widget=forms.TextInput(
+		attrs={'class':'form-control', 'placeholder':'Enter Author Name', 'autofocus':'autofocus'}), required=True, max_length=20)
+	cover_image=forms.ImageField(widget=forms.FileInput(
+		attrs={'class':'form-control'}), required=False)
 
+		
 	<link href="{%static 'css/bootstrap.min.css' %}" rel="stylesheet">
     <link href="{%static 'css/font-awesome.min.css' %}" rel="stylesheet">
     <link href="{%static 'css/nprogress.css' %}" rel="stylesheet">
     <link href="{%static 'css/custom.min.css' %}" rel="stylesheet">
+
+
+
+    books_name=forms.CharField(widget=forms.TextInput(
+		attrs={'class':'form-control', 'placeholder':'Enter Bookname'}), required=True, max_length=20)
+	books_image=forms.ImageField(widget=forms.FileInput(
+		attrs={'class':'form-control'}), required=True)
+	books_author_name=forms.CharField(widget=forms.TextInput(
+		attrs={'class':'form-control', 'placeholder':'Enter Authorname'}), required=True, max_length=20)
+	books_publication_name=forms.CharField(widget=forms.TextInput(
+		attrs={'class':'form-control', 'placeholder':'Enter Authorname'}), required=True, max_length=20)
+	books_price=forms.CharField(widget=forms.NumberInput(
+		attrs={'class':'form-control', 'placeholder':'Enter Price'}), required=True)
+	books_quantity=forms.IntegerField(widget=forms.NumberInput(
+		attrs={'class':'form-control', 'placeholder':'Enter quantity'}), required=True)
+
+
+
+
+
+
+
+{% extends "chat/base.html" %}
+
+{% block content %}
+<h3>Thread for {% if user != object.first %}{{ object.first }}{% else %}{{ object.second }}{% endif %}</h3>
+<ul id='chat-items'>
+{% for chat in object.chatmessage_set.all %}
+
+<li>{{ chat.message }} via {{ chat.user }}</li>
+
+{% endfor %}
+</ul>
+
+<form id='form' method='POST'> {% csrf_token %}
+{{form.as_p }}
+<input type='submit' class='btn btn-primary'/>
+</form>
+
+{% endblock %}
+
+{% block script %}
+
+<script>
+// websocket scripts
+var endpoint=''
+var socket=new WebSocket(endpoint)
+
+socket.onmessage=function(e){
+	console.log('message',e)
+}
+socket.onopen=function(e){
+	console.log('open',e)
+}
+socket.onerror=function(e){
+	console.log('error',e)
+}
+socket.onclose=function(e){
+	console.log('close',e)
+}
+
+</script>
+{% endblock %}
+
+
+def clean(self):
+		cleaned_data = super(IssuebookForm, self).clean()
+		book_id=self.cleaned_data['book']
+		student_id=self.cleaned_data['student']
+		book=AddBooks.objects.get(id=book_id)
+		student=User.objects.get(id=student_id)
+		prev_record=IssueBooks.objects.filter(student=student, book=book, returned=False)
+		if prev_record:
+			raise forms.ValidationError('This book is already issued to designated student')
+		else:
+			return super(IssuebookForm, self).clean()
+
+
+path('password-reset/', 
+        auth_views.PasswordResetView.as_view(template_name='account/password-reset.html'),
+        name='password_reset'),
+    path('password-reset-confirm/<uidb64>/<token>', 
+        auth_views.PasswordResetConfirmView.as_view(template_name='account/password-reset-confirm.html'),
+        name='password_reset_confirm'),
+    path('password-reset/done', 
+        auth_views.PasswordResetDoneView.as_view(template_name='account/password-reset-done.html'),
+        name='password_reset_done'),
+    path('password-reset-complete/', 
+        auth_views.PasswordResetCompleteView.as_view(template_name='account/password-reset-complete.html'),
+        name='password_reset_complete'),
+
+
+
+path('password-reset/a/', 
+        views.Password_change, 
+        name='password_change'),
+
+
+
+
+
+
+
+
+
+
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <link
+  rel="stylesheet"
+  href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+  integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
+  crossorigin="anonymous"
+  />
+  <link rel="stylesheet" href="{% static 'css/pdf.css' %}" />
+  <title>PDF Viewer</title>
+</head>
+<body>
+  <div class="top-bar">
+  <button class="btn" id="prev-page">
+    <i class="fas fa-arrow-circle-left"></i> Prev Page
+  </button>
+  <button class="btn" id="next-page">
+    Next Page <i class="fas fa-arrow-circle-right"></i>
+  </button>
+  <span class="page-info">
+    Page <span id="page-num"></span> of <span id="page-count"></span>
+  </span>
+  </div>
+  <canvas id="pdf-render"></canvas>
+  <script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
+  <script src="js/main.js"></script>
+  <script type="text/javascript">
+    const url = '{{read.book.url}}';
+
+    let pdfDoc = null,
+    pageNum = 1,
+    pageIsRendering = false,
+    pageNumIsPending = null;
+
+    const scale = 1.5,
+    canvas = document.querySelector('#pdf-render'),
+    ctx = canvas.getContext('2d');
+
+// Render the page
+const renderPage = num => {
+  pageIsRendering = true;
+
+  // Get page
+  pdfDoc.getPage(num).then(page => {
+    // Set scale
+    const viewport = page.getViewport({ scale });
+    canvas.height = viewport.height;
+    canvas.width = viewport.width;
+
+    const renderCtx = {
+      canvasContext: ctx,
+      viewport
+    };
+
+    page.render(renderCtx).promise.then(() => {
+      pageIsRendering = false;
+
+      if (pageNumIsPending !== null) {
+        renderPage(pageNumIsPending);
+        pageNumIsPending = null;
+      }
+    });
+
+    // Output current page
+    document.querySelector('#page-num').textContent = num;
+  });
+};
+
+// Check for pages rendering
+const queueRenderPage = num => {
+  if (pageIsRendering) {
+    pageNumIsPending = num;
+  } else {
+    renderPage(num);
+  }
+};
+
+// Show Prev Page
+const showPrevPage = () => {
+  if (pageNum <= 1) {
+    return;
+  }
+  pageNum--;
+  queueRenderPage(pageNum);
+};
+
+// Show Next Page
+const showNextPage = () => {
+  if (pageNum >= pdfDoc.numPages) {
+    return;
+  }
+  pageNum++;
+  queueRenderPage(pageNum);
+};
+
+// Get Document
+pdfjsLib
+.getDocument(url)
+.promise.then(pdfDoc_ => {
+  pdfDoc = pdfDoc_;
+
+  document.querySelector('#page-count').textContent = pdfDoc.numPages;
+
+  renderPage(pageNum);
+})
+.catch(err => {
+    // Display error
+    const div = document.createElement('div');
+    div.className = 'error';
+    div.appendChild(document.createTextNode(err.message));
+    document.querySelector('body').insertBefore(div, canvas);
+    // Remove top bar
+    document.querySelector('.top-bar').style.display = 'none';
+  });
+
+// Button Events
+document.querySelector('#prev-page').addEventListener('click', showPrevPage);
+document.querySelector('#next-page').addEventListener('click', showNextPage);
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+{%extends 'operations/main.html'%}
+{block content}
+<div class="container">
+<div class="row">
+<div class="col-md-12">
+  {% for item in issuedbooks%}
+  <div class="card">
+    <img src="{{item.book.books_image.url}}" height=100 width=100>
+    </div>
+  {% endfor %}
+  </div>
+</div>
+</div>
+  {% endblock%}
+
+  {% block sidebar%}
+ {%include 'operations/sidebar.html'%}
+ {% endblock sidebar %}
+
+ {% block title %}
+ <title>My Issued Books | LMS </title>   
+{% endblock title %}
+
+{% block heading %}
+<h2>My Issued Books </h2>
+{% endblock heading %}
+
+
+
+
 
 
 

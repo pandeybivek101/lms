@@ -1,8 +1,8 @@
 {%extends 'operations/main.html'%}
 {% block content %}
-<h2>My Readable Ebooks</h2>
 {% if readable_book%}
-<table class='table table-bordered'>
+<table class='table table-bordered' id="mytable">
+<thead>
   <tr>
     <th>ID</th>
     <th>Books Name</th>
@@ -10,16 +10,24 @@
     <th>Valid Till</th>
     <th>Book File</th>
   </tr>
-
+</thead>
+<tbody>
   {% for book in readable_book %}
   <tr>
     <td>{{book.ebook.id}}</td>
     <td>{{book.ebook.name}}</td>
     <td>{{book.ebook.name}}</td>
     <td>{{book.readable_upto|date:"M d, Y"}}</td>
-    <td><a href="{{book.ebook.book.url}}"><button class="btn btn-primary">Read</button></a></td>
+    <td>
+    <form method="POST" action="{% url 'view' book.ebook.id %}">
+    {% csrf_token %}
+    <a href="{{book.ebook.book.url}}"><button class="btn btn-primary">Read</button></a>
+    </form>
+    </td>
   </tr>     
   {% endfor %}
+  </tbody>
+  </table>
   {%else%}
   <h1>No EBooks </h1>
   {% endif %}
@@ -28,5 +36,22 @@
   {% block sidebar%}
  {%include 'operations/sidebar.html'%}
  {% endblock sidebar %}
+
+ {% block title %}
+ <title>My Readable Book | LMS </title>   
+{% endblock title %}
+
+{% block heading %}
+<h2>My Readable Books </h2>
+{% endblock heading %}
+
+{% block js %}
+  {% include 'operations/js.html'%}
+  {% endblock js %}
+
+
+
+
+
 
 

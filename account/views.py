@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponseRedirect
 from .forms import *
 from .models import *
 from django.contrib.auth import logout
@@ -7,6 +7,10 @@ from django.conf import settings
 from .models import User
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.urls import reverse
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib import messages
 
 
 # Create your views here.
@@ -33,23 +37,10 @@ def StudentInfo(request):
 			data.student=User.objects.filter().latest('id')
 			data.save()
 			return redirect('login')
-		else:
-			messages.success(request, f'Invalid Username Or Password')
-
 	else:
 		form1=StudentForm()
 	return render(request, 'account/sinfo.html', {'form1':form1})
 
-
-'''def LoginView(request):
-	if request.method=="POST":
-		username=request.POST.get('username')
-		password=request.POST.get('password')
-		user=authenticate(username=username, password=password)
-		if user is not None:
-			login(request, user)
-			return redirect('home')
-	return render(request, 'account/login.html', {})'''
 
 def LoginView(request):
 	if request.method=="POST":
@@ -61,6 +52,8 @@ def LoginView(request):
 			if user is not None:
 				login(request, user)
 				return redirect('home')
+			else:
+				messages.error(request, 'Invalid Username or password')
 	else:
 		form=LoginForm()
 	return render(request, 'account/login.html', {'form':form})
@@ -68,5 +61,64 @@ def LoginView(request):
 
 @login_required
 def Logout(request):
-    logout(request)      
+    logout(request)     
     return redirect('login')
+
+@login_required
+def Profile(request):
+    profile=User.objects.get(id=request.user.id)
+    std=Student.objects.filter(student=profile).first()
+    return render(request, 'account/profile.html', 
+        {'profile':profile,
+        'std':std
+        }
+)
+
+
+@login_required
+def ChangeProfile(request):
+	if request.user.Role=='Student':
+		if request.method == 'POST':
+			form1 = UserUpdateForm(request.POST, request.FILES, instance=request.user)
+			form2=StudentForm(request.POST, instance=request.user.student)
+			if form1.is_valid() and form2.is_valid():
+				form1.save()
+				form2.save()
+				return redirect('profile')
+
+		else:
+			form1 = UserUpdateForm(instance=request.user)
+			form2=StudentForm(instance=request.user.student)
+		return render(request, 'account/change-profile.html', 
+			{'form1': form1,
+			'form2':form2
+			})
+	else:
+		if request.method == 'POST':
+			form1 = UserUpdateForm(request.POST, request.FILES, instance=request.user)
+			if form1.is_valid():
+				form1.save()
+				return redirect('profile')
+		else:
+			form1 = UserUpdateForm(instance=request.user)
+		return render(request, 'account/change-profile.html', 
+			{'form1': form1,
+			})
+
+
+
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('profile')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'account/change_password.html', {
+        'form': form
+    })

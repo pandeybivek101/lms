@@ -1,0 +1,32 @@
+    {%extends 'operations/main.html'%}
+    {%block content%}
+    <!-- page content area main -->
+
+    <form method="POST" action="{%url 'msg_std' msg_std.id %}" class="col-lg-8" enctype="multipart/form-data" id='msg-form'>
+    	{% csrf_token %}
+    	{{form.as_p}}
+    	<input type="submit" name="submit" class="btn btn-primary">
+    </form>
+
+    {%endblock%}
+
+
+{% block sidebar%}
+ {%include 'operations/sidebar.html'%}
+ {% endblock sidebar %}
+
+{% block title %}
+ <title>Add Notice | LMS </title>   
+{% endblock title %}
+
+{% block heading %}
+<h2>Add Notice </h2>
+{% endblock heading %}
+
+{% block js%}
+<script type="text/javascript">
+</script>
+
+});
+{% endblock js%}
+

@@ -12,21 +12,28 @@ class AddBooksAdmin(admin.ModelAdmin):
 admin.site.register(AddBooks, AddBooksAdmin)
 
 
-admin.site.register(Notice)
-admin.site.register(NotifyMeModel)
+class MessageAdmin(admin.ModelAdmin):
+	list_display=['title', 'Posted_on', 'posted_to', 'read', ]
+admin.site.register(Message, MessageAdmin)
+
+class NotifyAdmin(admin.ModelAdmin):
+	list_display=['student', 'book', 'req_date']
+admin.site.register(NotifyMeModel, NotifyAdmin)
 
 
 class EbooksAdmin(admin.ModelAdmin):
 	list_display=['name','author_name','catagory']
 admin.site.register(Ebooks, EbooksAdmin)
 
+
 class EbooksRequestAdmin(admin.ModelAdmin):
 	list_display=['ebook', 'requested_by']
 admin.site.register(EbookRequest, EbooksRequestAdmin)
 
-class EBRHAdmin:
-	list_display=['ebook', 'action', 'requested_by']
-admin.site.register(EbookRequestHistory)
+
+class EBRHAdmin(admin.ModelAdmin):
+	list_display=['ebook', 'action', 'requested_by', 'readable']
+admin.site.register(EbookRequestHistory, EBRHAdmin)
 
 admin.site.register(Catagory)
 

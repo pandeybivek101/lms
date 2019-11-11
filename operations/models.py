@@ -45,12 +45,12 @@ class IssueBooks(models.Model):
 	def __init__(self, *args ,**kwargs):
 		super(IssueBooks ,self).__init__(*args, **kwargs)
 		current_time=datetime.datetime.utcnow().replace(tzinfo=pytz.UTC)
-		if self.return_date:
+		if self.return_date and not self.returned_date:
 		    if self.return_date < current_time:
 		    	diff= current_time - self.return_date
 		    	int_diff=int(diff.days)
 		    	ratio=int_diff//30
-		    	self.fine=ratio*200
+		    	self.fine=(ratio+1)*200
 
 
 class Ebooks(models.Model):
@@ -60,6 +60,9 @@ class Ebooks(models.Model):
 	cover_image=models.ImageField(upload_to='image', blank=True, null=True)
 	added_date=models.DateTimeField(auto_now_add=True, null=True)
 	catagory = models.ForeignKey(Catagory, on_delete=models.CASCADE, null=True)
+
+	def __str__(self):
+		return self.name
 	
 
 class EbookRequest(models.Model):
@@ -79,15 +82,14 @@ class EbookRequestHistory(models.Model):
 	readable=models.BooleanField()
 				
 
-class Notice(models.Model):
+class Message(models.Model):
 	title=models.CharField(max_length=20)
 	Description=models.TextField()
-	Postedon=models.DateField(auto_now_add=True)
-	opened=models.BooleanField(default=False)
-	posted_by=models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
+	Posted_on=models.DateTimeField(auto_now_add=True)
+	posted_to=models.ForeignKey(settings.AUTH_USER_MODEL, related_name='librarian', on_delete=models.CASCADE)
+	posted_by=models.ForeignKey(settings.AUTH_USER_MODEL, related_name='std', on_delete=models.CASCADE)
+	read=models.BooleanField(default=False)
 
-	def Summary(self):
-		return self.Description[:10]
 
 class NotifyMeModel(models.Model):
 	student=models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

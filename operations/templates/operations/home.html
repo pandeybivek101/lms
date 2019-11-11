@@ -1,6 +1,7 @@
 {%extends 'operations/main.html'%}
 {% block content%}
 <div class="container">
+{% if request.user.Role == 'Librarian' %}
 	<div class="row" style="">
         <div class="col-md-6">
 		<canvas id="myChart" height="200" width="300"></canvas>
@@ -21,14 +22,24 @@
         good
         </div>
     </div><br/>
+{% endif %}
+{% if request.user.Role == 'Student' %}
+<div id="container"></div>
+{% endif %}
 	
 </div>
+{% block title %}
+ <title>Home | LMS </title>   
+{% endblock title %}
 
 {% endblock %}
 
 {% block chartjs%}
+
 <script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js'>
 </script>
+<script src="https://code.highcharts.com/highcharts.src.js"></script>  
+
 <script>
 var ctx = document.getElementById('myChart').getContext('2d');
 var myChart = new Chart(ctx, {
@@ -96,8 +107,36 @@ var myLineChart = new Chart(ctx2, {
     }
 });
 </script>
+<script>
+
+    Highcharts.chart('container', {
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'My Issued and Return Per Month'
+        },
+        xAxis: {
+        categories:['{{my_mnth.0}}', '{{my_mnth.1}}', 
+        '{{my_mnth.2}}', '{{my_mnth.3}}', '{{my_mnth.4}}'] ,
+        },
+        series: [{
+            name: 'Issued',
+            data: {{my_iss}}
+        }, {
+            name: 'Returned',
+            data: {{my_ret}}
+        }]
+    });
+  </script>
 {% endblock chartjs %}
 
 {% block sidebar%}
  {%include 'operations/sidebar.html'%}
  {% endblock sidebar %}
+
+
+{% block heading %}
+<h2>Home </h2>
+{% endblock heading %}
+

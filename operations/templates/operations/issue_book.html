@@ -8,9 +8,20 @@ good
  {{form.as_p}}
  <input type="submit" name="submit" class="btn btn-primary">
 </form>
-
 {% endif %}
+
 {%endblock%}
 {% block sidebar%}
  {%include 'operations/sidebar.html'%}
  {% endblock sidebar %}
+
+ {% block title %}
+ <title>Issue Books | LMS </title>   
+{% endblock title %}
+
+{% block heading %}
+<h2>Issue Books </h2>
+{% endblock heading %}
+
+
+

@@ -4,31 +4,6 @@ from account.models import User
 from django.contrib.auth.forms import UserCreationForm
 
 class UserRegistrationForm(UserCreationForm):
-	'''username=forms.CharField(widget=forms.TextInput(
-		attrs={'class':'form-control', 'placeholder':'Enter Username'}), 
-	required=True, max_length=30)
-	Email=forms.CharField(widget=forms.EmailInput(
-		attrs={"class":"form-control", "placeholder":"Enter Email"}), 
-	required=True)
-	password=forms.CharField(widget=forms.PasswordInput(
-		attrs={"class":"form-control", "placeholder":"Enter Password"}), 
-	required=True)
-	First_Name=forms.CharField(widget=forms.TextInput(
-		attrs={'class':'form-control', 'placeholder':'Enter First Name'}), 
-	required=True, max_length=30)
-	Last_Name=forms.CharField(widget=forms.TextInput(
-		attrs={'class':'form-control', 'placeholder':'Enter Last Name'}), 
-	required=True, max_length=30)
-	#Role=forms.CharField(widget=forms.ChoiceInput(
-		#attrs={'class':'form-control'}), 
-	#required=True, max_length=30)
-	Profile_Pic=forms.ImageField(widget=forms.FileInput(
-		attrs={'class':'form-control'}), 
-	required=True, max_length=30)
-	Contact=forms.CharField(widget=forms.TextInput(
-		attrs={'class':'form-control', 'placeholder':'Enter Contact Number'}), 
-	required=True, max_length=30)'''
-
 	class Meta:
 		model=User
 		fields=[
@@ -42,6 +17,23 @@ class UserRegistrationForm(UserCreationForm):
 		'contact'
 		]
 		exclude=('password',)
+
+	def clean_email(self):
+		email=self.cleaned_data['email']
+		if User.objects.filter(email=email).exists():
+			raise forms.ValidationError('Email Already Taken')
+		else:
+			return email
+
+	def clean_contact(self):
+		contact=self.cleaned_data['contact']
+		if User.objects.filter(contact=contact).exists():
+			raise forms.ValidationError('Contact Already Taken')
+		elif not contact.isdigit():
+			raise forms.ValidationError('Contact cannot be Alphabet')
+		else:
+			return contact
+			
 		
 
 class StudentForm(forms.ModelForm):
@@ -59,3 +51,20 @@ class LoginForm(forms.Form):
 	class Meta:
 		model=User
 		fields=['username', 'password']
+
+
+class UserUpdateForm(forms.ModelForm):
+	class Meta:
+		model=User
+		fields=[ 
+		'email',
+		'first_name',
+		'last_name',
+		'profile_pic',
+		'contact'
+		]
+
+class StudentForm(forms.ModelForm):
+	class Meta:
+		model=Student
+		fields=['year', 'Enrollment']

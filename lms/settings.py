@@ -25,14 +25,12 @@ SECRET_KEY = '=ej628j)6e=po#_4ij)o3xz%_16)8w&p5kbbnf7bj^x36rb!+@'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    'channels',
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -41,7 +39,7 @@ INSTALLED_APPS = [
     'account',
     'operations',
     'crispy_forms',
-    'chat',
+    'django.contrib.admin',
     
 ]
 
@@ -68,6 +66,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'operations.context_processors.my_context_processor',
+                'operations.context_processors.get_all_catagory',
             ],
         },
     },
@@ -148,11 +148,13 @@ AUTH_USER_MODEL = 'account.User'
 CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST='smtp.gmail.com'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST='localhost'
+#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+#EMAIL_HOST='smtp.gmail.com'
 EMAIL_PORT=587
 EMAIL_HOST_USER='' #add hosts email
-EMAIL_HOST_PASSWORD='********' #add host password
+EMAIL_HOST_PASSWORD='' #add host password
 #must turn off 2 step verification and allow less secure app
 EMAIL_USE_TLS=True
 EMAIL_USE_SSL=False

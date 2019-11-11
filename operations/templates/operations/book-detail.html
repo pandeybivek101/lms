@@ -39,10 +39,17 @@
    <td>Available Quantity</td>
    <td>{{book.available_quantity}}</td>
  </tr>
+
  <tr>
    <td>Barcode</td>
-   <td><img src="{{book.barcode.url}}" height="100" width="100"></td>
+    {% if book.barcode %}
+   <td><img src="{{book.barcode.url}}" height="100" width="100">
+   {% else %}
+   <p>Currently Unavailable</p>
+   {% endif %}
+   </td>
  </tr>
+ 
 <tr>
    <td>Catagory</td>
    <td>{{book.catagory}}</td>
@@ -52,6 +59,30 @@
    <td>{{book.added_by}}</td>
  </tr>
  </table>
+ {% if request.user.Role == 'Librarian'%}
+ {% if issued%}
+ <table class='table table-bordered'>
+ <p style="text-align: center;"><b>Issued Student</b></p>
+    <tr>
+      <td>Id</td>
+       <td>First Name</td>
+       <td>Last Name</td>
+       <td>UserName</td>
+       <td>Return Date</td>
+    </tr>
+
+    {% for std in issued%}
+    <tr>
+    <td>{{std.student.id}}</td>
+      <td>{{std.student.first_name}}</td>
+      <td>{{std.student.last_name}}</td>
+      <td>{{std.student.last_name}}</td>
+      <td>{{std.return_date|date:"M d, Y"}}</td>
+    </tr>
+    {% endfor %}
+ </table>
+ {% endif %}
+ {% endif %}
  </table>
                                
 
@@ -61,6 +92,17 @@
 {% block sidebar%}
  {%include 'operations/sidebar.html'%}
  {% endblock sidebar %}
+
+{% block title %}
+ <title>Books Detail| LMS </title>   
+{% endblock title %}
+
+{% block heading %}
+<h2>Book Detail </h2>
+{% endblock heading %}
+
+
+
 
 
 

@@ -1,0 +1,87 @@
+{%extends 'operations/main.html'%}
+{% block content %}
+
+
+<table class='table table-bordered'>
+<tr><td>
+<a href="{% url 'change-profile'%}"><button class="form-control btn btn-info">Change Profile</button></a>
+<a href="{% url 'change_password' %}"><button class="form-control btn btn-info">Change Password</button></a>
+</td>
+</tr>
+ <tr>
+   <td style="text-align: center;"><b>Image</b></td>
+ </tr>
+ <tr>
+ <td style="text-align: center;"><img src="{{profile.profile_pic.url}}" height="300" width="300"></td>
+ </tr>
+ <table class='table table-bordered'>
+ <p style="text-align: center;"><b>Student Information</b></p>
+   <tr>
+   <td>First Name</td>
+   <td>{{profile.first_name}}</td>
+ </tr>
+ <tr>
+   <td>Last Name</td>
+   <td>{{profile.last_name}}</td>
+ </tr>
+ <tr>
+   <td>UserName</td>
+   <td>{{profile.username}}</td>
+ </tr>
+ <tr>
+   <td>Email</td>
+   <td>{{profile.email}}</td>
+ </tr>
+ <tr>
+   <td>Contact</td>
+   <td>{{profile.contact}}</td>
+ </tr>
+ {% if std %}
+ <tr>
+   <td>Year</td>
+   <td>{{std.year}}</td>
+ </tr>
+ <tr>
+   <td>Enrollment</td>
+   <td>{{std.Enrollment}}</td>
+ </tr>
+ {% endif %}
+ </table>
+
+{% endblock %}
+
+{% block sidebar%}
+ {%include 'operations/sidebar.html'%}
+ {% endblock sidebar %}
+
+ {% block title %}
+ <title>Profile | LMS </title>   
+{% endblock title %}
+
+{% block heading %}
+<h2>Profile </h2>
+{% endblock heading %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

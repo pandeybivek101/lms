@@ -32,4 +32,4 @@ class Student(models.Model):
 		)
 	Enrollment=models.CharField(max_length=20, choices=C_CHOICES)
 	year=models.CharField(max_length=20, choices=year)
-	student=models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
+	student=models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)

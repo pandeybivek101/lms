@@ -3,6 +3,7 @@
 
 
 <table class='table table-bordered'>
+<tr><a href="{% url 'msg_std' std.id %}"><button class="form-control btn btn-info">Message</button></tr></a>
  <tr>
    <td style="text-align: center;"><b>Image</b></td>
  </tr>
@@ -32,8 +33,42 @@
    <td>{{std.contact}}</td>
  </tr> 
  </table>
+ {% if course %}
+ <table class='table table-bordered'>
+ <p style="text-align: center;"><b>Educational detail</b></p>
+    <tr>
+       <td>Year</td>
+       <td>{{course.year}}</td>
+    </tr>
+    <tr>
+      <td>Enrollment</td>
+      <td>{{course.Enrollment}}</td>
+    </tr>
  </table>
-                               
+ {% endif %}
+ {% if request.user.Role == 'Librarian'%}
+ {% if book_issued %}
+ <table class='table table-bordered'>
+ <p style="text-align: center;"><b>Issued Books</b></p>
+    <tr>
+      <td>Id</td>
+       <td>Book Name</td>
+       <td>Author Name</td>
+       <td>Return Date</td>
+    </tr>
+    {% for book in book_issued%}
+    <tr>
+    <td>{{book.book.id}}</td>
+      <td>{{book.book.books_name}}</td>
+      <td>{{book.book.books_author_name}}</td>
+      <td>{{book.return_date|date:"M d, Y"}}</td>
+    </tr>
+    {% endfor %}
+ </table>
+ {% endif %}
+ {% endif %}
+ </table>
+                            
 
 
 {% endblock %}
@@ -41,6 +76,17 @@
 {% block sidebar%}
  {%include 'operations/sidebar.html'%}
  {% endblock sidebar %}
+
+ {% block title %}
+ <title>Student Detail | LMS </title>   
+{% endblock title %}
+
+{% block heading %}
+<h2>Student Detail </h2>
+{% endblock heading %}
+
+
+
 
 
 

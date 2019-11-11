@@ -1,0 +1,64 @@
+{%extends 'operations/main.html'%}
+{% load static %}
+{% block content %}
+<!-- page content area main -->
+
+<!-- Basic dropdown -->
+
+
+{% if activities %}
+<table class='table table-bordered' id="mytable">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Books Name</th>
+      <th>Author Name</th>
+      <th>Name</th>
+      <th>UserName</th>
+      <th>Action</th>
+    </thead>
+    <tbody>
+      {% for book in activities %}
+      <tr>
+        <td>{{book.ebook.id}}</td>
+        <td>{{book.ebook.name}}</td>
+        <td>{{book.ebook.author_name}}</td>
+        <td>{{book.requested_by.first_name}} {{book.requested_by.first_name}}</td>
+        <td>{{book.requested_by.username}}</td>
+        {% if book.action == 'Allowed' %}
+        <td style="color: blue;"><b>Allowed</b></td>
+        {% endif %}
+        {% if book.action == 'Denied' %}
+        <td style="color: red;"><b>Denied</b></td>
+        {% endif %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <h1>No EBooks Activities</h1>
+  {% endif %}
+
+
+  <!-- /page content -->
+  {% endblock %}
+
+  {% block sidebar%}
+  {%include 'operations/sidebar.html'%}
+  {% endblock sidebar %}
+
+  {% block title %}
+  <title>Ebook Activities | LMS </title>   
+  {% endblock title %}
+
+  {% block heading %}
+  <h2>Ebooks Activities </h2>
+  {% endblock heading %}
+
+  {% block js %}
+  {% include 'operations/js.html'%}
+  {% endblock js %}
+
+
+
+

@@ -27,15 +27,22 @@
 <body class="login">
     <div class="login_wrapper">
         <section class="login_content">
-            
-            {% block content %}
-            
-            {% endblock %}
-        </section>
-    </div>
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-primary" role="alert">
+                <div class="alert alert-danger col-lg-6 col-lg-push-3">
+                 <strong style="color:white">{{message}}</strong>
+             </div>
+             {% endfor %}
+             {% endif %}
+             {% block content %}
+             
+             {% endblock %}
+         </section>
+     </div>
 
 
 
 
-</body>
-</html>
+ </body>
+ </html>
