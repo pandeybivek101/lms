@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'operations',
     'crispy_forms',
     'django.contrib.admin',
+    'django_twilio',
     
 ]
 
@@ -159,6 +160,13 @@ EMAIL_USE_TLS=True
 EMAIL_USE_SSL=False
 
 
+TWILIO_ACCOUNT_SID = ''
+TWILIO_AUTH_TOKEN = ''
+
+phone_num=''
+
+DJANGO_TWILIO_BLACKLIST_CHECK = True
+DJANGO_TWILIO_FORGERY_PROTECTION = False
 
 
 

@@ -35,6 +35,9 @@ from account.models import Student
 from django.core.paginator import Paginator
 from django.views import View
 
+from twilio.rest import Client
+from twilio.rest import TwilioRestClient
+
 
 
 # Create your views here.
@@ -333,6 +336,16 @@ def ReturnBooks(request, pk):
                 fail_silently=False,
             )
             notify.delete()
+
+            account_sid=settings.TWILIO_ACCOUNT_SID
+            auth_token=settings.TWILIO_AUTH_TOKEN
+            client = Client(account_sid, auth_token)
+            message = client.messages.create(
+                     body='you have requested for book ('+' '+notify.book.books_name+' '+') which is now available',
+                     from_=settings.phone_num,
+                     to='+9779844700852',
+                 )
+
     else:
         bookitem.available_quantity=bookitem.books_quantity
     bookitem.save()
