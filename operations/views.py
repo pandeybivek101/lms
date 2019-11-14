@@ -34,6 +34,7 @@ from django.core.files.base import ContentFile
 from account.models import Student
 from django.core.paginator import Paginator
 from django.views import View
+import shutil
 
 from twilio.rest import Client
 from twilio.rest import TwilioRestClient
@@ -41,6 +42,7 @@ from twilio.rest import TwilioRestClient
 
 
 # Create your views here.
+
 
 def myissuedbook(request):
     issuedbooks=IssueBooks.objects.filter(student=request.user.id)
@@ -135,10 +137,9 @@ class ListStd(LoginRequiredMixin, UserPassesTestMixin, ListView):
     template_name='operations/liststd.html'
     queryset=User.objects.filter(Role='Student')
     context_object_name='stdrecord'
-    paginate_by=5
 
     def test_func(self):
-        if self.request.user.Role=='Librarian':
+        if  self.request.user.Role=='Librarian':
             return True
         else:
             return False
@@ -194,7 +195,7 @@ class DeleteBook(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return reverse_lazy("displaybooks")
 
     def test_func(self):
-        if self.request.user.Role=='Librarian':
+        if  self.request.user.Role=='Librarian':
             return True
         else:
             return False
@@ -216,10 +217,11 @@ class EditBook(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return reverse_lazy("displaybooks")
 
     def test_func(self):
-        if self.request.user.Role=='Librarian':
+        if  self.request.user.Role=='Librarian':
             return True
         else:
             return False
+
 
 
 def Messagestd(request, id):
@@ -250,11 +252,10 @@ class DeleteStd(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return reverse_lazy("liststd")
 
     def test_func(self):
-        if self.request.user.Role=='Librarian':
+        if  self.request.user.Role=='Librarian':
             return True
         else:
             return False
-
 
 
 @login_required
@@ -388,7 +389,7 @@ def printBarCode(request, id):
         filename = ean.save('std'+id)
         initial_path=settings.BASE_DIR+'\\'+"std"+id+".png"
         new_path=settings.BASE_DIR+'\\'+'media'+"\\"+"std"+id+".png"
-        os.rename(initial_path, new_path)
+        shutil.move(initial_path, new_path)
         std.barcode=filename
         std.save()
     return redirect('liststd')
@@ -476,7 +477,7 @@ def BookprintBarCode(request, id):
         filename = ean.save('book'+id)
         initial_path=settings.BASE_DIR+'\\'+"book"+id+".png"
         new_path=settings.BASE_DIR+'\\'+'media'+"\\"+'book'+id+".png"
-        os.rename(initial_path, new_path)
+        shutil.move(initial_path, new_path)
         book.barcode=filename
         book.save()
     return redirect('displaybooks')
@@ -524,10 +525,11 @@ class DeleteEBooks(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return reverse_lazy("list-ebooks")
 
     def test_func(self):
-        if self.request.user.Role=='Librarian':
+        if  self.request.user.Role=='Librarian':
             return True
         else:
             return False
+
 
 
 class EditEbooks(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
@@ -539,7 +541,7 @@ class EditEbooks(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return reverse_lazy("list-ebooks")
 
     def test_func(self):
-        if self.request.user.Role=='Librarian':
+        if  self.request.user.Role=='Librarian':
             return True
         else:
             return False
@@ -691,10 +693,11 @@ class IssueActivities(ListView, LoginRequiredMixin, UserPassesTestMixin):
         return context
 
     def test_func(self):
-        if self.request.user.Role=='Librarian':
+        if  self.request.user.Role=='Librarian':
             return True
         else:
             return False
+
 
 
 class EbookActivities(ListView, LoginRequiredMixin, UserPassesTestMixin):
@@ -711,7 +714,7 @@ class EbookActivities(ListView, LoginRequiredMixin, UserPassesTestMixin):
         return context
 
     def test_func(self):
-        if self.request.user.Role=='Librarian':
+        if  self.request.user.Role=='Librarian':
             return True
         else:
             return False

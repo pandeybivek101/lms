@@ -36,6 +36,8 @@ def StudentInfo(request):
 			data=form1.save(commit=False)
 			data.student=User.objects.filter().latest('id')
 			data.save()
+			if request.user.is_authenticated:
+				return redirect('home')
 			return redirect('login')
 	else:
 		form1=StudentForm()
@@ -51,6 +53,9 @@ def LoginView(request):
 			user=authenticate(username=username, password=password)
 			if user is not None:
 				login(request, user)
+				if request.user.Role == "Student":
+					if not Student.objects.filter(student=request.user).exists():
+						return redirect('sinfo')
 				return redirect('home')
 			else:
 				messages.error(request, 'Invalid Username or password')
