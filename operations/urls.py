@@ -21,6 +21,7 @@ from django.conf.urls import handler404, handler500
 
 urlpatterns = [
     path('', views.Home, name='home'),
+    path('scan/', views.Scan, name='scan'),
     path('view-message/', views.ViewMessage, name='view-message'),
     path('view-message/<int:id>/detail', views.ViewMessageDetail, name='view-msg-detail'),
 

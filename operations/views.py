@@ -42,7 +42,8 @@ from twilio.rest import TwilioRestClient
 
 
 # Create your views here.
-
+def Scan(request):
+    return render(request, 'operations/quagga.html',{})
 
 def myissuedbook(request):
     issuedbooks=IssueBooks.objects.filter(student=request.user.id)

@@ -96,6 +96,11 @@
               </a>
             </li>
 
+            <li role="presentation" class="dropdown">
+              <a class="dropdown-toggle info-number" href="{% url 'scan'%}">scan
+              </a>
+            </li>
+
           </ul>
         </nav>
       </div>
@@ -183,6 +188,8 @@
 
     <!-- Custom Theme Scripts -->
     <script src="{%static 'js/custom.min.js' %}"></script>
+    <script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.js'></script>
+    <script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js'></script>
     {% block js %}
 
     {% endblock js %}
