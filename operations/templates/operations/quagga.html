@@ -26,6 +26,7 @@
             left: 0;
             top: 0;
         }
+
     </style>
 {% endblock css %}
 
@@ -36,9 +37,7 @@
 
 
 
-    <script src="quagga.min.js"></script>
     <!-- Include the image-diff library -->
-    <script src="https://cdn.rawgit.com/serratus/quaggaJS/0420d5e0/dist/quagga.min.js"></script>
     <script src="https://cdn.rawgit.com/serratus/quaggaJS/0420d5e0/dist/quagga.min.js"></script>
     <script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.js'></script>
     <script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js'></script>
@@ -128,10 +127,10 @@
 
 
             Quagga.onDetected(function (result) {
-                console.log("Barcode detected and processed : [" + result.codeResult.code + "]", result);
-                console.log(result.codeResult.code)
+                //console.log("Barcode detected and processed : [" + result.codeResult.code + "]", result);
+                //console.log(result.codeResult.code)
                 Quagga.stop();
-                window.location.href = "{{request.scheme}}://{{request.get_host}}/displaybooks/"+result.codeResult.code+"/detail"
+                window.location.href = "{{request.scheme}}://{{request.get_host}}/liststd/"+result.codeResult.code+"/detail"
 
             });
         }

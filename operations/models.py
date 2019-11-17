@@ -20,7 +20,7 @@ class AddBooks(models.Model):
 	books_price=models.PositiveIntegerField()
 	books_quantity=models.PositiveIntegerField()
 	available_quantity=models.PositiveIntegerField()
-	barcode=models.ImageField(blank=True, null=True)
+	barcode=models.ImageField(blank=True, null=True,upload_to='book_barcode')
 	catagory = models.ForeignKey(Catagory, on_delete=models.CASCADE, null=True)
 	added_by=models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 

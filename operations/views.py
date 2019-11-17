@@ -35,13 +35,15 @@ from account.models import Student
 from django.core.paginator import Paginator
 from django.views import View
 import shutil
-
+from django.core.exceptions import ObjectDoesNotExist
 from twilio.rest import Client
 from twilio.rest import TwilioRestClient
 
 
 
 # Create your views here.
+@login_required
+@role_required(allowed_roles=['Librarian'])
 def Scan(request):
     return render(request, 'operations/quagga.html',{})
 
@@ -474,7 +476,7 @@ def View_Ebook_Request_deny(request, id):
 def BookprintBarCode(request, id):
     book=AddBooks.objects.get(id=id)
     if not book.barcode:
-        ean = barcode.get('code128', id, writer=ImageWriter())
+        ean = barcode.get('code39', id+'', writer=ImageWriter())
         filename = ean.save('book'+id)
         initial_path=settings.BASE_DIR+'\\'+"book"+id+".png"
         new_path=settings.BASE_DIR+'\\'+'media'+"\\"+'book'+id+".png"

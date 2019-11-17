@@ -63,3 +63,50 @@ tbody:before {
     line-height:10px;
     text-indent:-99999px;
 }
+
+https://codeday.me/es/qa/20190428/590279.html
+<script type="text/javascript" src="your_path/jquery.scannerdetection.js"></script>
+<script type="text/javascript">
+$(document).scannerDetection({
+	timeBeforeScanTest: 200, // wait for the next character for upto 200ms
+	startChar: [120], // Prefix character for the cabled scanner (OPL6845R)
+	endChar: [13], // be sure the scan is complete if key 13 (enter) is detected
+	avgTimeByChar: 40, // it's not a barcode if a character takes longer than 40ms
+	onComplete: function(barcode, qty){ ... } // main callback function	
+});
+</script>
+
+//https://github.com/kabachello/jQuery-Scanner-Detection
+//https://a.kabachnik.info/jquery-scannerdetection-tutorial.html
+//catching barcode scanner
+var BarcodeScanerEvents = function() {
+     this.initialize.apply(this, arguments);
+};
+
+BarcodeScanerEvents.prototype = {
+    initialize: function() {
+       $(document).on({
+          keyup: $.proxy(this._keyup, this)
+       });
+    },
+    _timeoutHandler: 0,
+    _inputString: '',
+    _keyup: function (e) {
+        if (this._timeoutHandler) {
+            clearTimeout(this._timeoutHandler);
+            this._inputString += String.fromCharCode(e.which);
+        } 
+
+        this._timeoutHandler = setTimeout($.proxy(function () {
+            if (this._inputString.length <= 3) {
+                this._inputString = '';
+                return;
+            }
+
+            $(document).trigger('onbarcodescaned', this._inputString);
+
+            this._inputString = '';
+
+        }, this), 20);
+    }
+};

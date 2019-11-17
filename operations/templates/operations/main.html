@@ -91,16 +91,21 @@
             </li>
             {% endif %}
 
+            {% if request.user.Role == "Librarian" %}
             <li role="presentation" class="dropdown">
               <a class="dropdown-toggle info-number" href="{% url 'profile'%}"><i class="fa fa-user"></i>
               </a>
             </li>
+            {% endif %}
+
+            {% if request.user.Role == "Librarian" %}
 
             <li role="presentation" class="dropdown">
-              <a class="dropdown-toggle info-number" href="{% url 'scan'%}">scan
+              <a class="dropdown-toggle info-number" href="{% url 'scan'%}"><i class="fa fa-barcode"></i>
               </a>
             </li>
 
+            {% endif %}
           </ul>
         </nav>
       </div>
