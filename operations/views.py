@@ -476,7 +476,7 @@ def View_Ebook_Request_deny(request, id):
 def BookprintBarCode(request, id):
     book=AddBooks.objects.get(id=id)
     if not book.barcode:
-        ean = barcode.get('code39', id+'', writer=ImageWriter())
+        ean = barcode.get('code128', id, writer=ImageWriter())
         filename = ean.save('book'+id)
         initial_path=settings.BASE_DIR+'\\'+"book"+id+".png"
         new_path=settings.BASE_DIR+'\\'+'media'+"\\"+'book'+id+".png"
