@@ -54,10 +54,20 @@ class IssuebookForm(forms.ModelForm):
 		model=Ebooks
 		fields=['student', 'book']
 
+	def clean(self):
+		cleaned_data = super().clean()
+		std_id = cleaned_data.get('student')
+		bk_id = cleaned_data.get('book')
+		iss=IssueBooks.objects.filter(student=std_id, 
+			returned=False,
+			book=bk_id)
+		if iss.exists():
+			raise forms.ValidationError('This book is already assigned to designated student')
+		return cleaned_data
+
 	def clean_student(self):
 		std_id=self.cleaned_data['student']
 		std_qs=User.objects.filter(id=std_id)
-		print(std_qs)
 		if not std_qs.exists():
 			raise forms.ValidationError('Student with this Id doesnot exists')
 		else:
@@ -72,7 +82,6 @@ class IssuebookForm(forms.ModelForm):
 					return std_id
 			else:
 			    return std_id
-
 
 	def clean_book(self):
 		book_id=self.cleaned_data['book']

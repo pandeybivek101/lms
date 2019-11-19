@@ -3,7 +3,7 @@ from .models import *
 # Register your models here.
 #jjj
 class IssueBookAdmin(admin.ModelAdmin):
-	list_display=['student', 'book' ,'issued_by']
+	list_display=['student', 'book' , 'returned', 'issued_by']
 admin.site.register(IssueBooks, IssueBookAdmin)
 
 

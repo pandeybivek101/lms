@@ -42,6 +42,7 @@ class IssueBooks(models.Model):
 	def count_issued(self):
 		count=self.object.count()
 
+
 	def __init__(self, *args ,**kwargs):
 		super(IssueBooks ,self).__init__(*args, **kwargs)
 		current_time=datetime.datetime.utcnow().replace(tzinfo=pytz.UTC)

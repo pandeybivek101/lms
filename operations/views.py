@@ -47,9 +47,13 @@ from twilio.rest import TwilioRestClient
 def Scan(request):
     return render(request, 'operations/quagga.html',{})
 
+@login_required
 def myissuedbook(request):
-    issuedbooks=IssueBooks.objects.filter(student=request.user.id)
-    return render(request, 'operations/myissuedbooks.html', {'issuedbooks':issuedbooks})
+    issuedbooks=IssueBooks.objects.filter(student=request.user.id,
+        returned=False)
+    return render(request, 
+        'operations/myissuedbooks.html', 
+        {'issuedbooks':issuedbooks})
 
 
 class ListEbooks(ListView):
@@ -109,7 +113,8 @@ def Home(request):
             )
         count=issued_data.count()
         count_lst.append(count)
-        erh=EbookRequestHistory.objects.filter(action_date__year=year,
+        erh=EbookRequestHistory.objects.filter(
+            action_date__year=year,
             action_date__month=i, 
             action='Allowed').count()
         erh_lst.append(erh)
@@ -119,7 +124,8 @@ def Home(request):
     self_user=IssueBooks.objects.filter(student=request.user)
     non_fined_per=float('%.2f' % ((non_fined / tot_issue)*100))
     fined=float('%.2f' % (100-non_fined_per))
-    msg_count=Message.objects.filter(posted_to=request.user, read=False).count()
+    msg_count=Message.objects.filter(posted_to=request.user, 
+        read=False).count()
     print(msg_count)
     context={
     'count_lst':count_lst,
@@ -171,11 +177,16 @@ class DisplayBooks(LoginRequiredMixin, ListView):
     paginate_by = 2
 
     def get_context_data(self, *args, **kwargs):
-        context = super(DisplayBooks, self).get_context_data(*args, **kwargs)
+        context = super(DisplayBooks, self).get_context_data(*args, 
+            **kwargs)
         books=self.queryset
         noti_lst=[]
-        noti_req=NotifyMeModel.objects.filter(student=self.request.user)
-        iss_qs=IssueBooks.objects.filter(student=self.request.user, returned=False)
+        noti_req=NotifyMeModel.objects.filter(
+            student=self.request.user
+            )
+        iss_qs=IssueBooks.objects.filter(
+            student=self.request.user, returned=False
+            )
         for i in noti_req:
             noti_lst.append(i.book.id)
         for i in iss_qs:
@@ -211,7 +222,8 @@ class EditBook(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     def form_valid(self, form):
         book=AddBooks.objects.get(pk=self.kwargs.get('pk'))
-        issued=IssueBooks.objects.filter(book=book, returned=False).count()
+        issued=IssueBooks.objects.filter(book=book, 
+            returned=False).count()
         form.instance.added_by == self.request.user
         form.instance.available_quantity=form.instance.books_quantity-issued
         return super().form_valid(form)
@@ -270,7 +282,9 @@ def EditStudent(request, id):
         form.save()
         return redirect("liststd")
     else:
-        return render(request,'SRegistration.html', {'student':student, 'form':form})
+        return render(request,'SRegistration.html', 
+            {'student':student,
+             'form':form})
 
 
 @login_required
@@ -421,7 +435,8 @@ def SearchBooks(request):
 @login_required
 def EBookRequest(request, id):
     req=Ebooks.objects.get(id=id)
-    EbookRequest.objects.get_or_create(ebook=req, requested_by=request.user)
+    EbookRequest.objects.get_or_create(ebook=req, 
+        requested_by=request.user)
     return redirect('list-ebooks')
 
 
@@ -429,7 +444,8 @@ def EBookRequest(request, id):
 @role_required(allowed_roles=['Librarian'])
 def ViewEbookRequest(request):
     requests=EbookRequest.objects.all()
-    return render(request, 'operations/ebook-request.html', {'requests':requests})
+    return render(request, 'operations/ebook-request.html', 
+        {'requests':requests})
 
 
 @login_required
@@ -562,7 +578,8 @@ def NotifyMe(request, id):
 def StdDetail(request, id):
     std=User.objects.get(id=id)
     course=Student.objects.filter(student=std).first()
-    book_issued=IssueBooks.objects.filter(student=std, returned=False)
+    book_issued=IssueBooks.objects.filter(student=std, 
+        returned=False)
     return render(request, 'operations/std-detail.html', 
         {
         'std':std,
@@ -576,9 +593,11 @@ class DetailBook(LoginRequiredMixin, DetailView):
     model=AddBooks
 
     def get_context_data(self, *args, **kwargs):
-        context = super(DetailBook, self).get_context_data(*args, **kwargs)
+        context = super(DetailBook, self).get_context_data(*args, 
+            **kwargs)
         book=AddBooks.objects.get(pk=self.kwargs.get('pk'))
-        issued=IssueBooks.objects.filter(book=book, returned=False)
+        issued=IssueBooks.objects.filter(book=book, 
+            returned=False)
         context.update({
             'book':book,
             'issued':issued
@@ -591,9 +610,11 @@ class DetailEBook(LoginRequiredMixin, DetailView):
     model=Ebooks
 
     def get_context_data(self, *args, **kwargs):
-        context = super(DetailEBook, self).get_context_data(*args, **kwargs)
+        context = super(DetailEBook, self).get_context_data(*args, 
+            **kwargs)
         ebook=Ebooks.objects.get(pk=self.kwargs.get('pk'))
-        allowed=EbookRequestHistory.objects.filter(ebook=ebook, readable=True)
+        allowed=EbookRequestHistory.objects.filter(ebook=ebook, 
+            readable=True)
         context.update({
             'ebook':ebook,
             'allowed':allowed
@@ -607,7 +628,8 @@ def ViewEbook(request, id):
         return redirect('home')
     else:
         read=Ebooks.objects.get(id=id)
-    return render(request, 'operations/pdf.html', {'read':read})
+    return render(request, 'operations/pdf.html', 
+        {'read':read})
 
 
 @login_required
@@ -663,7 +685,9 @@ def SearchEBooks(request):
 @login_required
 @role_required(allowed_roles=['Student'])
 def ViewMessage(request):
-    msgs=Message.objects.filter(posted_to=request.user).order_by('Posted_on')[::-1]
+    msgs=Message.objects.filter(
+        posted_to=request.user
+        ).order_by('Posted_on')[::-1]
     return render(request, 'operations/list-msg.html', {
         'msgs':msgs,
 
@@ -688,7 +712,8 @@ class IssueActivities(ListView, LoginRequiredMixin, UserPassesTestMixin):
     paginate_by=5 
 
     def get_context_data(self, *args, **kwargs):
-        context=super(IssueActivities,self).get_context_data(*args, **kwargs)
+        context=super(IssueActivities,self).get_context_data(*args, 
+            **kwargs)
         activities=self.get_queryset()
         context.update({
             'activities':activities,
