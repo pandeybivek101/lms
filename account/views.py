@@ -14,6 +14,7 @@ from django.contrib import messages
 
 
 # Create your views here.
+
 def URegister(request):
 	if request.method=="POST":
 		form=UserRegistrationForm(request.POST, request.FILES)
@@ -53,6 +54,8 @@ def LoginView(request):
 			user=authenticate(username=username, password=password)
 			if user is not None:
 				login(request, user)
+				if not request.POST.get('rememberme'):
+					request.session.set_expiry(0)
 				if request.user.Role == "Student":
 					if not Student.objects.filter(student=request.user).exists():
 						return redirect('sinfo')

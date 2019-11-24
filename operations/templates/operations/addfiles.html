@@ -1,25 +1,23 @@
-{%extends 'operations/main.html'%}
+{%extends 'operations/index.html'%}
 {% load crispy_forms_tags %}
 
 {% block content%}
-<form action="{% url 'add-ebooks'%}" method="POST" class="col-lg-8" enctype="multipart/form-data">
-	{% csrf_token %}
-	{{form|crispy}}
-	<input type="submit" name="submit" class="btn btn-primary">
-</form>   
-{%endblock%}
+<div class="container-fluid">
 
-{% block sidebar%}
-{%include 'operations/sidebar.html'%}
-{% endblock sidebar %}
+	<div class="row">
+		<div class="col-xl-12">
+			<div class="card-box">
 
-{% block title %}
-<title>Add EBooks | LMS </title>   
-{% endblock title %}
-
-{% block heading %}
-<h2>Add EBooks </h2>
-{% endblock heading %}
+				<h4 class="header-title mt-0 mb-3">Add Books</h4>
+				<form action="{% url 'add-ebooks'%}" method="POST" class="col-lg-8" enctype="multipart/form-data">
+					{% csrf_token %}
+					{{form|crispy}}
+					<input type="submit" name="submit" class="btn btn-primary">
+				</form> 
+			</div>
+		</div>
+	</div>  
+	{%endblock%}
 
 
 

@@ -1,59 +1,80 @@
 
-{%extends 'operations/main.html'%}
+{%extends 'operations/index.html'%}
 {% block content %}
 <!-- page content area main -->
 
 <!-- Basic dropdown -->
 {% if ebooks%}
-<table class='table table-bordered' id='mytable'>
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Books Name</th>
-      <th>Author Name</th>
-      {% if request.user.Role == 'Librarian'%}
-      <th>Book File</th>
-      <th>Action</th>
-      {% endif %}
+<div class="row">
+  <div class="col-12">
+    <div class="card-box table-responsive">
+      <h4 class="mt-0 header-title">Multi item selection</h4>
+      <div class="btn-group dropdown mt-1">
+        <button type="button" class="btn btn-success waves-effect waves-light">Catagories</button>
+        <button type="button" class="btn btn-success dropdown-toggle waves-effect waves-light" data-toggle="dropdown" aria-expanded="false"><i class="mdi mdi-chevron-down"></i></button>
+        <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(103px, 37px, 0px);">
+          <!-- item-->
+          <a href="{% url 'list-ebooks' %}" class="dropdown-item">All</a>
+          {% for item in catagories%}
+          <a href="{% url 'ebook-catagory' item.catagory  %}" class="dropdown-item">{{item.catagory}}</a>
+          {% endfor %}
+        </div>
+      </div>
+      <p class="text-muted font-14 mb-3">
+      </p>
 
-      {% if request.user.Role == 'Student'%}
-      <th>Action</th>
-      {% endif %}
-      <td><b>Detail</b></td>
-    </tr>
-  </thead>
-  
-  <tbody>
-    {% for book in ebooks.all %}
-    <tr>
-      <td>{{book.id}}</td>
-      <td>{{book.name}}</td>
-      <td>{{book.author_name}}</td>
+      <table id="selection-datatable" class="table table-bordered dt-responsive nowrap">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Books Name</th>
+            <th>Author Name</th>
+            {% if request.user.Role == 'Librarian'%}
+            <th>Book File</th>
+            <th>Action</th>
+            {% endif %}
 
-      {% if request.user.Role == 'Librarian'%}
-      <td>
-        <form method="POST" action="{% url 'view' book.id %}">
-          {% csrf_token %}
-          <input type="numbers" name="q" value="{{book.id}}" hidden="true">
-          <button class="btn btn-primary">Read</button>
-        </form>
-      </td>
-      <td><a href="{%url 'edit-ebook' book.id%}"><button class="btn btn-warning">Edit</button></a>
-       <a href="{%url 'delete-ebook' book.id%}"><button class="btn btn-danger">Delete</button></a></td>
-       {% endif %}
+            {% if request.user.Role == 'Student'%}
+            <th>Action</th>
+            {% endif %}
+            <td><b>Detail</b></td>
+          </tr>
+        </thead>
 
-       {% if request.user.Role == 'Student'%}
-       {% if book.id in req_list %}
-       <td><a href="{% url 'view-request' book.id%}"><button class="btn btn-primary" disabled="">send view request</button></a> </td>
-       {% else %}
-       <td><a href="{% url 'view-request' book.id%}"><button class="btn btn-primary">send view request</button></a> </td>
-       {% endif %}
-       {% endif %}
-       <td><a href="{% url 'detail-ebook' book.id%}">detail</a></td>
-     </tr>   
-     {% endfor %}
-   </tbody>
- </table>
+        <tbody>
+          {% for book in ebooks.all %}
+          <tr>
+            <td>{{book.id}}</td>
+            <td>{{book.name}}</td>
+            <td>{{book.author_name}}</td>
+
+            {% if request.user.Role == 'Librarian'%}
+            <td>
+              <form method="POST" action="{% url 'view' book.id %}">
+                {% csrf_token %}
+                <input type="numbers" name="q" value="{{book.id}}" hidden="true">
+                <button class="btn btn-primary">Read</button>
+              </form>
+            </td>
+            <td><a href="{%url 'edit-ebook' book.id%}"><button class="btn btn-warning">Edit</button></a>
+             <a href="{%url 'delete-ebook' book.id%}"><button class="btn btn-danger">Delete</button></a></td>
+             {% endif %}
+
+             {% if request.user.Role == 'Student'%}
+             {% if book.id in req_list %}
+             <td><a href="{% url 'view-request' book.id%}"><button class="btn btn-primary" disabled="">send view request</button></a> </td>
+             {% else %}
+             <td><a href="{% url 'view-request' book.id%}"><button class="btn btn-primary">send view request</button></a> </td>
+             {% endif %}
+             {% endif %}
+             <td><a href="{% url 'detail-ebook' book.id%}">detail</a></td>
+           </tr>   
+           {% endfor %}
+         </tbody>
+       </table>
+     </div>
+   </div>
+ </div>
 
  {% else %}
  <h1>No EBooks Uploaded</h1>
@@ -61,43 +82,4 @@
  <!-- /page content -->
  {% endblock %}
 
- {% block sidebar%}
- {%include 'operations/sidebar.html'%}
- {% endblock sidebar %}
-
- {% block js %}
- {% if request.user.Role == "Librarian" %}
- {% include 'operations/js1.html'%}
- {% else %}
- {% include 'operations/js.html'%}
- {% endif %}
- {% endblock js %}
-
- {% block title %}
- <title>Ebook List | LMS </title>   
- {% endblock title %}
-
-{% block css%}
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.3.1/css/select.dataTables.min.css">
-{% endblock css%}
-
-
-{% block heading %}
- <h2>Ebooks List </h2>
- <div class="col-md-2">
-    <div class="dropdown">
-      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Catagory
-      </button>
-      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <a class="dropdown-item" href="{% url 'list-ebooks' %}">All</a>
-        {% for item in catagories %}
-        <a class="dropdown-item" href="{% url 'ebook-catagory' item.catagory  %}">{{item.catagory}}</a>
-        {% endfor %}
-      </div>
-    </div>
-  </div>
- {% endblock heading %}
-
-
-
+ 

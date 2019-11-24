@@ -1,44 +1,118 @@
-<div id="sidebar-menu" class="main_menu_side hidden-print main_menu" style="">
-    <div class="menu_section">
-        <h3>General</h3>
-        
-        
-        <ul class="nav side-menu">
+<div id="sidebar-menu">
 
-            <li><a href="{%url 'list-ebooks' %}"><i class="fa fa-edit"></i>List Ebooks<span class="fa fa-chevron-down"></span></a></li>
+    <ul class="metismenu" id="side-menu">
 
-            <li><a href=" {%url 'displaybooks' %}"><i class="fa fa-table"></i> Display Books <span class="fa fa-chevron-down"></span></a></li>
-
-            {% if request.user.Role == 'Librarian' %}
+        <li class="menu-title">Navigation</li>
 
 
-            <li><a href="{%url 'liststd'%}"><i class="fa fa-home"></i> All Students info <span class="fa fa-chevron-down"></span></a></li>
+        <li>
+            <a href="{% url 'home' %}">
+                <i class="mdi mdi-view-dashboard"></i>
+                <span> Dashboard </span>
+            </a>
+        </li>
 
-            <li><a href="{%url 'addbooks'%}"><i class="fa fa-edit"></i> Add Books <span class="fa fa-chevron-down"></span></a></li>
+        <li>
+            <a href="{% url 'displaybooks'%}">
+                <i class="mdi mdi-format-font"></i>
+                <span> Book List </span>
+            </a>
+        </li>
 
-            <li><a href="{%url 'add-ebooks'%}"><i class="fa fa-edit"></i> Add EBooks <span class="fa fa-chevron-down"></span></a></li>
+        <li>
+            <a href="{% url 'list-ebooks'%}">
+                <i class="mdi mdi-format-font"></i>
+                <span> EBook List </span>
+            </a>
+        </li>
 
-            <li><a href="{%url 'view-ebook-request'%}"><i class="fa fa-home"></i> Ebook Request <span class="fa fa-chevron-down"></span></a></li>
+        {% if request.user.Role == 'Student' %}
+        <li>
+            <a href="{% url 'readable-book'%}">
+                <i class="mdi mdi-format-font"></i>
+                <span>MY Readable Ebooks</span>
+            </a>
+        </li>
 
-            <li><a href="{% url 'issuebooks'%}"><i class="fa fa-table"></i> Issue Books <span class="fa fa-chevron-down"></span></a></li>
+        <li>
+            <a href="{% url 'myissuedbook'%}">
+                <i class="mdi mdi-format-font"></i>
+                <span>My Issued Books</span>
+            </a>
+        </li>
 
-            <li><a href="{% url 'issuedbooks'%}"><i class="fa fa-table"></i>Return Books<span class="fa fa-chevron-down"></span></a></li>
+        <li>
+            <a href="{% url 'my_fine'%}">
+                <i class="mdi mdi-format-font"></i>
+                <span>My Fine Amount</span>
+            </a>
+        </li>
 
-            <li><a href="{% url 'issue-activities' %}"><i class="fa fa-table"></i>Issue Activities<span class="fa fa-chevron-down"></span></a></li>
+        {% endif %}
 
-            <li><a href="{% url 'ebook-activities' %}"><i class="fa fa-table"></i> Ebook Activities <span class="fa fa-chevron-down"></span></a></li>
+        {% if request.user.Role == 'Librarian' %}
+        <li>
+            <a href="{% url 'addbooks'%}">
+                <i class="mdi mdi-format-font"></i>
+                <span>Add Books</span>
+            </a>
+        </li>
 
-            {% endif %}
+        <li>
+            <a href="{% url 'add-ebooks'%}">
+                <i class="mdi mdi-format-font"></i>
+                <span>Add Ebooks</span>
+            </a>
+        </li>
 
-            {% if request.user.Role == 'Student' %}
+        <li>
+            <a href="{% url 'issuebooks'%}">
+                <i class="mdi mdi-format-font"></i>
+                <span>Issue Books</span>
+            </a>
+        </li>
 
-            <li><a href="{% url 'myissuedbook' %}"><i class="fa fa-edit"></i>My Issued Books<span class="fa fa-chevron-down"></span></a></li>
+        <li>
+            <a href="{% url 'ebook-activities'%}">
+                <i class="mdi mdi-format-font"></i>
+                <span> EBook Records </span>
+            </a>
+        </li>
+
+        <li>
+            <a href="{% url 'issue-activities'%}">
+                <i class="mdi mdi-format-font"></i>
+                <span> Issue Records </span>
+            </a>
+        </li>
+
+        <li>
+            <a href="{% url 'issuedbooks'%}">
+                <i class="mdi mdi-format-font"></i>
+                <span>Return Books</span>
+            </a>
+        </li>
 
 
-            <li><a href="{% url 'readable-book'%}"><i class="fa fa-edit"></i>MY Readable Ebooks<span class="fa fa-chevron-down"></span></a></li>
-            {% endif %}
+        <li>
+            <a href="{% url 'liststd'%}">
+                <i class="mdi mdi-format-font"></i>
+                <span> All Student Info </span>
+            </a>
+        </li>
 
-        </ul>
-        
-    </div>
+        <li>
+            <a href="{% url 'view-ebook-request'%}">
+                <i class="mdi mdi-format-font"></i>
+                <span>Ebook Requests</span>
+            </a>
+        </li>
+
+        {% endif %}
+    </ul>
+</li>
+</ul>
+</li>
+</ul>
+
 </div>

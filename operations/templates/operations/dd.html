@@ -1,3 +1,25 @@
+<div class="text-center mb-4">
+                                    <h4 class="text-uppercase mt-0">Register</h4>
+                                </div>
+
+
+
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'sparktech_lms',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
+    }
+}
+
+
+
+
+
 class AddBooks(models.Model):
 	id=models.PositiveIntegerField('primary_key=True')
 	books_name=models.CharField(max_length=100)
@@ -120,3 +142,17 @@ https://stackoverflow.com/questions/49361463/datatables-change-button-style
    'print',
    { extend: 'excel', className: 'excelButton' }
 ]);
+
+
+{% extends 'account/baselogin.html'%}
+{% load crispy_forms_tags %}
+{% block content %}
+<form method="POST" enctype="multipart/form-data" action="{% url 'uregister' %}">
+    {% csrf_token %}
+    {{form|crispy}}
+    <button class="btn btn-primary">Register</button>
+
+    <p class="change_link">
+    <a href="{% url 'login' %}">Already Have An Account ? </a>
+    </p>
+    {% endblock %}

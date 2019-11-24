@@ -1,4 +1,4 @@
-{% extends 'operations/main.html'%}
+{% extends 'operations/index.html'%}
 {% load static %}
 {% block content %}
 <canvas id="pdf-render"></canvas>
@@ -112,17 +112,6 @@ document.querySelector('#next-page').addEventListener('click', showNextPage);
 </script>
 {% endblock js%}
 
-{% block sidebar%}
-{%include 'operations/sidebar.html'%}
-{% endblock sidebar %}
-
-{% block title %}
-<title>Pdf | LMS </title>   
-{% endblock title %}
-
-{% block heading %}
-<h2>PDF books</h2>
-{% endblock heading %}
 
 {% block css %}
 <link

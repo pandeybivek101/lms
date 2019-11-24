@@ -1,57 +1,46 @@
-{%extends 'operations/main.html'%}
+{%extends 'operations/index.html'%}
 {% block content %}
 {% if issuedbooks %}
-<table class='table table-bordered' id="mytable">
-	<thead>
-		<tr>
-			<th>ID</th>
-			<th>Books Name</th>
-			<th>Books Image</th>
-			<th>Author Name</th>
-			<th>Publication Name</th>
-			<th>Issued Date</th>
-			<th>Return Date</th>
-			<th>Fine Amount</th>
-		</tr>
-	</thead>
-	<tbody>
-		{% for item in issuedbooks%}
-		<tr>
-			<td>{{item.book.id}}</td>
-			<td>{{item.book.books_name}}</td>
-			<td><img src="{{item.book.books_image.url}}" height=50 width=50></td>
-			<td>{{item.book.books_author_name}}</td>
-			<td>{{item.book.books_publication_name}}</td>  
-			<td>{{item.issued_date|date:"M d, Y"}}</td>
-			<td>{{item.return_date|date:"M d, Y"}}</td>
-			<td><b>{{item.fine}}</b></td>
-		</tr> 
-		{% endfor %}
-	</tbody>
-</table>
+<div class="row">
+	<div class="col-12">
+		<div class="card-box table-responsive">
+			<h4 class="mt-0 header-title">Multi item selection</h4>
+			<p class="text-muted font-14 mb-3"></p>
+			<table id="selection-datatable" class="table table-bordered dt-responsive nowrap">
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>Books Name</th>
+						<th>Books Image</th>
+						<th>Author Name</th>
+						<th>Publication Name</th>
+						<th>Issued Date</th>
+						<th>Return Date</th>
+						<th>Fine Amount</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for item in issuedbooks%}
+					<tr>
+						<td>{{item.book.id}}</td>
+						<td>{{item.book.books_name}}</td>
+						<td><img src="{{item.book.books_image.url}}" height=50 width=50></td>
+						<td>{{item.book.books_author_name}}</td>
+						<td>{{item.book.books_publication_name}}</td>  
+						<td>{{item.issued_date|date:"M d, Y"}}</td>
+						<td>{{item.return_date|date:"M d, Y"}}</td>
+						<td><b>{{item.fine}}</b></td>
+					</tr> 
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
 {%else%}
 <h1>No Book Issued </h1>
 {% endif %}
 {% endblock%}
-
-{% block sidebar%}
-{%include 'operations/sidebar.html'%}
-{% endblock sidebar %}
-
-{% block title %}
-<title>My Issued Books | LMS </title>   
-{% endblock title %}
-
-{% block heading %}
-<h2>My Issued Books </h2>
-{% endblock heading %}
-
-
-{% block js %}
-{% include 'operations/js.html'%}
-{% endblock js %}
-
-
 
 
 

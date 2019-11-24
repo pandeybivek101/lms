@@ -48,6 +48,7 @@ def Scan(request):
     return render(request, 'operations/quagga.html',{})
 
 @login_required
+@role_required(allowed_roles=['Student'])
 def myissuedbook(request):
     issuedbooks=IssueBooks.objects.filter(student=request.user.id,
         returned=False)
@@ -122,15 +123,11 @@ def Home(request):
     non_fined=IssueBooks.objects.filter(fine=0, returned=True).count()
     fined=IssueBooks.objects.filter(fine__gt=0).count()
     self_user=IssueBooks.objects.filter(student=request.user)
-    non_fined_per=float('%.2f' % ((non_fined / tot_issue)*100))
-    fined=float('%.2f' % (100-non_fined_per))
     msg_count=Message.objects.filter(posted_to=request.user, 
         read=False).count()
     print(msg_count)
     context={
     'count_lst':count_lst,
-    'non_fined_per':non_fined_per,
-    'fined':fined,
     'erh_lst':erh_lst,
     'curr_date':curr_date,
     'my_iss':my_iss,
@@ -756,6 +753,17 @@ def error_404(request):
 def error_500(request):
         data = {}
         return render(request,'myapp/error_500.html', data)
+
+
+@login_required
+@role_required(allowed_roles=['Student'])
+def MYFine(request):
+    sum=0
+    issue_rec=IssueBooks.objects.filter(student=request.user, returned=False)
+    for i in issue_rec:
+        sum=sum+i.fine
+    return render(request,'operations/my_fine.html', {'issue_rec':issue_rec, 'sum':sum})
+
 
 
         

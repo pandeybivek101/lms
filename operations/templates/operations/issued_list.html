@@ -1,57 +1,57 @@
-{%extends 'operations/main.html'%}
+{%extends 'operations/index.html'%}
 {% block content %}
 
 <!-- page content area main -->
-
-<h2>Return Book</h2>
 {% if issueditems %}
-<table class="table">
-<form method="POST" action="{% url 'search-issued'%}">
-  {% csrf_token %}
-    <tr>
-      <td> 
-      <input class='form-control' type="text" name="issued" placeholder="Search....." autofocus></td>
-       <td>
-         <input type="submit" name="submit" class="form-control btn btn-info">
-       </td>
-     </form>
-   </tr>
-</form>
-</table>
 
-<table class='table table-bordered' style="width: 100%;">
-  <tr>
-    <th>ID</th>
-    <th>Books Name</th>
-    <th>Books Author</th>
-    <th>Issued To</th>
-    <th>Issued Date</th>
-    <th>Return Date</th>
-    <th>Fine</th>
-    <th>Return</th>
-  </tr>
-  {% for item in issueditems%}
-  <tr>
-    <td>{{item.id}}</td>
-    <td> <a href="{% url 'detail-book' item.book.id %}">{{item.book.books_name}}</a></td>
-    <td>{{item.book.books_author_name}}</td>
-    <td>
-    <a href="{% url 'std-detail' item.student.id %}">
-    {{item.student.first_name}} {{item.student.last_name}}
-    </a>
-    </td>
-    <td>{{item.issued_date|date:"M d, Y"}}</td>
-    <td>{{item.return_date|date:"M d, Y"}}</td>
-    <td>{{item.fine}} Rs</td>
-    <td>
-    <form method="POST" action="{%url 'returnbooks' item.id%}">
-    {% csrf_token %}
-    <input type="number" value="{{item.id}}" hidden="true">
-    <button id='btn1' class="btn btn-info">Return</button>
-    </form>
-    </tr>
-    {% endfor%}   
-  </table>
+<div class="row">
+  <div class="col-12">
+    <div class="card-box table-responsive">
+      <h4 class="mt-0 header-title"><h2>Return Book</h2></h4>
+      <p class="text-muted font-14 mb-3">
+      </p>
+
+      <table id="selection-datatable" class="table table-bordered dt-responsive nowrap">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Books Name</th>
+            <th>Books Author</th>
+            <th>Issued To</th>
+            <th>Issued Date</th>
+            <th>Return Date</th>
+            <th>Fine</th>
+            <th>Return</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in issueditems%}
+          <tr>
+            <td>{{item.id}}</td>
+            <td> <a href="{% url 'detail-book' item.book.id %}">{{item.book.books_name}}</a></td>
+            <td>{{item.book.books_author_name}}</td>
+            <td>
+              <a href="{% url 'std-detail' item.student.id %}">
+                {{item.student.first_name}} {{item.student.last_name}}
+              </a>
+            </td>
+            <td>{{item.issued_date|date:"M d, Y"}}</td>
+            <td>{{item.return_date|date:"M d, Y"}}</td>
+            <td>{{item.fine}} Rs</td>
+            <td>
+              <form method="POST" action="{%url 'returnbooks' item.id%}">
+                {% csrf_token %}
+                <input type="number" value="{{item.id}}" hidden="true">
+                <button type="button" class="btn btn-info btn-xs" id="sa-warning">Return</button>
+              </form>
+            </td>
+          </tr>
+          {% endfor%}
+        </tbody>  
+      </table>
+    </div>
+  </div>
+
 
   {% else %}
   <h1>No Issued Items</h1>
@@ -67,24 +67,7 @@
   <title>Issued Books | LMS </title>   
   {% endblock title %}
 
-
-  {% block heading %}
-  <h2>Issued Action List</h2>
-  {% endblock heading %}
-
-{% block js %}
-<script type="text/javascript">
-  $(document).on('click', '#btn1', function(){
-    return confirm('Are you sure you want to Return this?');
-})
-</script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-{% include 'operations/js1.html'%}
-{% endblock js %}
-
-
-
-{% block css%}
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.3.1/css/select.dataTables.min.css">
-{% endblock css%}
+  {% block css%}
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.3.1/css/select.dataTables.min.css">
+  {% endblock css%}
 

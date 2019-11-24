@@ -1,4 +1,4 @@
-{%extends 'operations/main.html'%}
+{%extends 'operations/index.html'%}
 {% load static %}
 {% block content %}
 <!-- page content area main -->
@@ -7,7 +7,14 @@
 
 
 {% if activities %}
-<table class='table table-bordered' id="mytable">
+<div class="row">
+  <div class="col-12">
+    <div class="card-box table-responsive">
+      <h4 class="mt-0 header-title">Multi item selection</h4>
+      <p class="text-muted font-14 mb-3">
+      </p>
+
+      <table id="selection-datatable" class="table table-bordered dt-responsive nowrap">
   <thead>
     <tr>
       <th>ID</th>
@@ -16,6 +23,7 @@
       <th>Name</th>
       <th>UserName</th>
       <th>Action</th>
+      </tr>
     </thead>
     <tbody>
       {% for book in activities %}
@@ -35,6 +43,9 @@
       {% endfor %}
     </tbody>
   </table>
+  </div>
+  </div>
+  </div>
   {% else %}
   <h1>No EBooks Activities</h1>
   {% endif %}
@@ -43,24 +54,4 @@
   <!-- /page content -->
   {% endblock %}
 
-  {% block sidebar%}
-  {%include 'operations/sidebar.html'%}
-  {% endblock sidebar %}
-
-  {% block title %}
-  <title>Ebook Activities | LMS </title>   
-  {% endblock title %}
-
-  {% block heading %}
-  <h2>Ebooks Activities </h2>
-  {% endblock heading %}
-
   
-{% block js %}
-{% include 'operations/js1.html'%}
-{% endblock js %}
-
-{% block css%}
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.3.1/css/select.dataTables.min.css">
-{% endblock css%}
-

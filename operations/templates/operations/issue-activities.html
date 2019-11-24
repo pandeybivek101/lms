@@ -1,76 +1,59 @@
-{%extends 'operations/main.html'%}
+{%extends 'operations/index.html'%}
 {% load static %}
 
 {% block content %}
 {% if activities %}
-<table class='table table-bordered' id='mytable' style="border-collapse:collapse;">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Books Name</th>
-      <th>Books Author</th>
-      <th>Issued To</th>
-      <th>Issued Date</th>
-      <th>Return Date</th>
-      <th>Fine</th>
-      <th>Activities</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for item in activities.all %}
-    <tr>
-      <td>{{item.id}}</td>
-      <td>{{item.book.books_name}}</td>
-      <td>{{item.book.books_author_name}}</td>
-      <td>{{item.student.first_name}} {{item.student.last_name}}</td>
-      <td>{{item.issued_date|date:"M d, Y"}}</td>
-      <td>{{item.return_date|date:"M d, Y"}}</td>
-      <td>{{item.fine}} Rs</td>
-      <td>
-        {% if item.returned == False %}
-        <a href="{%url 'returnbooks' item.id%}"><button class='btn btn-info'>Return</button></a>
-        {% endif %}
-        {% if item.returned == True %}
-        <button class='btn btn-warning'>Returned</button>
-        {% endif %}
-        {% if item.fine > 0 %}
-        <a href=""><button class='btn btn-danger'>Fined</button></a>
-        {% endif %}
-      </td>
-    </tr>
-    {% endfor%} 
-  </tbody> 
-</table>
+<div class="row">
+  <div class="col-12">
+    <div class="card-box table-responsive">
+      <h4 class="mt-0 header-title">Multi item selection</h4>
+      <p class="text-muted font-14 mb-3">
+      </p>
+
+      <table id="selection-datatable" class="table table-bordered dt-responsive nowrap">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Books Name</th>
+            <th>Books Author</th>
+            <th>Issued To</th>
+            <th>Issued Date</th>
+            <th>Return Date</th>
+            <th>Fine</th>
+            <th>Activities</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in activities.all %}
+          <tr>
+            <td>{{item.id}}</td>
+            <td>{{item.book.books_name}}</td>
+            <td>{{item.book.books_author_name}}</td>
+            <td>{{item.student.first_name}} {{item.student.last_name}}</td>
+            <td>{{item.issued_date|date:"M d, Y"}}</td>
+            <td>{{item.return_date|date:"M d, Y"}}</td>
+            <td>{{item.fine}} Rs</td>
+            <td>
+              {% if item.returned == False %}
+              <a href="{%url 'returnbooks' item.id%}"><button class='btn btn-info'>Return</button></a>
+              {% endif %}
+              {% if item.returned == True %}
+              <button class='btn btn-warning'>Returned</button>
+              {% endif %}
+              {% if item.fine > 0 %}
+              <a href=""><button class='btn btn-danger'>Fined</button></a>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor%} 
+        </tbody> 
+      </table>
+    </div>
+  </div>
+</div>
 {% else %}
 <h1>No Issued Items</h1>
 {% endif %}
 {% endblock %}
-
-
-{% block sidebar%}
-{%include 'operations/sidebar.html'%}
-{% endblock sidebar %}
-
-{% block title %}
-<title>Issued Books | LMS </title>   
-{% endblock title %}
-
-
-{% block heading %}
-<h2>Return Books </h2>
-{% endblock heading %}
-
-{% block js %}
-{% include 'operations/js1.html'%}
-{% endblock js %}
-
-{% block css%}
-<style type="text/css">
-table #mytable{
-
-}
-</style>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.3.1/css/select.dataTables.min.css">
-{% endblock css%}
 
 

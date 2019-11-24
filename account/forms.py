@@ -9,7 +9,8 @@ class UserRegistrationForm(UserCreationForm):
 		fields=[
 		'username', 
 		'email',
-		'password',
+		'password1',
+		'password2',
 		'first_name',
 		'last_name',
 		'Role',
@@ -32,9 +33,7 @@ class UserRegistrationForm(UserCreationForm):
 		elif not contact.isdigit():
 			raise forms.ValidationError('Contact cannot be Alphabet')
 		else:
-			return contact
-			
-		
+			return contact	
 
 class StudentForm(forms.ModelForm):
 	class Meta:
@@ -43,10 +42,16 @@ class StudentForm(forms.ModelForm):
 
 class LoginForm(forms.Form):
 	username=forms.CharField(widget=forms.TextInput(
-		attrs={'class':'form-control', 'placeholder':'Enter Username'}), 
+		attrs={'class':'form-control', 
+		'placeholder':'Enter your Username',
+		'id':'username'
+		}), 
 	required=True, max_length=30)
 	password=forms.CharField(widget=forms.PasswordInput(
-		attrs={"class":"form-control", "placeholder":"Enter Password"}), 
+		attrs={"class":"form-control",
+		 "placeholder":"Enter Password",
+		 'id':'password',
+		 }), 
 	required=True)
 	class Meta:
 		model=User

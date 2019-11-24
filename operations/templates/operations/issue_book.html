@@ -1,27 +1,22 @@
-{%extends 'operations/main.html'%}
+{%extends 'operations/index.html'%}
+{% load crispy_forms_tags %}
 {% block content%}
-{% if request.post %}
-good
-{% else %}
-<form action="{% url 'issuebooks'%}" method="POST" class="col-lg-8" enctype="multipart/form-data">
- {% csrf_token %}
- {{form.as_p}}
- <input type="submit" name="submit" class="btn btn-primary">
-</form>
-{% endif %}
+<div class="container-fluid">
 
-{%endblock%}
-{% block sidebar%}
- {%include 'operations/sidebar.html'%}
- {% endblock sidebar %}
+	<div class="row">
+		<div class="col-xl-12">
+			<div class="card-box">
 
- {% block title %}
- <title>Issue Books | LMS </title>   
-{% endblock title %}
+			<h4 class="header-title mt-0 mb-3">Issue Books</h4>
+				<form action="{% url 'issuebooks'%}" method="POST" class="col-lg-8" enctype="multipart/form-data">
+					{% csrf_token %}
+					{{form|crispy}}
+					<input type="submit" name="submit" class="btn btn-primary">
+				</form>
+			</div>
+		</div>
+	</div>
 
-{% block heading %}
-<h2>Issue Books </h2>
-{% endblock heading %}
-
+	{%endblock%}
 
 

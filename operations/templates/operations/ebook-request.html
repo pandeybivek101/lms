@@ -1,64 +1,47 @@
-{%extends 'operations/main.html'%}
+{%extends 'operations/index.html'%}
 {% load static %}
 {% block content %}
 
 <!-- page content area main -->
-
-<h2>Ebook Request</h2>
 {% if requests %}
-<table class='table table-bordered' id="mytable">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Books Name</th>
-      <th>Author Name</th>
-      <th>Requested_by</th>
-      <th>Requested_date</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for book in requests%}
-    <tr>
-      <td>{{book.ebook.id}}</td>
-      <td>{{book.ebook.name}}</td>
-      <td>{{book.ebook.author_name}}</td>
-      <td>{{book.requested_by.username}}</td>  
-      <td>{{book.requested_date|date:"M d, Y"}}</td>
-      <td>
-       <a href="{% url 'allow' book.id %}"><button class="btn btn-warning">Allow</button></a>
-       <a href="{% url 'deny' book.id %}"><button class="btn btn-danger">Deny</button></a>
-     </td>
-   </tr>     
-   {% endfor %}
- </tbody>
-</table>
+<div class="row">
+  <div class="col-12">
+    <div class="card-box table-responsive">
+      <h2 class="mt-0 header-title">EBook Requests</h2>
+      <p class="text-muted font-14 mb-3"></p>
+      <table id="selection-datatable" class="table table-bordered dt-responsive nowrap">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Books Name</th>
+            <th>Author Name</th>
+            <th>Requested_by</th>
+            <th>Requested_date</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for book in requests%}
+          <tr>
+            <td>{{book.ebook.id}}</td>
+            <td>{{book.ebook.name}}</td>
+            <td>{{book.ebook.author_name}}</td>
+            <td>{{book.requested_by.username}}</td>  
+            <td>{{book.requested_date|date:"M d, Y"}}</td>
+            <td>
+             <a href="{% url 'allow' book.id %}"><button class="btn btn-warning">Allow</button></a>
+             <a href="{% url 'deny' book.id %}"><button class="btn btn-danger">Deny</button></a>
+           </td>
+         </tr>     
+         {% endfor %}
+       </tbody>
+     </table>
+   </div>
+ </div>
+ {% else %}
+ <h1>No Ebooks Requests </h1>
+ {% endif %}
+ <!-- /page content -->
+ {% endblock %}
 
-{% else %}
-<h1>No Ebooks Requests </h1>
-{% endif %}
-<!-- /page content -->
-{% endblock %}
-
-{% block sidebar%}
-{%include 'operations/sidebar.html'%}
-{% endblock sidebar %}
-
-{% block title %}
-<title>EBook Request | LMS </title>   
-{% endblock title %}
-
-{% block heading %}
-<h2>Ebook Requests </h2>
-{% endblock heading %}
-
-
-{% block js %}
-{% include 'operations/js1.html'%}
-{% endblock js %}
-
-{% block css%}
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.3.1/css/select.dataTables.min.css">
-{% endblock css%}
-
-
+ 

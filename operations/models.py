@@ -35,7 +35,7 @@ class IssueBooks(models.Model):
 	issued_date=models.DateTimeField(auto_now_add=True)
 	return_date=models.DateTimeField()
 	fine=models.IntegerField(default=0)
-	returned=models.BooleanField(default=0)
+	returned=models.BooleanField(default=False)
 	returned_date=models.DateTimeField(blank=True, null=True)
 	issued_by=models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='User', null=True)
 
