@@ -1,12 +1,35 @@
     {%extends 'operations/index.html'%}
     {%block content%}
     <!-- page content area main -->
-
-    <form method="POST" action="{%url 'msg_std' msg_std.id %}" class="col-lg-8" enctype="multipart/form-data" id='msg-form'>
+    <form method="post" class="card-box" action="{% url 'msg_std' msg_std.id %}">
     	{% csrf_token %}
-    	{{form.as_p}}
-    	<input type="submit" name="submit" class="btn btn-primary">
+    	{{form.title}}
+    	<span class="input-icon icon-right">
+    		{{form.Description}}
+    	</span>
+    	<div class="pt-1 float-right">
+    		<button class="btn btn-primary btn-sm waves-effect waves-light">Send</button>
+    	</div>
+    	<ul class="nav nav-pills profile-pills mt-1">
+    		<li>
+    			<a href="#"><i class="fa fa-user"></i></a>
+    		</li>
+    		<li>
+    			<a href="#"><i class="fa fa-location-arrow"></i></a>
+    		</li>
+    		<li>
+    			<a href="#"><i class=" fa fa-camera"></i></a>
+    		</li>
+    		<li>
+    			<a href="#"><i class="far fa-smile"></i></a>
+    		</li>
+    	</ul>
+
     </form>
+
+    
+
+
 
     {%endblock%}
 

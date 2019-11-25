@@ -66,6 +66,14 @@
         </li>
 
         <li>
+            <a href="{% url 'view-ebook-request'%}">
+                <i class="mdi mdi-format-font"></i>
+                <span>Ebook Requests</span>
+                <span class="badge badge-purple float-right">New</span>
+            </a>
+        </li>
+
+        <li>
             <a href="{% url 'issuebooks'%}">
                 <i class="mdi mdi-format-font"></i>
                 <span>Issue Books</span>
@@ -101,12 +109,7 @@
             </a>
         </li>
 
-        <li>
-            <a href="{% url 'view-ebook-request'%}">
-                <i class="mdi mdi-format-font"></i>
-                <span>Ebook Requests</span>
-            </a>
-        </li>
+
 
         {% endif %}
     </ul>

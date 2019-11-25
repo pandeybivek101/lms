@@ -6,9 +6,17 @@ from account.models import User
 
 class MessageForm(forms.ModelForm):
 	title=forms.CharField(widget=forms.TextInput(
-		attrs={'class':'form-control', 'placeholder':'Enter Title'}), required=True, max_length=30)
+		attrs={
+		'class':'form-control', 
+		'placeholder':'Enter Title',
+		}), required=True, max_length=30)
 	Description=forms.CharField(widget=forms.Textarea(
-		attrs={"class":"form-control", "placeholder":"Enter Description"}), required=True)
+		attrs={
+		"class":"form-control", 
+		'rows':3,
+		'placeholder':"Post a new message"
+
+		}), required=True)
 	class Meta:
 		model=Message
 		fields=['title', 'Description']
