@@ -62,9 +62,9 @@
 
         </form>
         <div class="card-box">
-        <h4 class="header-title mt-0 mb-3"><i class="mdi mdi-notification-clear-all mr-1"></i>Messages</h4>
+            <h4 class="header-title mt-0 mb-3"><i class="mdi mdi-notification-clear-all mr-1"></i>Messages</h4>
 
-        {% for item  in message|slice:'5'%}
+            {% for item  in message|slice:'5'%}
             <div class="media mb-2">
                 <img src="{% static 'assets/images/users/user-1.jpg' %}" alt="" class="comment-avatar avatar-sm rounded mr-2">
                 <div class="media-body">
@@ -72,40 +72,80 @@
                     <p>{{item.title}}</p>
                 </div>
             </div>
-        {% endfor %}
+            {% endfor %}
             <!--  media -->
-        
+
 
         </div>
 
     </div>
 
     <div class="col-sm-4">
+
         <div class="card-box">
 
-            <h4 class="header-title mt-0 mb-3">Issued Books</h4>
+        <h4 class="header-title mt-0 mb-3">Student Information</h4>
+        <table class="table table-bordered table-bordered dt-responsive nowrap">
+          <tr>
+              <td>Id</td>
+              <td>{{std.id}}</td>
+          </tr> 
+          <tr>
+              <td>Name</td>
+              <td>{{std.get_full_name}}</td>
+          </tr> 
+          <tr>
+              <td>Username</td>
+              <td>{{std.username}}</td>
+          </tr>
+          <tr>
+              <td>Email</td>
+              <td>{{std.email}}</td>
+          </tr> 
+          <tr>
+              <td>Contact</td>
+              <td>{{std.contact}}</td>
+          </tr> 
+          <tr>
+              <td>Enrollment</td>
+              <td>{{course.Enrollment}}</td>
+          </tr>
+          <tr>
+              <td>Year</td>
+              <td>{{course.year}}</td>
+          </tr>
+        </table>
 
-            <ul class="list-group mb-0 user-list">
-              {% if book_issued %}
-              {% for book in book_issued%}
+</div>
 
-              <li class="list-group-item">
-                <a href="#" class="user-list-item">
-                  <div class="user avatar-sm float-left mr-2">
-                    <img src="{{book.book.books_image.url}}" alt="" class="img-fluid rounded-circle">
-                </div>
-                <div class="user-desc">
-                    <h5 class="name mt-0 mb-1">{{book.book.books_name}}</h5>
-                    <p class="desc text-muted mb-0 font-12">{{book.book.books_author_name}}</p>
-                </div>
-            </a>
-        </li>
 
-        {% endfor %}
-        {% else %}
-        <p>No Issued Books</p>
-        {% endif %}
-    </ul>
+
+
+<div class="card-box">
+
+    <h4 class="header-title mt-0 mb-3">Issued Books</h4>
+
+    <ul class="list-group mb-0 user-list">
+      {% if book_issued %}
+      {% for book in book_issued%}
+
+      <li class="list-group-item">
+        <a href="#" class="user-list-item">
+          <div class="user avatar-sm float-left mr-2">
+            <img src="{{book.book.books_image.url}}" alt="" class="img-fluid rounded-circle">
+        </div>
+        <div class="user-desc">
+            <h5 class="name mt-0 mb-1">{{book.book.books_name}}</h5>
+            <p class="desc text-muted mb-0 font-12">{{book.book.books_author_name}}</p>
+        </div>
+    </a>
+</li>
+
+{% endfor %}
+{% else %}
+<p>No Issued Books</p>
+{% endif %}
+</ul>
 </div>
 
 <div class="card-box">
