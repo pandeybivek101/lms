@@ -4,6 +4,7 @@ from django.db.models.signals import post_save, post_init
 from django.utils import timezone
 import datetime
 import pytz
+from account.models import User
 
 class Catagory(models.Model):
 	catagory = models.CharField(max_length=100)

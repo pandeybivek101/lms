@@ -577,11 +577,14 @@ def StdDetail(request, id):
     course=Student.objects.filter(student=std).first()
     book_issued=IssueBooks.objects.filter(student=std, 
         returned=False)
+    notify=NotifyMeModel.objects.filter(student=std)
+    message=Message.objects.filter(posted_to=std)
     return render(request, 'operations/std-detail.html', 
         {
         'std':std,
         'course':course,
-        'book_issued':book_issued
+        'book_issued':book_issued,
+        'notify':notify
         })
 
 

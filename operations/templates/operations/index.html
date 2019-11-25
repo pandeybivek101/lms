@@ -8,6 +8,9 @@
     <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
     <meta content="Coderthemes" name="author" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- Plugins css -->
+        <link href="{% static 'assets/libs/bootstrap-tagsinput/bootstrap-tagsinput.css' %}" rel="stylesheet" />
     <!-- App favicon -->
     <link rel="shortcut icon" href="{% static 'assets/images/favicon.ico' %}">
 
@@ -423,8 +426,6 @@
             <script src="{% static 'assets/js/app.min.js' %}"></script>
 
             
-            <!-- App js -->
-            <script src="{% static 'assets/js/app.min.js' %}"></script>
 
             <!-- validation -->
             <script src="{% static 'assets/js/pages/form-validation.init.js' %}"></script>
@@ -468,6 +469,10 @@
 
           <!-- Datatables init -->
           <script src="{% static 'assets/js/pages/datatables.init.js' %}"></script>
+
+          <!-- plugin -->
+        <script src="{% static 'assets/libs/bootstrap-tagsinput/bootstrap-tagsinput.min.js' %}"></script>
+
           {% block js %}
 
           {% endblock js %}
