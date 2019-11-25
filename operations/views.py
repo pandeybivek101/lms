@@ -584,7 +584,8 @@ def StdDetail(request, id):
         'std':std,
         'course':course,
         'book_issued':book_issued,
-        'notify':notify
+        'notify':notify,
+        'message':message,
         })
 
 
