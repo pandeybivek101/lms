@@ -28,7 +28,7 @@
                 <a href="javascript: void(0);" class="social-list-item border-secondary text-secondary"><i class="mdi mdi-github-circle"></i></a>
               </li>
               <li class="list-inline-item">
-              <a href="{% url 'msg_std' std.id %}"><button type="button" class="btn btn-primary btn-rounded waves-effect waves-light">Send Message</button></a>
+                <a href="{% url 'msg_std' std.id %}"><button type="button" class="btn btn-primary btn-rounded waves-effect waves-light">Send Message</button></a>
               </li>
             </ul>
 
@@ -45,14 +45,17 @@
       <div class="card-box">
         <h4 class="header-title mt-0 mb-3"><i class="mdi mdi-notification-clear-all mr-1"></i>Messages</h4>
 
-        {% for item  in message|slice:'5'%}
+        {% for item  in message|slice:'8'%}
+
         <div class="media mb-2">
           <img src="{% static 'assets/images/users/user-1.jpg' %}" alt="" class="comment-avatar avatar-sm rounded mr-2">
           <div class="media-body">
             <h5 class="mt-0"><a href="#" class="text-dark">{{item.posted_by}}</a><small class="ml-1 text-muted">{{item.Posted_on}}</small></h5>
-            <p>{{item.title}}</p>
+            <p>{{item.Description}}</p>
           </div>
         </div>
+
+          
         {% endfor %}
         <!--  media -->
 
@@ -161,5 +164,11 @@
   </div>        
 
 </div>
+
+
+
+
 {% endblock %}
+
+
 © 2019 GitHub, Inc.

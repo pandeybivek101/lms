@@ -13,3 +13,8 @@ def my_context_processor(request):
 def get_all_catagory(request):
     catagories=Catagory.objects.all()
     return {'catagories':catagories}
+
+
+def issue_requests(request):
+    issue_requests=EbookRequest.objects.all()
+    return {'issue_requests':issue_requests}

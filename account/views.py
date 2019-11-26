@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect, HttpResponseRedirect
 from .forms import *
 from .models import *
+from operations.models import *
 from django.contrib.auth import logout
 from django.contrib.auth import authenticate, login
 from django.conf import settings
-from .models import User
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
@@ -76,9 +76,12 @@ def Logout(request):
 def Profile(request):
     profile=User.objects.get(id=request.user.id)
     std=Student.objects.filter(student=profile).first()
+    issued_by=IssueBooks.objects.filter(issued_by=profile, returned=False)
+    print(issued_by)
     return render(request, 'account/profile.html', 
         {'profile':profile,
-        'std':std
+        'std':std,
+        'issued_by':issued_by
         }
 )
 

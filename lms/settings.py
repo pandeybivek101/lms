@@ -69,6 +69,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'operations.context_processors.my_context_processor',
                 'operations.context_processors.get_all_catagory',
+                'operations.context_processors.issue_requests',
             ],
         },
     },

@@ -69,7 +69,9 @@
             <a href="{% url 'view-ebook-request'%}">
                 <i class="mdi mdi-format-font"></i>
                 <span>Ebook Requests</span>
+                {% if issue_requests %}
                 <span class="badge badge-purple float-right">New</span>
+                {% endif %}
             </a>
         </li>
 

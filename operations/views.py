@@ -578,7 +578,7 @@ def StdDetail(request, id):
     book_issued=IssueBooks.objects.filter(student=std, 
         returned=False)
     notify=NotifyMeModel.objects.filter(student=std)
-    message=Message.objects.filter(posted_to=std)
+    message=Message.objects.filter(posted_to=std).order_by('Posted_on')[::-1]
     return render(request, 'operations/std-detail.html', 
         {
         'std':std,
