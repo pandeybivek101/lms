@@ -1,27 +1,37 @@
-{%extends 'operations/main.html'%}
+{%extends 'operations/index.html'%}
 {% load crispy_forms_tags %}
 {% block content%}
-<form action="{% url 'change-profile' %}" method="POST" class="col-lg-8" enctype="multipart/form-data">
-	{% csrf_token %}
-	{{form1|crispy}}
-	{% if request.user.Role == "Student" %}
-	{{form2|crispy}}
-	{% endif %}
-	<input type="submit" name="submit" class="btn btn-primary">
-</form>   
-{%endblock%}
+<div class="container-fluid">
 
-{% block sidebar%}
-{%include 'operations/sidebar.html'%}
-{% endblock sidebar %}
+	<div class="row">
+		<div class="col-xl-12">
+			<div class="card-box">
 
-{% block title %}
-<title>Change Profile | LMS </title>   
-{% endblock title %}
+				<h4 class="header-title mt-0 mb-3">Change Profile</h4>
+				<form action="{% url 'change-profile' %}" method="POST" class="col-lg-8" enctype="multipart/form-data">
+					{% csrf_token %}
+					{{form1|crispy}}
+					{% if request.user.Role == "Student" %}
+					{{form2|crispy}}
+					{% endif %}
+					<button class="btn btn-primary btn-rounded waves-effect waves-light">Change Profile</button>
+				</form> 
+			</div>
+		</div>
+	</div>  
+	{%endblock%}
 
-{% block heading %}
-<h2>Change Profile</h2>
-{% endblock heading %}
+	{% block sidebar%}
+	{%include 'operations/sidebar.html'%}
+	{% endblock sidebar %}
+
+	{% block title %}
+	<title>Change Profile | LMS </title>   
+	{% endblock title %}
+
+	{% block heading %}
+	<h2>Change Profile</h2>
+	{% endblock heading %}
 
 
 

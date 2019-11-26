@@ -1,17 +1,18 @@
- {%extends 'operations/index.html'%}
- {% load static %}
- {% block content %}
- <div class="container-fluid">
+{%extends 'operations/index.html'%}
+{% load static %}
+{% block content %}
+<div class="container-fluid">
 
   <div class="row">
     <div class="col-sm-8">
       <div class="bg-picture card-box">
         <div class="profile-info-name">
           <img src="{{profile.profile_pic.url}}" class="rounded-circle avatar-xl img-thumbnail float-left mr-3" alt="profile-image">
+
           <div class="profile-info-detail overflow-hidden">
             <h4 class="m-0">{{profile.get_full_name}}</h4>
             <p class="text-muted"><i>{{profile.Role}}</i></p>
-            <p class="font-13">Hi I'm {{profile.get_full_name}} , has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type.Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature it over 2000 years to popular belief Ipsum is not simplyrandom text.</p>
+            <p class="font-13">Hi I'm {{profile.first_name}},has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type.Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature it over 2000 years to popular belief Ipsum is not simplyrandom text.</p>
 
             <ul class="social-list list-inline mt-3 mb-0">
               <li class="list-inline-item">
@@ -26,6 +27,13 @@
               <li class="list-inline-item">
                 <a href="javascript: void(0);" class="social-list-item border-secondary text-secondary"><i class="mdi mdi-github-circle"></i></a>
               </li>
+              <li class="list-inline-item">
+                <a href="{% url 'change-profile' %}"><button type="button" class="btn btn-primary btn-rounded waves-effect waves-light">Change Profile</button></a>
+              </li>
+              <li class="list-inline-item">
+                <a href="{% url 'change_password' %}"><button type="button" class="btn btn-primary btn-rounded waves-effect waves-light">Change Password</button></a>
+              </li>
+
             </ul>
 
           </div>
@@ -35,110 +43,35 @@
       </div>
       <!--/ meta -->
 
+
+
+      
       <div class="card-box">
+        <h4 class="header-title mt-0 mb-3"><i class="mdi mdi-notification-clear-all mr-1"></i>Messages</h4>
+
+        {% for item  in message|slice:'8'%}
+
         <div class="media mb-2">
-          <img src="assets/images/users/user-1.jpg" alt="" class="comment-avatar avatar-sm rounded mr-2">
+          <img src="{% static 'assets/images/users/user-1.jpg' %}" alt="" class="comment-avatar avatar-sm rounded mr-2">
           <div class="media-body">
-            <h5 class="mt-0"><a href="#" class="text-dark">Adam Jansen</a><small class="ml-1 text-muted">about 2 minuts ago</small></h5>
-            <p>Story based around the idea of time lapse, animation to post soon!</p>
-            <div>
-              <a href="">
-                <img src="assets/images/small/img-1.jpg" class="avatar-md rounded">
-              </a>
-              <a href="">
-                <img src="assets/images/small/img-2.jpg" class="avatar-md rounded">
-              </a>
-              <a href="">
-                <img src="assets/images/small/img-3.jpg" class="avatar-md rounded">
-              </a>
-            </div>
-            <div class="comment-footer pt-2 mb-3">
-              <a href="#"><i class="far fa-thumbs-up"></i></a>
-              <a href="#"><i class="far fa-thumbs-down"></i></a>
-              <a href="#">Reply</a>
-            </div>
-
-            <div class="media mb-2">
-              <img src="assets/images/users/user-3.jpg" alt="" class="comment-avatar avatar-sm rounded mr-2">
-              <div class="media-body">
-                <h5 class="mt-0"><a href="#" class="text-dark">John Smith</a><small class="ml-1 text-muted">about 1 hour ago</small></h5>
-                <p>Wow impressive!</p>
-
-                <div class="comment-footer">
-                  <a href="#"><i class="far fa-thumbs-up"></i></a>
-                  <a href="#"><i class="far fa-thumbs-down"></i></a>
-                  <a href="#">Reply</a>
-                </div>
-              </div>
-            </div>
-            <div class="media">
-              <img src="assets/images/users/user-4.jpg" alt="" class="comment-avatar avatar-sm rounded mr-2">
-              <div class="media-body">
-                <h5 class="mt-0"><a href="#" class="text-dark">Matt Cheuvront</a><small class="ml-1 text-muted">about 2 hour ago</small></h5>
-                <p>Wow, that is really nice.</p>
-
-                <div class="comment-footer mb-3">
-                  <a href="#"><i class="far fa-thumbs-up"></i></a>
-                  <a href="#"><i class="far fa-thumbs-down"></i></a>
-                  <a href="#">Reply</a>
-                </div>
-
-                <div class="media mb-2">
-                  <img src="assets/images/users/user-5.jpg" alt="" class="comment-avatar avatar-sm rounded mr-2">
-                  <div class="media-body">
-                    <h5 class="mt-0"><a href="#" class="text-dark">Stephanie Walter</a><small class="ml-1 text-muted">about 3 hour ago</small></h5>
-                    <p>Nice work, makes me think of The Money Pit.</p>
-
-                    <div class="comment-footer">
-                      <a href="#"><i class="far fa-thumbs-up"></i></a>
-                      <a href="#"><i class="far fa-thumbs-down"></i></a>
-                      <a href="#">Reply</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <h5 class="mt-0"><a href="#" class="text-dark">{{item.posted_by}}</a><small class="ml-1 text-muted">{{item.Posted_on}}</small></h5>
+            <p>{{item.Description}}</p>
           </div>
         </div>
+
+
+        {% endfor %}
         <!--  media -->
 
-        <div class="media mb-3">
-          <img src="assets/images/users/user-6.jpg" alt="" class="comment-avatar avatar-sm rounded mr-2">
-          <div class="media-body">
-            <h5 class="mt-0"><a href="#" class="text-dark">John Smith</a><small class="ml-1 text-muted">about 4 hour ago</small></h5>
-            <p>i'm in the middle of a timelapse animation myself! (Very different though.) Awesome stuff.</p>
 
-            <div class="comment-footer">
-              <a href="#"><i class="far fa-thumbs-up"></i></a>
-              <a href="#"><i class="far fa-thumbs-down"></i></a>
-              <a href="#">Reply</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="media mb-3">
-          <img src="assets/images/users/user-7.jpg" alt="" class="comment-avatar avatar-sm rounded mr-2">
-          <div class="media-body">
-            <h5 class="mt-0"><a href="#" class="text-dark">Nicolai Larson</a><small class="ml-1 text-muted">about 10 hour ago</small></h5>
-            <p>The parallax is a little odd but O.o that house build is awesome!!</p>
-
-            <div class="comment-footer">
-              <a href="#"><i class="far fa-thumbs-up"></i></a>
-              <a href="#"><i class="far fa-thumbs-down"></i></a>
-              <a href="#">Reply</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="text-center">
-          <a href="" class="text-danger"><i class="mdi mdi-spin mdi-loading mr-1"></i> Load more </a>
-        </div>
       </div>
 
     </div>
 
     <div class="col-sm-4">
+
       <div class="card-box">
+
         <h4 class="header-title mt-0 mb-3">My Information</h4>
 
         <table class="table table-bordered table-bordered dt-responsive nowrap">
@@ -174,18 +107,25 @@
          {% endif %}
 
        </table>
+
+
      </div>
 
-     <div class="card-box">
-      <h4 class="header-title mt-0 mb-3"><i class="mdi mdi-notification-clear-all mr-1"></i>Issued By Me</h4>
 
-      <ul class="list-group mb-0 user-list">
+
+
+     <div class="card-box">
+
+       {% if request.user.Role == 'Librarian' %}
+       <h4 class="header-title mt-0 mb-3"><i class="mdi mdi-notification-clear-all mr-1"></i>Issued By Me</h4>
+
+       <ul class="list-group mb-0 user-list">
         {% if issued_by %}
         {% for std in issued_by%}
         <li class="list-group-item">
           <a href="#" class="user-list-item">
             <div class="user avatar-sm float-left mr-2">
-            <img src="{{std.student.profile_pic.url}}" alt="" class="img-fluid rounded-circle">
+              <img src="{{std.student.profile_pic.url}}" alt="" class="img-fluid rounded-circle">
             </div>
             <div class="user-desc">
               <h5 class="name mt-0 mb-1">{{std.student.get_full_name}}</h5>
@@ -196,6 +136,60 @@
         {% endfor %}
         {% endif %}
 
+
+      </ul>
+      {% endif %}
+
+      {% if request.user.Role == 'Student' %}
+       <h4 class="header-title mt-0 mb-3"><i class="mdi mdi-notification-clear-all mr-1"></i>My issued Books</h4>
+
+       <ul class="list-group mb-0 user-list">
+        {% if my_book %}
+        {% for std in my_book %}
+        <li class="list-group-item">
+          <a href="#" class="user-list-item">
+            <div class="user avatar-sm float-left mr-2">
+              <img src="{{std.student.profile_pic.url}}" alt="" class="img-fluid rounded-circle">
+            </div>
+            <div class="user-desc">
+              <h5 class="name mt-0 mb-1">{{std.student.get_full_name}}</h5>
+              <p class="desc text-muted mb-0 font-12">{{std.student.username}}</p>
+            </div>
+          </a>
+        </li>
+        {% endfor %}
+        {% else %}
+        <p>No Books Issued</p>
+        {% endif %}
+        
+
+      </ul>
+      {% endif %}
+    </div>
+
+    <div class="card-box">
+
+      <h4 class="header-title mt-0 mb-3"><i class="mdi mdi-notification-clear-all mr-1"></i>Notify on Available Request</h4>
+
+      <ul class="list-group mb-0 user-list">
+        {% if notify %}
+        {% for item in notify %}
+
+        <li class="list-group-item">
+          <a href="#" class="user-list-item">
+            <div class="user float-left mr-3">
+              <i class="mdi mdi-circle text-info"></i>
+            </div>
+            <div class="user-desc overflow-hidden">
+              <h5 class="name mt-0 mb-1">{{item.book.books_name}}</h5>
+              <span class="desc text-muted font-12 text-truncate d-block">{{item.req_date}}</span>
+            </div>
+          </a>
+        </li>
+        {% endfor %}
+        {% else %}
+        <p>No notify request</p>
+        {% endif %}
       </ul>
     </div>
 
@@ -204,4 +198,11 @@
 </div>        
 
 </div>
+
+
+
+
 {% endblock %}
+
+
+© 2019 GitHub, Inc.

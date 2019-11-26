@@ -77,11 +77,14 @@ def Profile(request):
     profile=User.objects.get(id=request.user.id)
     std=Student.objects.filter(student=profile).first()
     issued_by=IssueBooks.objects.filter(issued_by=profile, returned=False)
-    print(issued_by)
+    my_book=IssueBooks.objects.filter(student=profile, returned=False)
+    notify=NotifyMeModel.objects.filter(student=profile)
     return render(request, 'account/profile.html', 
         {'profile':profile,
         'std':std,
-        'issued_by':issued_by
+        'issued_by':issued_by,
+        'my_book':my_book,
+        'notify':notify,
         }
 )
 
