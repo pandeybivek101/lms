@@ -123,7 +123,7 @@
         {% if issued_by %}
         {% for std in issued_by%}
         <li class="list-group-item">
-          <a href="#" class="user-list-item">
+          <a href="{% url 'std-detail' std.student.id %}" class="user-list-item">
             <div class="user avatar-sm float-left mr-2">
               <img src="{{std.student.profile_pic.url}}" alt="" class="img-fluid rounded-circle">
             </div>
@@ -145,15 +145,15 @@
 
        <ul class="list-group mb-0 user-list">
         {% if my_book %}
-        {% for std in my_book %}
+        {% for book in my_book %}
         <li class="list-group-item">
-          <a href="#" class="user-list-item">
+          <a href="{% url 'detail-book' book.book.id %}" class="user-list-item">
             <div class="user avatar-sm float-left mr-2">
               <img src="{{std.student.profile_pic.url}}" alt="" class="img-fluid rounded-circle">
             </div>
             <div class="user-desc">
-              <h5 class="name mt-0 mb-1">{{std.student.get_full_name}}</h5>
-              <p class="desc text-muted mb-0 font-12">{{std.student.username}}</p>
+              <h5 class="name mt-0 mb-1">{{book.book.books_name}}</h5>
+              <p class="desc text-muted mb-0 font-12">{{book.book.books_author_name}}</p>
             </div>
           </a>
         </li>
@@ -176,7 +176,7 @@
         {% for item in notify %}
 
         <li class="list-group-item">
-          <a href="#" class="user-list-item">
+          <a href="" class="user-list-item">
             <div class="user float-left mr-3">
               <i class="mdi mdi-circle text-info"></i>
             </div>

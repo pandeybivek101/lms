@@ -359,7 +359,7 @@
                     <div class="user-box">
                         <div class="user-img">
                             <img src="{% static 'assets/images/users/user-1.jpg' %}" alt="user-img" title="Mat Helme" class="rounded-circle img-fluid">
-                            <a href="javascript:void(0);" class="user-edit"><i class="mdi mdi-pencil"></i></a>
+                            <a href="{% url 'change-profile' %}" class="user-edit"><i class="mdi mdi-pencil"></i></a>
                         </div>
                         
                         <h5><a href="javascript: void(0);">{{request.user.first_name}} {{request.user.last_name}}</a> </h5>
@@ -369,36 +369,22 @@
                     <!-- Settings -->
                     <!-- Timeline -->
                     <hr class="mt-0" />
-                    <h5 class="pl-3 pr-3">Messages <span class="float-right badge badge-pill badge-danger">25</span></h5>
+                    <h5 class="pl-3 pr-3">Messages <span class="float-right badge badge-pill badge-danger">{{count}}</span></h5>
                     <hr class="mb-0" />
                     <div class="p-3">
                         <div class="inbox-widget">
-                            <div class="inbox-item">
-                                <div class="inbox-item-img"><img src="{% static 'assets/images/users/user-2.jpg' %}" class="rounded-circle" alt=""></div>
-                                <p class="inbox-item-author"><a href="javascript: void(0);" class="text-dark">Tomaslau</a></p>
-                                <p class="inbox-item-text">I've finished it! See you so...</p>
-                            </div>
-                            <div class="inbox-item">
-                                <div class="inbox-item-img"><img src="{% static 'assets/images/users/user-3.jpg' %}" class="rounded-circle" alt=""></div>
-                                <p class="inbox-item-author"><a href="javascript: void(0);" class="text-dark">Stillnotdavid</a></p>
-                                <p class="inbox-item-text">This theme is awesome!</p>
-                            </div>
-                            <div class="inbox-item">
-                                <div class="inbox-item-img"><img src="{% static 'assets/images/users/user-4.jpg' %}" class="rounded-circle" alt=""></div>
-                                <p class="inbox-item-author"><a href="javascript: void(0);" class="text-dark">Kurafire</a></p>
-                                <p class="inbox-item-text">Nice to meet you</p>
-                            </div>
-
-                            <div class="inbox-item">
-                                <div class="inbox-item-img"><img src="{% static 'assets/images/users/user-5.jpg' %}" class="rounded-circle" alt=""></div>
-                                <p class="inbox-item-author"><a href="javascript: void(0);" class="text-dark">Shahedk</a></p>
-                                <p class="inbox-item-text">Hey! there I'm available...</p>
-                            </div>
+                             {% for msg in msgs|slice:'10'%}
                             <div class="inbox-item">
                                 <div class="inbox-item-img"><img src="{% static 'assets/images/users/user-6.jpg' %}" class="rounded-circle" alt=""></div>
-                                <p class="inbox-item-author"><a href="javascript: void(0);" class="text-dark">Adhamdannaway</a></p>
-                                <p class="inbox-item-text">This theme is awesome!</p>
+                                {% if msg.read == False %}
+                                <p class="inbox-item-author"><a href="javascript: void(0);" class="text-dark"><b>{{msg.posted_by}}</b></a></p>
+                                <p class="inbox-item-text"><b>{{msg.title}}</b></p>
+                                {% else %}
+                                <p class="inbox-item-author"><a href="javascript: void(0);" class="text-dark">{{msg.posted_by}}</a></p>
+                                <p class="inbox-item-text">{{msg.title}}</p>
+                                {% endif %}
                             </div>
+                            {% endfor %}
                         </div> <!-- end inbox-widget -->
                     </div> <!-- end .p-3-->
 

@@ -14,14 +14,14 @@
 
         <li>
             <a href="{% url 'displaybooks'%}">
-                <i class="mdi mdi-format-font"></i>
+                <i class="mdi mdi-view-list"></i>
                 <span> Book List </span>
             </a>
         </li>
 
         <li>
             <a href="{% url 'list-ebooks'%}">
-                <i class="mdi mdi-format-font"></i>
+                <i class="mdi mdi-view-list"></i>
                 <span> EBook List </span>
             </a>
         </li>
@@ -29,21 +29,21 @@
         {% if request.user.Role == 'Student' %}
         <li>
             <a href="{% url 'readable-book'%}">
-                <i class="mdi mdi-format-font"></i>
+                <i class="mdi mdi-view-list"></i>
                 <span>MY Readable Ebooks</span>
             </a>
         </li>
 
         <li>
             <a href="{% url 'myissuedbook'%}">
-                <i class="mdi mdi-format-font"></i>
+                <i class="mdi mdi-view-list"></i>
                 <span>My Issued Books</span>
             </a>
         </li>
 
         <li>
             <a href="{% url 'my_fine'%}">
-                <i class="mdi mdi-format-font"></i>
+                <i class="mdi mdi-page-layout-sidebar-left"></i>
                 <span>My Fine Amount</span>
             </a>
         </li>
@@ -53,14 +53,14 @@
         {% if request.user.Role == 'Librarian' %}
         <li>
             <a href="{% url 'addbooks'%}">
-                <i class="mdi mdi-format-font"></i>
+                <i class="mdi mdi-texture"></i>
                 <span>Add Books</span>
             </a>
         </li>
 
         <li>
             <a href="{% url 'add-ebooks'%}">
-                <i class="mdi mdi-format-font"></i>
+                <i class="mdi mdi-texture"></i>
                 <span>Add Ebooks</span>
             </a>
         </li>
@@ -91,7 +91,7 @@
 
         <li>
             <a href="{% url 'issue-activities'%}">
-                <i class="mdi mdi-format-font"></i>
+                <i class="mdi mdi-page-layout-sidebar-left"></i>
                 <span> Issue Records </span>
             </a>
         </li>

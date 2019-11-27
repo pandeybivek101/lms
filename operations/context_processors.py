@@ -2,10 +2,11 @@ from .models import *
 
 def my_context_processor(request):
     if request.user.is_authenticated:
-        msgs=Message.objects.filter(posted_to=request.user, read=False)
-        count=msgs.count()
+        count=Message.objects.filter(posted_to=request.user, read=False).count()
+        msgs=Message.objects.filter(posted_to=request.user).order_by('Posted_on')[::-1]
         return {
-            'count': count
+            'count': count,
+            'msgs':msgs,
         }
     return {}
 
