@@ -41,134 +41,214 @@
 
 
 
-      
-      <div class="card-box">
-        <h4 class="header-title mt-0 mb-3"><i class="mdi mdi-notification-clear-all mr-1"></i>Messages</h4>
+      <div class="bg-picture card-box" id="printdiv">
+        <div class="profile-info-name">
 
-        {% for item  in message|slice:'8'%}
 
-        <div class="media mb-2">
-          <img src="{% static 'assets/images/users/user-1.jpg' %}" alt="" class="comment-avatar avatar-sm rounded mr-2">
-          <div class="media-body">
-            <h5 class="mt-0"><a href="#" class="text-dark">{{item.posted_by}}</a><small class="ml-1 text-muted">{{item.Posted_on}}</small></h5>
-            <p>{{item.Description}}</p>
+
+          <div class="card-box">
+            <table class="main" width="100%" cellpadding="0" cellspacing="0" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; border-radius: 3px;  margin: 0; border: none;">
+              <tbody><tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+                <td class="content-wrap aligncenter" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; display: block; margin: 0;padding: 20px;border: 3px solid #71B6F9;border-radius: 7px; background-color: #fff;" valign="top">
+                  <table width="100%" cellpadding="0" cellspacing="0" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+                    <tbody><tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+                      <td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
+                        <h2 class="aligncenter" style="font-family: 'Helvetica Neue',Helvetica,Arial,'Lucida Grande',sans-serif; box-sizing: border-box; font-size: 22px; color: #000; line-height: 1.2em; font-weight: 400; text-align: center; margin: 10px 0 0;" align="center">
+                          <a href="#" style="display: block;margin-bottom: 20px;"> <img src="{% static 'assets/images/logo-dark.png' %}" height="20" alt="logo"></a>
+                          Thanks for using Adminto.</h2>
+                        </td>
+                      </tr>
+                      <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+                        <td class="content-block aligncenter" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; text-align: center; margin: 0; padding: 0 0 10px;" align="center" valign="top">
+                          <table class="invoice" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; text-align: left; width: 80%; margin: 40px auto;">
+                            <tbody><tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+                              <td style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 5px 0;" valign="top">Coderthemes<br style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">Invoice
+                                #12345<br style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">October
+                                01 2015
+                              </td>
+                            </tr>
+                            <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+                              <td style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 5px 0;" valign="top">
+                                <table class="invoice-items" cellpadding="0" cellspacing="0" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; width: 100%; margin: 0;">
+                                  <tbody>
+                                    {% for item in issue_rec %}
+                                    <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+                                      <td style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; border-top-width: 1px; border-top-color: #eee; border-top-style: solid; margin: 0; padding: 5px 0;" valign="top">{{item.book.books_name}}
+                                      </td>
+                                      <td class="alignright" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; text-align: right; border-top-width: 1px; border-top-color: #eee; border-top-style: solid; margin: 0; padding: 5px 0;" align="right" valign="top">{{item.fine}} Rs
+                                      </td>
+                                    </tr>
+                                    {% endfor %}
+                                    <tr class="total" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+                                      <td class="alignright" width="80%" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; text-align: right; border-top-width: 2px; border-top-color: #333; border-top-style: solid; border-bottom-color: #333; border-bottom-width: 2px; border-bottom-style: solid; font-weight: 700; margin: 0; padding: 5px 0;" align="right" valign="top">Total
+                                      </td>
+                                      <td class="alignright" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; text-align: right; border-top-width: 2px; border-top-color: #333; border-top-style: solid; border-bottom-color: #333; border-bottom-width: 2px; border-bottom-style: solid; font-weight: 700; margin: 0; padding: 5px 0;" align="right" valign="top"> {{total}} Rs
+                                      </td>
+                                    </tr>
+                                  </tbody></table>
+                                </td>
+                              </tr>
+                            </tbody></table>
+                          </td>
+                        </tr>
+                        <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+                          <td class="content-block aligncenter" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; text-align: center; margin: 0; padding: 0 0 20px;" align="center" valign="top">
+                            <a href="#" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #348eda; text-decoration: underline; margin: 0;">View
+                              in browser</a>
+                            </td>
+                          </tr>
+                          <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+                            <td class="content-block aligncenter" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; text-align: center; margin: 0; padding: 0 0 20px;" align="center" valign="top">
+                              Adminto Inc. 123 my street, And my Country
+                            </td>
+                          </tr>
+                        </tbody></table>
+                      </td>
+                    </tr>
+                  </tbody></table>
+                </div>
+
+
+
+                <div class="d-print-none">
+                  <div class="float-right">
+                    <button onclick="printJS('printdiv', 'html')" class="btn btn-dark waves-effect waves-light"><i class="fa fa-print"></i></button> 
+                  </div>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="clearfix"></div>
+              </div>
+            </div>
+
+
+            <div class="card-box">
+              <h4 class="header-title mt-0 mb-3"><i class="mdi mdi-notification-clear-all mr-1"></i>Messages</h4>
+
+              {% for item  in message|slice:'8'%}
+
+              <div class="media mb-2">
+                <img src="{% static 'assets/images/users/user-1.jpg' %}" alt="" class="comment-avatar avatar-sm rounded mr-2">
+                <div class="media-body">
+                  <h5 class="mt-0"><a href="#" class="text-dark">{{item.posted_by}}</a><small class="ml-1 text-muted">{{item.Posted_on}}</small></h5>
+                  <p>{{item.Description}}</p>
+                </div>
+              </div>
+
+
+              {% endfor %}
+              <!--  media -->
+
+
+            </div>
+
           </div>
-        </div>
 
-          
-        {% endfor %}
-        <!--  media -->
+          <div class="col-sm-4">
 
+            <div class="card-box">
+
+              <h4 class="header-title mt-0 mb-3">Student Information</h4>
+              <table class="table table-bordered table-bordered dt-responsive nowrap">
+                <tr>
+                  <td>Id</td>
+                  <td>{{std.id}}</td>
+                </tr> 
+                <tr>
+                  <td>Name</td>
+                  <td>{{std.get_full_name}}</td>
+                </tr> 
+                <tr>
+                  <td>Username</td>
+                  <td>{{std.username}}</td>
+                </tr>
+                <tr>
+                  <td>Email</td>
+                  <td>{{std.email}}</td>
+                </tr> 
+                <tr>
+                  <td>Contact</td>
+                  <td>{{std.contact}}</td>
+                </tr> 
+                <tr>
+                  <td>Enrollment</td>
+                  <td>{{course.Enrollment}}</td>
+                </tr>
+                <tr>
+                  <td>Year</td>
+                  <td>{{course.year}}</td>
+                </tr>
+
+              </table>
+
+            </div>
+
+
+
+
+            <div class="card-box">
+
+              <h4 class="header-title mt-0 mb-3">Issued Books</h4>
+
+              <ul class="list-group mb-0 user-list">
+                {% if book_issued %}
+                {% for book in book_issued%}
+
+                <li class="list-group-item">
+                  <a href="#" class="user-list-item">
+                    <div class="user avatar-sm float-left mr-2">
+                      <img src="{{book.book.books_image.url}}" alt="" class="img-fluid rounded-circle">
+                    </div>
+                    <div class="user-desc">
+                      <h5 class="name mt-0 mb-1">{{book.book.books_name}}</h5>
+                      <p class="desc text-muted mb-0 font-12">{{book.book.books_author_name}}</p>
+                    </div>
+                  </a>
+                </li>
+
+                {% endfor %}
+                {% else %}
+                <p>No Issued Books</p>
+                {% endif %}
+              </ul>
+            </div>
+
+            <div class="card-box">
+
+              <h4 class="header-title mt-0 mb-3"><i class="mdi mdi-notification-clear-all mr-1"></i>Notify on Available Request</h4>
+
+              <ul class="list-group mb-0 user-list">
+                {% if notify%}
+                {% for item in notify %}
+
+                <li class="list-group-item">
+                  <a href="#" class="user-list-item">
+                    <div class="user float-left mr-3">
+                      <i class="mdi mdi-circle text-info"></i>
+                    </div>
+                    <div class="user-desc overflow-hidden">
+                      <h5 class="name mt-0 mb-1">{{item.book.books_name}}</h5>
+                      <span class="desc text-muted font-12 text-truncate d-block">{{item.req_date}}</span>
+                    </div>
+                  </a>
+                </li>
+                {% endfor %}
+                {% else %}
+                <p>No Request</p>
+                {% endif %}
+              </ul>
+            </div>
+
+
+          </div>
+        </div>        
 
       </div>
 
-    </div>
-
-    <div class="col-sm-4">
-
-      <div class="card-box">
-
-        <h4 class="header-title mt-0 mb-3">Student Information</h4>
-        <table class="table table-bordered table-bordered dt-responsive nowrap">
-          <tr>
-            <td>Id</td>
-            <td>{{std.id}}</td>
-          </tr> 
-          <tr>
-            <td>Name</td>
-            <td>{{std.get_full_name}}</td>
-          </tr> 
-          <tr>
-            <td>Username</td>
-            <td>{{std.username}}</td>
-          </tr>
-          <tr>
-            <td>Email</td>
-            <td>{{std.email}}</td>
-          </tr> 
-          <tr>
-            <td>Contact</td>
-            <td>{{std.contact}}</td>
-          </tr> 
-          <tr>
-            <td>Enrollment</td>
-            <td>{{course.Enrollment}}</td>
-          </tr>
-          <tr>
-            <td>Year</td>
-            <td>{{course.year}}</td>
-          </tr>
-
-        </table>
-
-      </div>
 
 
 
-
-      <div class="card-box">
-
-        <h4 class="header-title mt-0 mb-3">Issued Books</h4>
-
-        <ul class="list-group mb-0 user-list">
-          {% if book_issued %}
-          {% for book in book_issued%}
-
-          <li class="list-group-item">
-            <a href="#" class="user-list-item">
-              <div class="user avatar-sm float-left mr-2">
-                <img src="{{book.book.books_image.url}}" alt="" class="img-fluid rounded-circle">
-              </div>
-              <div class="user-desc">
-                <h5 class="name mt-0 mb-1">{{book.book.books_name}}</h5>
-                <p class="desc text-muted mb-0 font-12">{{book.book.books_author_name}}</p>
-              </div>
-            </a>
-          </li>
-
-          {% endfor %}
-          {% else %}
-          <p>No Issued Books</p>
-          {% endif %}
-        </ul>
-      </div>
-
-      <div class="card-box">
-
-        <h4 class="header-title mt-0 mb-3"><i class="mdi mdi-notification-clear-all mr-1"></i>Notify on Available Request</h4>
-
-        <ul class="list-group mb-0 user-list">
-          {% if notify%}
-          {% for item in notify %}
-
-          <li class="list-group-item">
-            <a href="#" class="user-list-item">
-              <div class="user float-left mr-3">
-                <i class="mdi mdi-circle text-info"></i>
-              </div>
-              <div class="user-desc overflow-hidden">
-                <h5 class="name mt-0 mb-1">{{item.book.books_name}}</h5>
-                <span class="desc text-muted font-12 text-truncate d-block">{{item.req_date}}</span>
-              </div>
-            </a>
-          </li>
-          {% endfor %}
-          {% else %}
-          <p>No Request</p>
-          {% endif %}
-        </ul>
-      </div>
-
-
-    </div>
-  </div>        
-
-</div>
+      {% endblock %}
 
 
 
-
-{% endblock %}
-
-
-© 2019 GitHub, Inc.
+      © 2019 GitHub, Inc.

@@ -1,38 +1,4 @@
-{%extends 'operations/main.html'%}
+{%extends 'operations/index.html'%}
 {% block content %}
-<table class='table table-bordered' id="mytable">
-<thead>
- <tr>
-   <th>ID</th>
-   <th>Title</th>
-   <th>Posted_on</th>
-   <th>View</th>
- </tr>
-</thead>
- <tbody>
- {% for msg in msgs|slice:'10'%}
-
- <tr>
-   
-   <td>{{msg.id}}</td>
-   <td>{{msg.title}}</td>
-   <td>{{msg.Posted_on}}</td>
-   
-   <td>
-   {% if msg.read == False %}
-   <a href="{% url 'view-msg-detail' msg.id%}"><button class="btn btn-info">View</button></a>
-   {% else %}
-   <a href="{% url 'view-msg-detail' msg.id%}"><button class="btn btn-info">Viewed</button></a>
-   {% endif %}
-   </td>
-
- </tr>
-{% endfor %} 
-</tbody>                               
-</table>
-
 
 {% endblock %}
-
-
-

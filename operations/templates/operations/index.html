@@ -71,8 +71,9 @@
                     </form>
                 </li>
 
+                {% if request.user.Role == 'Student'%}
                 <li class="dropdown notification-list">
-                    <a class="nav-link dropdown-toggle  waves-effect" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                    <a href="{% url 'view-message' %}" role="button" class="nav-link dropdown-toggle  waves-effect" >
                         <i class="fas fa-envelope"></i>
                         <span class="badge badge-danger rounded-circle noti-icon-badge">{{count}}</span>
                     </a>
@@ -168,7 +169,7 @@
                                 
                             </div>
                         </li>
-                        
+                        {% endif %}
                         <li class="dropdown notification-list">
                             <a class="nav-link dropdown-toggle nav-user mr-0 waves-effect" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
                                 <img src="{{request.user.profile_pic.url}}" alt="user-image" class="rounded-circle">
@@ -333,9 +334,9 @@
                             <div class="container-fluid">
                                 <div class="row">
                                     <div class="col-md-6">
-                                     2016 - 2019 &copy; Adminto theme by <a href="">Coderthemes</a> 
-                                 </div>
-                                 <div class="col-md-6">
+                                       2016 - 2019 &copy; Adminto theme by <a href="">Coderthemes</a> 
+                                   </div>
+                                   <div class="col-md-6">
                                     <div class="text-md-right footer-links d-none d-sm-block">
                                         <a href="javascript:void(0);">About Us</a>
                                         <a href="javascript:void(0);">Help</a>
@@ -380,12 +381,13 @@
                     <!-- Settings -->
                     <!-- Timeline -->
                     <hr class="mt-0" />
+                    {% if request.user.Role == 'Student'%}
                     <h5 class="pl-3 pr-3">Messages <span class="float-right badge badge-pill badge-danger">{{count}}</span></h5>
                     <hr class="mb-0" />
                     <div class="p-3">
                         <div class="inbox-widget">
-                           {% for msg in msgs|slice:'7'%}
-                           <div class="inbox-item">
+                         {% for msg in msgs|slice:'7'%}
+                         <div class="inbox-item">
                             <div class="inbox-item-img"><img src="{{msg.posted_by.profile_pic.url}}" class="rounded-circle" alt=""></div>
                             {% if msg.read == False %}
                             <p class="inbox-item-author"><a href="javascript: void(0);" class="text-dark"><b>{{msg.posted_by}}</b></a></p>
@@ -397,6 +399,13 @@
                         </div>
                         {% endfor %}
                     </div> <!-- end inbox-widget -->
+                    {% endif %}
+
+                    {% if request.user.Role == 'Librarian'%}
+                    <h5 class="pl-3 pr-3">Scan</h5>
+                    <hr class="mb-0" />
+                    <a href="{% url 'scan'%}"><img  style="" src="{% static 'assets/images/scanner.png' %}" width="250" height="200"></a>
+                    {% endif %}
                 </div> <!-- end .p-3-->
 
             </div> <!-- end slimscroll-menu-->

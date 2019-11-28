@@ -88,7 +88,8 @@ class Message(models.Model):
 	title=models.CharField(max_length=20)
 	Description=models.TextField()
 	Posted_on=models.DateTimeField(auto_now_add=True)
-	posted_to=models.ForeignKey(settings.AUTH_USER_MODEL, related_name='librarian', on_delete=models.CASCADE)
+	posted_to=models.ForeignKey(settings.AUTH_USER_MODEL, 
+		related_name='librarian', on_delete=models.CASCADE)
 	posted_by=models.ForeignKey(settings.AUTH_USER_MODEL, related_name='std', on_delete=models.CASCADE)
 	read=models.BooleanField(default=False)
 
