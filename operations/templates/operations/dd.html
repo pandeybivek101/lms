@@ -156,3 +156,32 @@ https://stackoverflow.com/questions/49361463/datatables-change-button-style
     <a href="{% url 'login' %}">Already Have An Account ? </a>
     </p>
     {% endblock %}
+
+
+
+
+
+    <script type="text/javascript">
+    function alert() {
+      var data=document.getElementById('data').value
+      Swal.fire({
+        title: 'Are you sure to return this book?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes,Return'
+      }).then((result) => {
+        if (result.value) {
+          window.location.href = "{{request.scheme}}://{{request.get_host}}/issuedbooks/"+data+"/returnbooks"
+          Swal.fire(
+            'Returned!',
+            'Your Book has been returned.',
+            'success'
+            )
+        }
+
+      })
+    }
+  </script>

@@ -82,7 +82,9 @@ class ListEbooks(ListView):
 
 @login_required
 def Home(request):
-    count_lst=[]
+
+    #-------------------------------------
+    '''count_lst=[]
     cat_lst=[]
     erh_lst=[]
     curr_date=datetime.datetime.utcnow().replace(tzinfo=pytz.UTC)
@@ -134,6 +136,21 @@ def Home(request):
     'my_ret':my_ret,
     'my_mnth':my_mnth,
     'msg_count':msg_count
+    }'''
+
+    #-------------------------------
+    curr_date=datetime.datetime.utcnow().replace(tzinfo=pytz.UTC)
+    issued_today=IssueBooks.objects.filter(issued_date__day=curr_date.day).count()
+    returned_today=IssueBooks.objects.filter(returned=True, 
+        returned_date__day=curr_date.day).count()
+    issued_monthly=IssueBooks.objects.filter(issued_date__month=curr_date.month).count()
+    returned_monthly=IssueBooks.objects.filter(returned=True, 
+        returned_date__month=curr_date.month).count()
+    context={
+    'issued_today':issued_today,
+    'returned_today':returned_today,
+    'issued_monthly':issued_monthly,
+    'returned_monthly':returned_monthly,
     }
 
     return render(request,'operations/home.html', context)
