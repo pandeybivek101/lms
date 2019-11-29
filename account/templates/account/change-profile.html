@@ -8,7 +8,7 @@
 			<div class="card-box">
 
 				<h4 class="header-title mt-0 mb-3">Change Profile</h4>
-				<form action="{% url 'change-profile' %}" method="POST" class="col-lg-8" enctype="multipart/form-data">
+				<form action="{% url 'change-profile' %}" method="POST" class="col-lg-8" enctype="multipart/form-data" onsubmit="timeralert()">
 					{% csrf_token %}
 					{{form1|crispy}}
 					{% if request.user.Role == "Student" %}
@@ -32,6 +32,23 @@
 	{% block heading %}
 	<h2>Change Profile</h2>
 	{% endblock heading %}
+
+
+	{% block js %}
+	<script type="text/javascript">
+		function timeralert(){
+			Swal.fire({
+				position: 'center',
+				type: 'success',
+				title: 'Your Profile has been changed',
+				showConfirmButton:!1,
+				timer: 2000,
+			})
+
+		}
+
+	</script>
+	{% endblock js %}
 
 
 

@@ -1,4 +1,5 @@
 {%extends 'operations/index.html'%}
+{% load static %}
 {% block content %}
 
 {% if stdrecord%}
@@ -36,7 +37,7 @@
           <td><a href="{% url 'st-barcode' std.id %}"><button class="btn btn-warning">BarCode</button></a></td>
           {% endif %}
           <td>
-            <a href="{% url 'deletestd' std.id%}"><button class="btn btn-danger">Delete</button></a>
+            <a href="{% url 'deletestd' std.id%}"></a><button class="btn btn-danger">Delete</button></a>
           </td>
           <td><a href="{% url 'std-detail' std.id%}">detail</a></td>
           {% endfor %}

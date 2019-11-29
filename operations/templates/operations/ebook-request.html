@@ -17,7 +17,8 @@
             <th>Author Name</th>
             <th>Requested_by</th>
             <th>Requested_date</th>
-            <th>Actions</th>
+            <th>Allow</th>
+            <th>Deny</th>
           </tr>
         </thead>
         <tbody>
@@ -29,8 +30,16 @@
             <td>{{book.requested_by.username}}</td>  
             <td>{{book.requested_date|date:"M d, Y"}}</td>
             <td>
-             <a href="{% url 'allow' book.id %}"><button class="btn btn-warning">Allow</button></a>
-             <a href="{% url 'deny' book.id %}"><button class="btn btn-danger">Deny</button></a>
+            <form method="POST" action="{% url 'allow' book.id %}">
+            {% csrf_token %}
+             <button class="btn btn-warning" value="allow" id="{{book.id}}" type="button" onclick="Actionrequest(this.id, this.value);">Allow</button>
+             </form>
+             </td>
+             <td>
+             <form method="POST" action="{% url 'deny' book.id %}">
+                {% csrf_token %}
+                <button value="deny" id="{{book.id}}" type="button" class="btn btn-info" onclick="Actionrequest(this.id, this.value);">Deny</button>
+             </form>
            </td>
          </tr>     
          {% endfor %}
@@ -43,5 +52,38 @@
  {% endif %}
  <!-- /page content -->
  {% endblock %}
+
+
+{% block js %}
+ <script type="text/javascript">
+   function Actionrequest(id, value){
+    Swal.fire({
+        title:"Are you sure to"+ value +"this Request?",
+        text:"You won't be able to revert this!",
+        type:"warning",
+        showCancelButton:!0,
+        confirmButtonColor:"#3085d6",
+        cancelButtonColor:"#d33",
+        confirmButtonText:"Yes"+","+value+"!",
+      }).then((result) => {
+
+        if (result.value) {
+          window.location.href = "{{request.scheme}}://{{request.get_host}}/view-ebook-request/"+id+"/"+value
+          Swal.fire(
+            value+'ed',
+            'Your Book has been returned.',
+            'success'
+            )
+        }
+
+      })
+
+  }
+
+
+  
+  </script> 
+
+  {% endblock js%}
 
  
