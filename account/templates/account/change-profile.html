@@ -34,21 +34,8 @@
 	{% endblock heading %}
 
 
-	{% block js %}
-	<script type="text/javascript">
-		function timeralert(){
-			Swal.fire({
-				position: 'center',
-				type: 'success',
-				title: 'Your Profile has been changed',
-				showConfirmButton:!1,
-				timer: 2000,
-			})
+{% block js %}
+ {% include 'operations/js.html'%}
+ {% endblock js %}
 
-		}
-
-	</script>
-	{% endblock js %}
-
-
-
+ 

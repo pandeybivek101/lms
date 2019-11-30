@@ -56,35 +56,6 @@
 
 {% block js %}
 {% include 'operations/js.html'%}
- <script type="text/javascript">
-   function Actionrequest(id, value){
-    Swal.fire({
-        title:"Are you sure to"+ value +"this Request?",
-        text:"You won't be able to revert this!",
-        type:"warning",
-        showCancelButton:!0,
-        confirmButtonColor:"#3085d6",
-        cancelButtonColor:"#d33",
-        confirmButtonText:"Yes"+","+value+"!",
-      }).then((result) => {
-
-        if (result.value) {
-          window.location.href = "{{request.scheme}}://{{request.get_host}}/view-ebook-request/"+id+"/"+value
-          Swal.fire(
-            value+'ed',
-            'Your Book has been returned.',
-            'success'
-            )
-        }
-
-      })
-
-  }
-
-
-  
-  </script> 
-
   {% endblock js%}
 
  

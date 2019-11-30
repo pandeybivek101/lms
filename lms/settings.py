@@ -70,6 +70,7 @@ TEMPLATES = [
                 'operations.context_processors.my_context_processor',
                 'operations.context_processors.get_all_catagory',
                 'operations.context_processors.issue_requests',
+                'operations.context_processors.chart',
             ],
         },
     },

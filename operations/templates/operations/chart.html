@@ -1,0 +1,57 @@
+<script type="text/javascript">
+var ctx = document.getElementById('pie').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'pie',
+    data: {
+        labels: ["Allowed","Denied","Pending"],
+        datasets: [{
+            label: '# of Votes',
+            data: [{{total_allowed}},{{total_denied}},{{total_pending}}],
+            backgroundColor:["#ff8acc","#5b69bc","#f9c851"],
+            hoverBackgroundColor:["#ff8acc","#5b69bc","#f9c851"],
+            hoverBorderColor:"#fff",
+        }]
+    },
+});
+
+
+
+var dtx = document.getElementById('doughnut').getContext('2d');
+var doChart = new Chart(dtx, {
+    type: 'doughnut',
+    data: {
+        labels: ["non-fined","fined"],
+        datasets: [{
+            label: '# of Votes',
+            data: [{{non_fined}},{{fined}}],
+            backgroundColor:["#188ae2","#f9c851"],
+            hoverBackgroundColor:["#188ae2","#f9c851"],
+            hoverBorderColor:"#fff",
+        }]
+    },
+});
+
+
+new Chart(document.getElementById("bar-chart-grouped"), {
+    type: 'bar',
+    data: {
+      labels: ["Jan", "Feb", "March", "Apr", "May", 
+      'Jun', 'July', 'Aug','Sep', 'Oct', 'Nov', 'Dec'],
+      datasets: [
+        {
+          label: "Issued",
+          backgroundColor: "#188ae2",
+          data: [133,221,783,2478,223,444,
+          64,567,352,093,32,122]
+        }, {
+          label: "Returned",
+          backgroundColor: "#f9c851",
+          data: [408,547,675,734,432,782,422,322,342,222,72,12]
+        }
+      ]
+    },
+});
+
+
+
+</script>

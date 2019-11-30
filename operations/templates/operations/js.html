@@ -42,4 +42,201 @@ $(document).ready(function() {
 
   } );
 } );
+
+
+function Actionrequest(id, value){
+    Swal.fire({
+        title:"Are you sure to"+" "+value+" "+"this Request?",
+        text:"You won't be able to revert this!",
+        type:"warning",
+        showCancelButton:!0,
+        confirmButtonColor:"#3085d6",
+        cancelButtonColor:"#d33",
+        confirmButtonText:"Yes"+","+value+"!",
+      }).then((result) => {
+
+        if (result.value) {
+          window.location.href = "{{request.scheme}}://{{request.get_host}}/view-ebook-request/"+id+"/"+value
+          Swal.fire(
+            value+'ed',
+            'Your Book has been returned.',
+            'success'
+            )
+        }
+
+      })
+
+  }
+
+
+  function notify(){
+  Swal.fire({
+    text:'You will be notified when this book is available',
+    timer:2000
+  })
+}
+
+function ebookreqalert(){
+   Swal.fire({
+    type: 'success',
+    text:'Your Request for Ebook has been Recorded',
+    timer:2000,
+    showConfirmButton:!1,
+
+  })
+}
+
+
+function alert(id){
+      Swal.fire({
+        title:"Are you sure to Return this Book?",
+        text:"You won't be able to revert this!",
+        type:"warning",
+        showCancelButton:!0,
+        confirmButtonColor:"#3085d6",
+        cancelButtonColor:"#d33",
+        confirmButtonText:"Yes,Return it!",
+      }).then((result) => {
+        if (result.value) {
+          window.location.href = "{{request.scheme}}://{{request.get_host}}/issuedbooks/"+id+"/returnbooks"
+          Swal.fire(
+            'Returned!',
+            'Your Book has been returned.',
+            'success'
+            )
+        }
+
+      })
+    }
+   
+
+
+   var _scannerIsRunning = false;
+
+    function startScanner() {
+        Quagga.init({
+            inputStream: {
+                name: "Live",
+                type: "LiveStream",
+                target: document.querySelector('#scanner-container'),
+                constraints: {
+                    width: 480,
+                    height: 320,
+                    facingMode: "environment"
+                },
+            },
+            decoder: {
+                readers: [
+                "code_128_reader",
+                "ean_reader",
+                "ean_8_reader",
+                "code_39_reader",
+                "code_39_vin_reader",
+                "codabar_reader",
+                "upc_reader",
+                "upc_e_reader",
+                "i2of5_reader"
+                ],
+                debug: {
+                    showCanvas: true,
+                    showPatches: true,
+                    showFoundPatches: true,
+                    showSkeleton: true,
+                    showLabels: true,
+                    showPatchLabels: true,
+                    showRemainingPatchLabels: true,
+                    boxFromPatches: {
+                        showTransformed: true,
+                        showTransformedBox: true,
+                        showBB: true
+                    }
+                }
+            },
+
+        }, function (err) {
+            if (err) {
+                console.log(err);
+                return
+            }
+
+            console.log("Initialization finished. Ready to start");
+            Quagga.start();
+
+                // Set flag to is running
+                _scannerIsRunning = true;
+            });
+
+        Quagga.onProcessed(function (result) {
+            var drawingCtx = Quagga.canvas.ctx.overlay,
+            drawingCanvas = Quagga.canvas.dom.overlay;
+
+            if (result) {
+                if (result.boxes) {
+                    drawingCtx.clearRect(0, 0, parseInt(drawingCanvas.getAttribute("width")), parseInt(drawingCanvas.getAttribute("height")));
+                    result.boxes.filter(function (box) {
+                        return box !== result.box;
+                    }).forEach(function (box) {
+                        Quagga.ImageDebug.drawPath(box, { x: 0, y: 1 }, drawingCtx, { color: "green", lineWidth: 2 });
+                    });
+                }
+
+                if (result.box) {
+                    Quagga.ImageDebug.drawPath(result.box, { x: 0, y: 1 }, drawingCtx, { color: "#00F", lineWidth: 2 });
+                }
+
+                if (result.codeResult && result.codeResult.code) {
+                    Quagga.ImageDebug.drawPath(result.line, { x: 'x', y: 'y' }, drawingCtx, { color: 'red', lineWidth: 3 });
+                }
+            }
+        });
+
+
+        Quagga.onDetected(function (result) {
+                //console.log("Barcode detected and processed : [" + result.codeResult.code + "]", result);
+                //console.log(result.codeResult.code)
+                Quagga.stop();
+                window.location.href = "{{request.scheme}}://{{request.get_host}}/liststd/"+result.codeResult.code+"/detail"
+
+            });
+    }
+
+
+        // Start/stop scanner
+        document.getElementById("btn").addEventListener("click", function () {
+            if (_scannerIsRunning) {
+                Quagga.stop();
+            } else {
+                startScanner();
+            }
+        }, false); 
+
+
+
+        function timeralert(){
+            Swal.fire({
+                position: 'center',
+                type: 'success',
+                title: 'Your Profile has been changed',
+                showConfirmButton:!1,
+                timer: 2000,
+            })
+
+        }
+
+
+    function CPtimeralert()
+    {
+        var myForm=document.getElementById("form1");
+        if(myForm.valid()){
+
+            Swal.fire({
+                position: 'center',
+                type: 'success',
+                title: 'Your Password has been changed',
+                showConfirmButton:!1,
+                timer: 2000,
+            })
+        }
+
+    }
 </script>

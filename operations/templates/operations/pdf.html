@@ -1,7 +1,6 @@
 {%extends 'operations/index.html'%}
 {% load static %}
 {% block content %}
-<div class="content">
 
     <!-- Start Content-->
     <div class="container-fluid">
@@ -11,15 +10,17 @@
                 <div class="card-box">
 
                     <canvas id="pdf-render"></canvas>
+                    <div class="text-center mb-4">
                     <button class="btn btn-info" id="prev-page">
                         <i class="fas fa-arrow-circle-left"></i> Prev Page
-                    </button>
-                    <button class="btn btn-info" id="next-page">
-                        Next Page <i class="fas fa-arrow-circle-right"></i>
                     </button>
                     <span class="page-info">
                         Page <span id="page-num"></span> of <span id="page-count"></span>
                     </span>
+                    <button class="btn btn-info" id="next-page">
+                        Next Page <i class="fas fa-arrow-circle-right"></i>
+                    </button>
+                    </div>
 
                     <!-- end card-box -->
 
@@ -29,7 +30,6 @@
         </div> <!-- container-fluid -->
 
     </div>
-</div>
 {% endblock %}
 
 {% block js %}
