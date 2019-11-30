@@ -24,9 +24,9 @@
       </p>
 
       {% if request.user.Role == 'Student' %}
-      <table id="responsive-datatable" class="table table-bordered table-bordered dt-responsive nowrap">
+      <table id="responsive-datatable1" class="table table-bordered table-bordered dt-responsive nowrap">
       {% else %}
-      <table id="selection-datatable" class="table table-bordered dt-responsive nowrap">
+      <table id="selection-table1" class="table table-bordered dt-responsive nowrap">
       {% endif %}
         <thead>
           <tr>
@@ -68,7 +68,10 @@
              {% if book.id in req_list %}
              <td><a href="{% url 'view-request' book.id%}"><button class="btn btn-primary" disabled="">send view request</button></a> </td>
              {% else %}
-             <td><a href="{% url 'view-request' book.id%}"><button class="btn btn-primary">send view request</button></a> </td>
+             <td>
+             <a href="{% url 'view-request' book.id%}"><button class="btn btn-primary" onclick="ebookreqalert()">send view request</button></a>
+             </form>
+             </td>
              {% endif %}
              {% endif %}
              <td><a href="{% url 'detail-ebook' book.id%}">detail</a></td>
@@ -85,5 +88,21 @@
  {% endif %}
  <!-- /page content -->
  {% endblock %}
+
+
+ {% block js %}
+ {% include 'operations/js.html'%}
+ <script type="text/javascript">
+ function ebookreqalert(){
+   Swal.fire({
+    type: 'success',
+    text:'Your Request for Ebook has been Recorded',
+    timer:2000,
+    showConfirmButton:!1,
+
+  })
+}
+</script>
+ {% endblock js %}
 
  

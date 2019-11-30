@@ -9,7 +9,7 @@
     <div class="card-box table-responsive">
       <h2 class="mt-0 header-title">EBook Requests</h2>
       <p class="text-muted font-14 mb-3"></p>
-      <table id="selection-datatable" class="table table-bordered dt-responsive nowrap">
+      <table id="selection-table1" class="table table-bordered dt-responsive nowrap">
         <thead>
           <tr>
             <th>ID</th>
@@ -55,6 +55,7 @@
 
 
 {% block js %}
+{% include 'operations/js.html'%}
  <script type="text/javascript">
    function Actionrequest(id, value){
     Swal.fire({

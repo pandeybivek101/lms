@@ -1,13 +1,25 @@
 {% extends 'account/baselogin.html'%}
 {%block content %}
-<p><b>Do you want to delete ? <b></p>
-<form action="{% url 'deletebook' object.id %}" method="POST">
-    {% csrf_token %}
-	<input type="" name="" hidden="">
-	<p><button class="btn btn-danger">delete</button>
-	<a class="btn btn-primary" href="{% url 'displaybooks' %}">Cancel</a>
-	</p>
-</form>
+<div class="card">
+
+	<div class="card-body p-4">
+
+		<div class="text-center mb-4">
+			<h4 class="text-uppercase mt-0">Confirm Delete</h4>
+			<p>Name:{{object.books_name}}</p>
+		</div>
+
+		<form action="{% url 'deletebook' object.id %}" method="POST">
+			{% csrf_token %}
+			<input type="" name="" hidden="">
+			<div class="text-center mb-4">
+				<p><button class="btn btn-danger">delete</button>
+					<a class="btn btn-primary" href="{% url 'displaybooks' %}">Cancel</a>
+				</p>
+			</div>
+		</form>
+	</div>
+</div>
 {% endblock %}
 
 

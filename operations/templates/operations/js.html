@@ -1,20 +1,45 @@
-<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.bootstrap4.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.flash.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/colreorder/1.5.2/js/dataTables.colReorder.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/scroller/2.0.1/js/dataTables.scroller.min.js"></script>
-
 
 <script type="text/javascript">
 
 $(document).ready( function () {
-  var table = $('#mytable').DataTable( {
+  var table = $('#responsive-datatable1').DataTable( {
     pageLength : 5,
     lengthMenu: [[5, 10, 20, -1], [5, 10, 20, 'All']]
   } )
+} );
+
+
+$(document).ready(function() {
+  $('#selection-table1').DataTable( {
+    dom: "Bfrtip",
+    lengthMenu: [
+            [ 5, 10, 20, -1 ],
+            [ '5 rows', '10 rows', '20 rows', 'All' ]
+        ],
+        buttons: [
+            'copy',
+            'csv',
+            'excel',
+            'pdf',
+            'pageLength',
+            {
+                extend: 'print',
+                text: 'Print all',
+                exportOptions: {
+                    modifier: {
+                        selected: null
+                    }
+                }
+            },
+            {
+                extend: 'print',
+                text: 'Print selected'
+            }
+        ],
+        select:{
+            style:"multi",
+        },
+
+  } );
 } );
 </script>

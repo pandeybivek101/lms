@@ -11,7 +11,7 @@
       <div class="btn-group dropdown mt-1">
         <button type="button" class="btn btn-success waves-effect waves-light">Catagories</button>
         <button type="button" class="btn btn-success dropdown-toggle waves-effect waves-light" data-toggle="dropdown" aria-expanded="false"><i class="mdi mdi-chevron-down"></i></button>
-        <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(103px, 37px, 0px);">
+        <div class="dropdown-menu" x-placement="bottom-start">
           <!-- item-->
           <a href="{% url 'displaybooks'%}" class="dropdown-item">All</a>
           {% for item in catagories%}
@@ -19,14 +19,14 @@
           {% endfor %}
         </div>
       </div>
+      <hr />
       
-      <hr/>
 
       {% if books %}
       {% if request.user.Role == 'Student' %}
-      <table id="responsive-datatable" class="table table-bordered table-bordered dt-responsive nowrap">
+      <table id="responsive-datatable1" class="table table-bordered table-bordered dt-responsive nowrap">
       {% else %}
-      <table id="selection-datatable" class="table table-bordered dt-responsive nowrap">
+      <table id="selection-table1" class="table table-bordered dt-responsive nowrap">
       {% endif %}
         <thead>
           <tr>
@@ -63,7 +63,7 @@
             <td>{{book.available_quantity}}</td> 
             {% if book.barcode %}
             <td>
-              <button onclick="printJS('{{book.barcode.url}}', 'image')" class="btn btn-warning">Print</button>
+              <button onclick="printJS('{{book.barcode.url}}', 'image')" class="btn btn-warning">Print Barcode</button>
             </td>
             {% else %}
             <td>
@@ -84,7 +84,7 @@
              {% if book.id in noti_lst %}
              <p>Notify on Available</p>
              {% else %}
-             <a href="{% url 'notifyme' book.id%}">Notify on Available</a>
+             <a href="{% url 'notifyme' book.id%}" onclick="notify()">Notify on Available</a>
              {% endif %}
            </td>
            {%endif%}
@@ -105,5 +105,15 @@
 
 {% block js %}
 
+{% include 'operations/js.html'%}
+<script type="text/javascript">
+function notify(){
+  Swal.fire({
+    text:'You will be notified when this book is available',
+    timer:2000
+  })
+}
 
+  
+</script>
 {% endblock js%}
