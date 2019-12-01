@@ -3,10 +3,16 @@
 {% load static %}
 {% block content %}
 <div class="container-fluid">
-
+<div class="card-box">
+<div class="text-center mb-4">
+<h2>Dashboard</h2>
+</div>
+</div>
+{% if request.user.Role == 'Librarian'%}
     <div class="row">
 
         <div class="col-xl-3 col-md-6">
+
             <div class="card-box">
 
                 <h4 class="header-title mt-0 mb-4">Today's Issued Analytics</h4>
@@ -127,16 +133,118 @@
             <h4 class="header-title mt-0 mb-3">Issue And Return Record of Fiseal Year {{curr_date.year}}</h4>
             </div>
             <div class="chartjs-chart">
-               <canvas id="bar-chart-grouped" width="800" height="450"></canvas>
+               <canvas id="bar-chart-grouped" width="800" height="500"></canvas>
             </div>
         </div>
     </div><!-- end col-->
 </div> <!-- container -->
+{% endif %}
+
+{% if request.user.Role == 'Student'%}
+<div class="row">
+    <div class="col-xl-6">
+        <div class="card-box">
+            <div class="text-center mb-4">
+            <h4 class="header-title mt-0 mb-3">Ebook Request Records of {{request.user.get_full_name}}</h4>
+            </div>
+            <div class="chartjs-line">
+               <canvas id="line-chart" width="800" height="450"></canvas>
+            </div>
+        </div>
+    </div><!-- end col-->
+
+    <div class="col-xl-6">
+        <div class="card-box">
+            <div class="text-center mb-4">
+            <h4 class="header-title mt-0 mb-3">
+            My fined and Non-fined Records
+            </h4>
+            </div>
+            <div class="chartjs-chart">
+                <canvas id="doughnut1" height="170"></canvas>
+            </div>
+        </div>
+    </div><!-- end col-->
+</div>
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card-box">
+        <div class="text-center mb-4">
+            <h4 class="header-title mt-0 mb-3">Issue And Return Record in Fiseal Year {{curr_date.year}} of {{request.user.username}}</h4>
+            </div>
+            <div class="chartjs-chart">
+               <canvas id="bar-chart-grouped" width="800" height="500"></canvas>
+            </div>
+        </div>
+    </div>
+</div> 
+{% endif %}
 
 </div> 
+
 {% endblock %}
 
 
 {% block js%}
 {% include 'operations/chart.html'%}
+<script type="text/javascript">
+
+new Chart(document.getElementById("line-chart"), {
+  type: 'line',
+  data: {
+    labels: ['Jan','Feb','Mar','Apr','May','Jun',
+    'Jul','Aug','Sep','Oct','Nov','Dec'],
+    datasets: [{ 
+        data:{{allowed_std}},
+        label: "Allowed",
+        borderColor: "#3e95cd",
+        fill: false
+      }, { 
+        data: {{denied_std}},
+        label: "Denied",
+        borderColor: "#8e5ea2",
+        fill: false
+      }, 
+    ]
+  },
+});
+
+
+var dtx = document.getElementById('doughnut1').getContext('2d');
+var doChart = new Chart(dtx, {
+    type: 'doughnut',
+    data: {
+        labels: ["Fined","Non-fined"],
+        datasets: [{
+            label: '# of Votes',
+            data: [{{std_fined}},{{std_nonfined}}],
+            backgroundColor:["#188ae2","#f9c851"],
+            hoverBackgroundColor:["#188ae2","#f9c851"],
+            hoverBorderColor:"#fff",
+        }]
+    },
+});
+
+new Chart(document.getElementById("bar-chart-grouped"), {
+    type: 'bar',
+    data: {
+      labels: ["Jan", "Feb", "March", "Apr", "May", 
+      'Jun', 'July', 'Aug','Sep', 'Oct', 'Nov', 'Dec'],
+      datasets: [
+        {
+          label: "Issued",
+          backgroundColor: "#188ae2",
+          data:{{my_issued}}
+        }, {
+          label: "Returned",
+          backgroundColor: "#f9c851",
+          data:{{my_returned}}
+        }
+      ]
+    },
+});
+
+
+
+</script>
 {% endblock js%}

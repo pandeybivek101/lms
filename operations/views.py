@@ -116,7 +116,6 @@ def AddBook(request):
 class DisplayBooks(LoginRequiredMixin, ListView):
     template_name='operations/displaybooks.html'
     queryset=AddBooks.objects.all()
-    paginate_by = 2
 
     def get_context_data(self, *args, **kwargs):
         context = super(DisplayBooks, self).get_context_data(*args, 
@@ -460,7 +459,6 @@ class EBookcatagorylist(LoginRequiredMixin, ListView):
     model = Ebooks
     template_name = 'operations/ebook-list.html'
     context_object_name = 'ebooks'
-    paginate_by=5
 
     def get_queryset(self):
         catagory = get_object_or_404(Catagory, catagory=self.kwargs.get('catagory'))
@@ -471,7 +469,6 @@ class Bookcatagorylist(LoginRequiredMixin, ListView):
     model = AddBooks
     template_name = 'operations/displaybooks.html'
     context_object_name = 'books'
-    paginate_by=5
 
     def get_queryset(self):
         catagory = get_object_or_404(Catagory, catagory=self.kwargs.get('catagory'))
@@ -661,7 +658,6 @@ def ViewMessageDetail(request, id):
 class IssueActivities(ListView, LoginRequiredMixin, UserPassesTestMixin):
     template_name='operations/issue-activities.html'
     queryset=IssueBooks.objects.all().order_by('-issued_date')
-    paginate_by=5 
 
     def get_context_data(self, *args, **kwargs):
         context=super(IssueActivities,self).get_context_data(*args, 
@@ -683,7 +679,6 @@ class IssueActivities(ListView, LoginRequiredMixin, UserPassesTestMixin):
 class EbookActivities(ListView, LoginRequiredMixin, UserPassesTestMixin):
     template_name='operations/ebook-activities.html'
     queryset=EbookRequestHistory.objects.all().order_by('-requested_date')
-    paginate_by=5
 
     def get_context_data(self, *args, **kwargs):
         context=super(EbookActivities,self).get_context_data(*args, **kwargs)

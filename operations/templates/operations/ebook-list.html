@@ -12,13 +12,20 @@
       <div class="btn-group dropdown mt-1">
         <button type="button" class="btn btn-success waves-effect waves-light">Catagories</button>
         <button type="button" class="btn btn-success dropdown-toggle waves-effect waves-light" data-toggle="dropdown" aria-expanded="false"><i class="mdi mdi-chevron-down"></i></button>
-        <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(103px, 37px, 0px);">
+        <div class="dropdown-menu" x-placement="bottom-start">
           <!-- item-->
           <a href="{% url 'list-ebooks' %}" class="dropdown-item">All</a>
           {% for item in catagories%}
           <a href="{% url 'ebook-catagory' item.catagory  %}" class="dropdown-item">{{item.catagory}}</a>
           {% endfor %}
         </div>
+        {% if request.user.Role == 'Librarian' %}
+        <div class="mx-2">
+          <a href="{% url 'add-ebooks' %}" class="btn btn-lg btn-success font-16 btn-block waves-effect waves-light">
+          <i class="fa fa-plus mr-1"></i> Create New
+        </a>
+        </div>
+      {% endif %}
       </div>
       <p class="text-muted font-14 mb-3">
       </p>
