@@ -34,16 +34,17 @@ def chart(request):
         curr_date=datetime.datetime.utcnow().replace(tzinfo=pytz.UTC)
 
         for i in range(1, 13):
-            issued_result=IssueBooks.objects.filter(
-                issued_date__year=curr_date.year,
-                issued_date__month=i).count()
-            issued_yearly.append(issued_result)
 
             returned_result=IssueBooks.objects.filter(
                 returned_date__year=curr_date.year,
                 returned=True,
                 returned_date__month=i).count()
             returned_yearly.append(returned_result)
+
+            issued_result=IssueBooks.objects.filter(
+                issued_date__year=curr_date.year,
+                issued_date__month=i).count()
+            issued_yearly.append(issued_result)
 
             my_return=IssueBooks.objects.filter(
                 returned_date__year=curr_date.year,
@@ -98,6 +99,7 @@ def chart(request):
         total_denied=EbookRequestHistory.objects.filter(
             action='Denied').count()
         total_pending=EbookRequest.objects.all().count()
+
         return {
         'issued_today':issued_today,
         'returned_today':returned_today,

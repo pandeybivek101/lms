@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.utils import timezone
 from django.shortcuts import render, redirect, render_to_response, get_object_or_404
 from .models import *
@@ -60,7 +60,15 @@ def myissuedbook(request):
         {'issuedbooks':issuedbooks})
 
 
-class ListEbooks(ListView):
+@login_required
+@role_required(allowed_roles=['Student'])
+def DirectView(request, id):
+    msg_detail=Message.objects.get(id=id)
+    msg_detail.read=True
+    msg_detail.save()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+class ListEbooks(LoginRequiredMixin, ListView):
     template_name='operations/ebook-list.html'
     queryset=Ebooks.objects.all()
 

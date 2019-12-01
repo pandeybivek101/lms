@@ -25,6 +25,7 @@ urlpatterns = [
     path('my-fine/', views.MYFine, name='my_fine'),
     path('view-message/', views.ViewMessage, name='view-message'),
     path('view-message/<int:id>/detail', views.ViewMessageDetail, name='view-msg-detail'),
+    path('direct-view/<int:id>/', views.DirectView, name='direct-view'),
 
 
     path('issuebooks', views.IssueBook, name='issuebooks'),

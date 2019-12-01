@@ -393,15 +393,40 @@
                     <div class="p-3">
                         <div class="inbox-widget">
                          {% for msg in msgs|slice:'7'%}
+
+
+                         <!-- flash model data-dismiss="modal"-->
+
+                         <div class="modal fade" id="data{{msg.id}}" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-scrollable" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title" id="exampleModalScrollableTitle">{{msg.title}}</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <p>{{msg.Description}}</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <a href="{% url 'direct-view' msg.id %}"><button class="btn btn-secondary">Close</button></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                     <!-- end flash model -->
+
                          <div class="inbox-item">
                             <div class="inbox-item-img"><img src="{{msg.posted_by.profile_pic.url}}" class="rounded-circle" alt=""></div>
                             {% if msg.read == False %}
-                            <p class="inbox-item-author"><a href="javascript: void(0);" class="text-dark"><b>{{msg.posted_by}}</b></a></p>
-                            <p class="inbox-item-text"><b>{{msg.title}}</b></p>
+                            <p class="inbox-item-author"><a href="" class="text-dark" data-target="#data{{msg.id}}" data-toggle="modal"><h5>{{msg.title}}</h5></a></p>
+                            <p class="inbox-item-text">{{msg.posted_by}}</p>
                             {% else %}
-                            <p class="inbox-item-author"><a href="javascript: void(0);" class="text-dark">{{msg.posted_by}}</a></p>
-                            <p class="inbox-item-text">{{msg.title}}</p>
+                            <p class="inbox-item-author"><a href="" class="text-dark" data-target="#data{{msg.id}}" data-toggle="modal" >{{msg.title}}</a></p>
+                            <p class="inbox-item-text">{{msg.posted_by}}</p>
+
                             {% endif %}
+                            
                         </div>
                         {% endfor %}
                     </div> <!-- end inbox-widget -->
@@ -495,6 +520,9 @@
 
       <!-- Sweet Alerts js -->
       <script src="{% static 'assets/libs/sweetalert2/sweetalert2.min.js' %}"></script>
+
+      <!-- Modal-Effect -->
+        <script src="{% static 'assets/libs/custombox/custombox.min.js' %}"></script>
 
       <!-- Sweet alert init js-->
       <!--<script src="{% static 'assets/js/pages/sweet-alerts.init.js' %}"></script>-->
