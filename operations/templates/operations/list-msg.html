@@ -1,50 +1,50 @@
 {%extends 'operations/index.html'%}
 {% block content %}
 <div class="row">
-	<div class="col-12">
-		<div class="card-box table-responsive">
-			<h4 class="mt-0 header-title">Multi item selection</h4>
-			<p class="text-muted font-14 mb-3">
+  <div class="col-12">
+    <div class="card-box table-responsive">
+      <h4 class="mt-0 header-title">Multi item selection</h4>
+      <p class="text-muted font-14 mb-3">
+      </p>
 
-				<table id="responsive-datatable1" class="table table-bordered table-bordered dt-responsive nowrap">
-					<thead>
-						<tr>
-							<th> hy</th>
-							<th>hello</th>
-							<th>Action</th>
-						</tr>
-					</thead>
-					<tbody>
-						<div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog"
-						aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
-						<div class="modal-dialog modal-dialog-scrollable" role="document">
-							<div class="modal-content">
-								<div class="modal-header">
-									<h4 class="modal-title" id="exampleModalScrollableTitle">Modal title</h4>
-									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-										<span aria-hidden="true">&times;</span>
-									</button>
-								</div>
-								<div class="modal-body">
-									<p>msg detail</p>
-								</div>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-								</div>
-							</div>
-						</div>
-					</div>
-					<tr>
-						<td>nice</td>
-						<td>very</td>
-						<td>
-							<button type="button" class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-target="#exampleModalScrollable">View</button>
-
-						</td>
-					</tr>     
-				</tbody>
-			</table>
-		</div>
-	</div>
+      <table id="responsive-datatable1" class="table table-bordered table-bordered dt-responsive nowrap">
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Title</th>
+            <th>Posted By</th>
+            <th>Posted_on</th>
+            <th>View</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for msg in msgs %}
+          <tr>
+             {% if msg.read == False %}
+             <td><h5>{{msg.id}}</h5></td>
+            <td><h5>{{msg.title}}</h5></td>
+            <td><h5>{{msg.posted_by}}</h5></td>
+            <td><h5>{{msg.Posted_on}}</h5></td>
+            {% else %}
+            <td>{{msg.id}}</td>
+            <td>{{msg.title}}</td>
+            <td>{{msg.posted_by}}</td>
+            <td>{{msg.Posted_on}}</td>
+            {% endif %}
+            <td><a href="{% url 'view-msg-detail' msg.id%}"><button class="btn btn-info">View</button></a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
-{% endblock %}
+{% endblock%}
+
+
+{% block js %}
+{% include 'operations/js.html'%}
+{% endblock js %}
+
+
+

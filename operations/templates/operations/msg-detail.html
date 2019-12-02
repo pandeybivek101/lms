@@ -1,16 +1,25 @@
 {%extends 'operations/index.html'%}
 {% block content %}
 
-<table class='table table-bordered'>
- <tr>
-   <td style="text-align: center;"><b>{{msg_detail.title}}</b></td>
- </tr>
-   <tr>
-   <td style="text-align: center;">{{msg_detail.Description}}</td>
- </tr>
- </table>
+<div class="bg-picture card-box">
+	<div class="profile-info-name">
+		<img src="{{msg_detail.posted_by.profile_pic.url}}" class="rounded-circle avatar-xl img-thumbnail float-left mr-3" alt="profile-image">
 
-                               
+		<div class="profile-info-detail overflow-hidden">
+			<h4 class="m-0">{{msg_detail.title}}</h4>
+			
+			<h5 class="font-13">{{msg_detail.Description}}</h5>
+			<div style="float: right;">
+			<i class="text-muted">{{msg_detail.posted_by.get_full_name}} ({{msg_detail.posted_by}})</i>
+				<p class="text-muted"><i>-{{msg_detail.Posted_on}}</i></p>
+			</div>
+			
+		</div>
+		<div class="clearfix"></div>
+	</div>
+</div>
+
+
 {% endblock %}
 
 

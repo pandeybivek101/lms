@@ -249,9 +249,9 @@
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-md-6">
-                             2016 - 2019 &copy; Adminto theme by <a href="">Coderthemes</a> 
-                         </div>
-                         <div class="col-md-6">
+                               2016 - 2019 &copy; Adminto theme by <a href="">Coderthemes</a> 
+                           </div>
+                           <div class="col-md-6">
                             <div class="text-md-right footer-links d-none d-sm-block">
                                 <a href="javascript:void(0);">About Us</a>
                                 <a href="javascript:void(0);">Help</a>
@@ -301,14 +301,14 @@
             <hr class="mb-0" />
             <div class="p-3">
                 <div class="inbox-widget">
-                   {% for msg in msgs|slice:'7'%}
+                 {% for msg in msgs|slice:'7'%}
 
 
-                   <!-- flash model data-dismiss="modal"-->
+                 <!-- flash model data-dismiss="modal"-->
 
-                   <div class="modal fade" id="data{{msg.id}}" tabindex="-1" role="dialog"
-                   aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
-                   <div class="modal-dialog modal-dialog-scrollable" role="document">
+                 <div class="modal fade" id="data{{msg.id}}" tabindex="-1" role="dialog"
+                 aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+                 <div class="modal-dialog modal-dialog-scrollable" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h4 class="modal-title" id="exampleModalScrollableTitle">{{msg.title}}</h4>
@@ -338,6 +338,10 @@
                 
             </div>
             {% endfor %}
+            <a href="{% url 'view-message' %}" class="dropdown-item text-center text-primary notify-item notify-all">
+                View all
+                <i class="fi-arrow-right"></i>
+            </a>
         </div> <!-- end inbox-widget -->
         {% endif %}
 
