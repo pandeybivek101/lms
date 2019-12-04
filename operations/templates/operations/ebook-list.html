@@ -64,24 +64,30 @@
               <form method="POST" action="{% url 'view' book.id %}">
                 {% csrf_token %}
                 <input type="numbers" name="q" value="{{book.id}}" hidden="true">
-                <button class="btn btn-primary">Read</button>
+                <button class="btn btn-primary"><i class="fas fa-book-open"></i></button>
               </form>
             </td>
-            <td><a href="{%url 'edit-ebook' book.id%}"><button class="btn btn-warning">Edit</button></a>
-             <a href="{%url 'delete-ebook' book.id%}"><button class="btn btn-danger">Delete</button></a></td>
+            <td><a href="{%url 'edit-ebook' book.id%}"><button class="btn btn-warning"><i class="fas fa-edit"></i></button></a>
+             <a href="{%url 'delete-ebook' book.id%}"><button class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></button></a></td>
              {% endif %}
 
              {% if request.user.Role == 'Student'%}
              {% if book.id in req_list %}
-             <td><a href="{% url 'view-request' book.id%}"><button class="btn btn-primary" disabled="">send view request</button></a> </td>
+             <td><a href="{% url 'view-request' book.id%}">
+             <button type="button" class="btn btn-lighten-success waves-effect  width-md waves-success" disabled="">send view request</button>
+             </a> </td>
              {% else %}
              <td>
-             <a href="{% url 'view-request' book.id%}"><button class="btn btn-primary" onclick="ebookreqalert()">send view request</button></a>
+             <a href="{% url 'view-request' book.id%}">
+             <button type="button" onclick="ebookreqalert()" class="btn btn-success waves-effect width-md waves-light">send view request</button>
+             </a>
              </form>
              </td>
              {% endif %}
              {% endif %}
-             <td><a href="{% url 'detail-ebook' book.id%}">detail</a></td>
+             <td><a href="{% url 'detail-ebook' book.id%}">
+             <button class="btn btn-primary">detail</button>
+             </a></td>
            </tr>   
            {% endfor %}
          </tbody>

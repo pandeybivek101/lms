@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -9,22 +10,22 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
         <!-- App favicon -->
-        <link rel="shortcut icon" href="images/favicon.ico">
+        <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}">
 
         <!-- Bootstrap core CSS -->
-        <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
+        <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type="text/css">
 
         <!--Material Icon -->
-        <link rel="stylesheet" type="text/css" href="css/materialdesignicons.min.css" />
+        <link rel="stylesheet" type="text/css" href="{% static 'css/materialdesignicons.min.css' %}" />
     
         <!--pe-7 Icon -->
-        <link rel="stylesheet" type="text/css" href="css/pe-icon-7-stroke.css" />
+        <link rel="stylesheet" type="text/css" href="{% static 'css/pe-icon-7-stroke.css' %}" />
 
         <!-- Magnific-popup -->
-        <link rel="stylesheet" type="text/css" href="css/magnific-popup.css">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/magnific-popup.css' %}">
 
         <!-- Custom  sCss -->
-        <link rel="stylesheet" type="text/css" href="css/style.css" />
+        <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
 
     </head>
 
@@ -35,8 +36,8 @@
             <div class="container-fluid">
                 <!-- LOGO -->
                 <a class="logo text-uppercase" href="index.html">
-                    <img src="images/logo-light.png" alt="" class="logo-light" height="18" />
-                    <img src="images/logo-dark.png" alt="" class="logo-dark" height="18" />
+                    <img src="{% static 'images/logo-light.png' %}" alt="" class="logo-light" height="18" />
+                    <img src="{% static 'images/logo-dark.png' %}" alt="" class="logo-dark" height="18" />
                 </a>
 
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -92,7 +93,7 @@
                             </div>
                             <div class="col-lg-5 offset-lg-1 col-sm-6">
                                 <div class="home-img mo-mt-20">
-                                    <img src="images/home-img.png" alt="" class="img-fluid mx-auto d-block">
+                                    <img src="{% static 'images/home-img.png' %}" alt="" class="img-fluid mx-auto d-block">
                                 </div>
                             </div>
                         </div>
@@ -154,7 +155,7 @@
                                 <div class="row align-items-center justify-content-center">
                                     <div class="col-lg-4 col-sm-6">
                                         <div>
-                                            <img src="images/features-img/img-1.png" alt="" class="img-fluid mx-auto d-block">
+                                            <img src="{% static 'images/features-img/img-1.png' %}" alt="" class="img-fluid mx-auto d-block">
                                         </div>
                                     </div>
                                     <div class="col-lg-6 offset-lg-1">
@@ -192,7 +193,7 @@
                                 <div class="row align-items-center justify-content-center">
                                     <div class="col-lg-4 col-sm-6">
                                         <div>
-                                            <img src="images/features-img/img-2.png" alt="" class="img-fluid mx-auto d-block">
+                                            <img src="{% static 'images/features-img/img-2.png' %}" alt="" class="img-fluid mx-auto d-block">
                                         </div>
                                     </div>
                                     <div class="col-lg-6 offset-lg-1">
@@ -230,7 +231,7 @@
                                 <div class="row align-items-center justify-content-center">
                                     <div class="col-lg-4 col-sm-6">
                                         <div>
-                                            <img src="images/features-img/img-3.png" alt="" class="img-fluid mx-auto d-block">
+                                            <img src="{% static 'images/features-img/img-3.png' %}" alt="" class="img-fluid mx-auto d-block">
                                         </div>
                                     </div>
                                     <div class="col-lg-6 offset-lg-1">
@@ -290,7 +291,7 @@
                     <div class="col-xl-4 col-sm-6">
                         <div class="services-box p-4 bg-white mt-4">
                             <div class="services-img float-left mr-4">
-                                <img src="images/icons/layers.png" alt="">
+                                <img src="{% static 'images/icons/layers.png' %}" alt="">
                             </div>
                             <h5>Responsive Layouts</h5>
                             <div class="overflow-hidden">
@@ -303,7 +304,7 @@
                     <div class="col-xl-4 col-sm-6">
                         <div class="services-box p-4 bg-white mt-4">
                             <div class="services-img float-left mr-4">
-                                <img src="images/icons/core.png" alt="">
+                                <img src="{% static 'images/icons/core.png' %}" alt="">
                             </div>
                             <h5>Based on Bootstrap UI</h5>
                             <div class="overflow-hidden">
@@ -316,7 +317,7 @@
                     <div class="col-xl-4 col-sm-6">
                         <div class="services-box p-4 bg-white mt-4">
                             <div class="services-img float-left mr-4">
-                                <img src="images/icons/paperdesk.png" alt="">
+                                <img src="{% static 'images/icons/paperdesk.png' %}" alt="">
                             </div>
                             <h5>Creative Design</h5>
                             <div class="overflow-hidden">
@@ -329,7 +330,7 @@
                     <div class="col-xl-4 col-sm-6">
                         <div class="services-box p-4 bg-white mt-4">
                             <div class="services-img float-left mr-4">
-                                <img src="images/icons/solarsystem.png" alt="">
+                                <img src="{% static 'images/icons/solarsystem.png' %}" alt="">
                             </div>
                             <h5>Awesome Support</h5>
                             <div class="overflow-hidden">
@@ -342,7 +343,7 @@
                     <div class="col-xl-4 col-sm-6">
                         <div class="services-box p-4 bg-white mt-4">
                             <div class="services-img float-left mr-4">
-                                <img src="images/icons/datatext.png" alt="">
+                                <img src="{% static 'images/icons/datatext.png' %}' %}" alt="">
                             </div>
                             <h5>Easy to customize</h5>
                             <div class="overflow-hidden">
@@ -355,7 +356,7 @@
                     <div class="col-xl-4 col-sm-6">
                         <div class="services-box p-4 bg-white mt-4">
                             <div class="services-img float-left mr-4">
-                                <img src="images/icons/browserscript.png" alt="">
+                                <img src="{% static 'images/icons/browserscript.png' %}" alt="">
                             </div>
                             <h5>Quality Code</h5>
                             <div class="overflow-hidden">
@@ -390,7 +391,7 @@
                             <a href="#" class="text-dark">
                                 <div class="position-relative demo-content">
                                     <div class="demo-img">
-                                        <img src="images/demo/demo-1.jpg" alt="" class="img-fluid mx-auto d-block rounded">
+                                        <img src="{% static 'images/demo/demo-1.jpg' %}" alt="" class="img-fluid mx-auto d-block rounded">
                                     </div>
                                     <div class="demo-overlay">
                                         <div class="overlay-icon">
@@ -409,7 +410,7 @@
                             <a href="#" class="text-dark">
                                 <div class="position-relative demo-content">
                                     <div class="demo-img">
-                                        <img src="images/demo/demo-2.jpg" alt="" class="img-fluid mx-auto d-block rounded">
+                                        <img src="{% static 'images/demo/demo-2.jpg' %}" alt="" class="img-fluid mx-auto d-block rounded">
                                     </div>
                                     <div class="demo-overlay">
                                         <div class="overlay-icon">
@@ -428,7 +429,7 @@
                             <a href="#" class="text-dark">
                                 <div class="position-relative demo-content">
                                     <div class="demo-img">
-                                        <img src="images/demo/demo-3.jpg" alt="" class="img-fluid mx-auto d-block rounded">
+                                        <img src="{% static 'images/demo/demo-3.jpg' %}" alt="" class="img-fluid mx-auto d-block rounded">
                                     </div>
                                     <div class="demo-overlay">
                                         <div class="overlay-icon">
@@ -447,7 +448,7 @@
                             <a href="#" class="text-dark">
                                 <div class="position-relative demo-content">
                                     <div class="demo-img">
-                                        <img src="images/demo/demo-4.jpg" alt="" class="img-fluid mx-auto d-block rounded">
+                                        <img src="{% static 'images/demo/demo-4.jpg' %}" alt="" class="img-fluid mx-auto d-block rounded">
                                     </div>
                                     <div class="demo-overlay">
                                         <div class="overlay-icon">
@@ -466,7 +467,7 @@
                             <a href="#" class="text-dark">
                                 <div class="position-relative demo-content">
                                     <div class="demo-img">
-                                        <img src="images/demo/demo-5.jpg" alt="" class="img-fluid mx-auto d-block rounded">
+                                        <img src="{% static 'images/demo/demo-5.jpg' %}" alt="" class="img-fluid mx-auto d-block rounded">
                                     </div>
                                     <div class="demo-overlay">
                                         <div class="overlay-icon">
@@ -485,7 +486,7 @@
                             <a href="#" class="text-dark">
                                 <div class="position-relative demo-content">
                                     <div class="demo-img">
-                                        <img src="images/demo/demo-6.jpg" alt="" class="img-fluid mx-auto d-block rounded">
+                                        <img src="{% static 'images/demo/demo-6.jpg' %}" alt="" class="img-fluid mx-auto d-block rounded">
                                     </div>
                                     <div class="demo-overlay">
                                         <div class="overlay-icon">
@@ -531,7 +532,7 @@
                         <div class="testi-box p-4 bg-white mt-4 text-center">
                             <p class="text-muted mb-4">" The designer of this theme delivered a quality product. I am not a front-end developer and I hate when the theme I download has glitches or needs minor tweaks here and there. This worked for my needs just out of the boxes. Also, it is fast and elegant."</p>
                             <div class="testi-img mb-4">
-                                <img src="images/testi/img-1.png" alt="" class="rounded-circle img-thumbnail">
+                                <img src="{% static 'images/testi/img-1.png' %}" alt="" class="rounded-circle img-thumbnail">
                             </div>
                             <p class="text-muted mb-1"> - Adminto User</p>
                             <h5 class="font-18">Xpanta</h5>
@@ -546,7 +547,7 @@
                         <div class="testi-box p-4 bg-white mt-4 text-center">
                             <p class="text-muted mb-4">"  Extremely well designed and the documentation is very well done. Super happy with the purchase and definitely recommend this! "</p>
                             <div class="testi-img mb-4">
-                                <img src="images/testi/img-2.png" alt="" class="rounded-circle img-thumbnail">
+                                <img src="{% static 'images/testi/img-2.png' %}" alt="" class="rounded-circle img-thumbnail">
                             </div>
                             <p class="text-muted mb-1"> - Adminto User</p>
                             <h5 class="font-18">G_Sam</h5>
@@ -561,7 +562,7 @@
                         <div class="testi-box p-4 bg-white mt-4 text-center">
                             <p class="text-muted mb-4">"  We used this theme to save some design time but... wow it has everything you didn't realize you would need later. I highly recommend this template to get your web design headed in the right direction quickly.  "</p>
                             <div class="testi-img mb-4">
-                                <img src="images/testi/img-3.png" alt="" class="rounded-circle img-thumbnail">
+                                <img src="{% static 'images/testi/img-3.png' %}" alt="" class="rounded-circle img-thumbnail">
                             </div>
                             <p class="text-muted mb-1"> - Adminto User</p>
                             <h5 class="font-18">Isaacfab</h5>
@@ -578,22 +579,22 @@
                 <div class="row mt-5 pt-5">
                     <div class="col-lg-3 col-sm-6">
                         <div class="client-images">
-                            <img src="images/clients/1.png" alt="logo-img" class="mx-auto img-fluid d-block">
+                            <img src="{% static 'images/clients/1.png' %}" alt="logo-img" class="mx-auto img-fluid d-block">
                         </div>
                     </div>
                     <div class="col-lg-3 col-sm-6">
                         <div class="client-images">
-                            <img src="images/clients/2.png" alt="logo-img" class="mx-auto img-fluid d-block">
+                            <img src="{% static 'images/clients/2.png' %}" alt="logo-img" class="mx-auto img-fluid d-block">
                         </div>
                     </div>
                     <div class="col-lg-3 col-sm-6">
                         <div class="client-images">
-                            <img src="images/clients/3.png" alt="logo-img" class="mx-auto img-fluid d-block">
+                            <img src="{% static 'images/clients/3.png' %}" alt="logo-img" class="mx-auto img-fluid d-block">
                         </div>
                     </div>
                     <div class="col-lg-3 col-sm-6">
                         <div class="client-images">
-                            <img src="images/clients/4.png" alt="logo-img" class="mx-auto img-fluid d-block">
+                            <img src="{% static 'images/clients/4.png' %}" alt="logo-img" class="mx-auto img-fluid d-block">
                         </div>
                     </div>
                 </div>
@@ -859,7 +860,7 @@
                     <div class="col-xl-12">
                         <div class="text-center">
                             <div class="footer-logo mb-3">
-                                <img src="images/logo-light.png" alt="" height="20">
+                                <img src="{% static 'images/logo-light.png' %}" alt="" height="20">
                             </div>
                             <ul class="list-inline footer-list text-center mt-5">
                                 <li class="list-inline-item"><a href="#">Home</a></li>
@@ -891,19 +892,19 @@
 
         
         <!-- javascript -->
-        <script src="js/jquery.min.js"></script>
-        <script src="js/bootstrap.bundle.min.js"></script>
-        <script src="js/jquery.easing.min.js"></script>
-        <script src="js/scrollspy.min.js"></script>
+        <script src="{% static 'js/jquery.min.js' %}"></script>
+        <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+        <script src="{% static 'js/jquery.easing.min.js' %}"></script>
+        <script src="{% static 'js/scrollspy.min.js' %}"></script>
         
         <!-- Magnific Popup -->
-        <script src="js/jquery.magnific-popup.min.js"></script>
+        <script src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
 
         <!-- counter js -->
-        <script src="js/counter.int.js"></script>
+        <script src="{% static 'js/counter.int.js' %}"></script>
 
         <!-- custom js -->
-        <script src="js/app.js"></script>
+        <script src="{% static 'js/app.js' %}"></script>
     </body>
 
 </html>

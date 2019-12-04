@@ -46,6 +46,7 @@ def chart(request):
                 issued_date__month=i).count()
             issued_yearly.append(issued_result)
 
+
             my_return=IssueBooks.objects.filter(
                 returned_date__year=curr_date.year,
                 returned=True,
@@ -57,7 +58,6 @@ def chart(request):
                 issued_date__year=curr_date.year,
                 student=request.user,
                 issued_date__month=i).count()
-            issued_yearly.append(issued_result)
             my_issued.append(my_issue)
 
             my_total_allowed=EbookRequestHistory.objects.filter(
@@ -100,6 +100,7 @@ def chart(request):
             action='Denied').count()
         total_pending=EbookRequest.objects.all().count()
 
+
         return {
         'issued_today':issued_today,
         'returned_today':returned_today,
@@ -120,5 +121,4 @@ def chart(request):
         'my_issued':my_issued,
         }
     return {}
-
 

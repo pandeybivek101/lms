@@ -17,14 +17,28 @@ $(document).ready(function() {
             [ '5 rows', '10 rows', '20 rows', 'All' ]
         ],
         buttons: [
-            'pageLength',
-            'copy',
-            'csv',
-            'excel',
-            'pdf',
+            { extend:'pageLength',
+            className: 'btn btn-lg btn-success font-16',
+             },
+
+            { extend: 'copy', 
+            className: 'btn btn-lg btn-success font-16',
+            text:'<i class="fas fa-copy"></i>' 
+        },
+            { extend: 'csv', 
+            className: 'btn btn-lg btn-success font-16',
+            text:'<i class="fas fa-file-csv"></i>'
+
+        },
+            { extend: 'pdf', 
+            className: 'btn btn-lg btn-success font-16',
+            text:'<i class="fas fa-file-pdf"></i>'
+        },
             {
                 extend: 'print',
-                text: 'Print all',
+                text: '<i class="fa fa-print" aria-hidden="true"></i>(all)',
+                className:'btn btn-lg btn-success font-16',
+
                 exportOptions: {
                     modifier: {
                         selected: null
@@ -33,7 +47,8 @@ $(document).ready(function() {
             },
             {
                 extend: 'print',
-                text: 'Print selected'
+                text: '<i class="fa fa-print" aria-hidden="true"></i>(selected)',
+                className:'btn btn-lg btn-success font-16',
             }
         ],
         select:{

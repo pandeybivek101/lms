@@ -1,6 +1,5 @@
 {%extends 'operations/index.html'%}
 {% load static %}
-
 {% block content%}
 <div class="row">
   <div class="col-12">
@@ -69,7 +68,7 @@
               <td>{{book.available_quantity}}</td> 
               {% if book.barcode %}
               <td>
-                <button onclick="printJS('{{book.barcode.url}}', 'image')" class="btn btn-warning">Print Barcode</button>
+                <button onclick="printJS('{{book.barcode.url}}', 'image')" class="btn btn-secondary width-md"><i class="fa fa-print" aria-hidden="true"></i></button>
               </td>
               {% else %}
               <td>
@@ -77,8 +76,8 @@
               </td>
               {% endif %}
               <td>
-               <a href="{% url 'editbook' book.id %}"><button class="btn btn-warning">Edit</button></a>
-               <a href="{% url 'deletebook' book.id %}"><button class="btn btn-danger">Delete</button></a>
+               <a href="{% url 'editbook' book.id %}"><button class="btn btn-warning"><i class="fas fa-edit"></i></button></a>
+               <a href="{% url 'deletebook' book.id %}"><button class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></button></a>
              </td>
 
              {% endif %}
@@ -110,5 +109,5 @@
 
 
  {% block js %}
- {% include 'operations/js.html'%}
+{% include 'operations/js.html'%}
  {% endblock js%}

@@ -32,13 +32,13 @@
             <td>
             <form method="POST" action="{% url 'allow' book.id %}">
             {% csrf_token %}
-             <button class="btn btn-warning" value="allow" id="{{book.id}}" type="button" onclick="Actionrequest(this.id, this.value);">Allow</button>
+             <button class="btn btn-primary" value="allow" id="{{book.id}}" type="button" onclick="Actionrequest(this.id, this.value);"><i class="fas fa-check"></i></button>
              </form>
              </td>
              <td>
              <form method="POST" action="{% url 'deny' book.id %}">
                 {% csrf_token %}
-                <button value="deny" id="{{book.id}}" type="button" class="btn btn-info" onclick="Actionrequest(this.id, this.value);">Deny</button>
+                <button value="deny" id="{{book.id}}" type="button" class="btn btn-danger" onclick="Actionrequest(this.id, this.value);"><i class="fa fa-times" aria-hidden="true"></i></button>
              </form>
            </td>
          </tr>     

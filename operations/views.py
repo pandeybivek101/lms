@@ -40,6 +40,8 @@ from twilio.rest import TwilioRestClient
 
 
 # Create your views here.
+
+
 @login_required
 def Home(request):
     return render(request,'operations/home.html')
@@ -169,11 +171,12 @@ class EditBook(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     template_name = 'operations/updatebooks.html'
     form_class=AddBooksForm
 
+
     def form_valid(self, form):
         book=AddBooks.objects.get(pk=self.kwargs.get('pk'))
         issued=IssueBooks.objects.filter(book=book, 
             returned=False).count()
-        form.instance.added_by == self.request.user
+        form.instance.added_by = self.request.user
         form.instance.available_quantity=form.instance.books_quantity-issued
         return super().form_valid(form)
     
@@ -502,6 +505,11 @@ class EditEbooks(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Ebooks
     form_class = EbooksForm
     template_name = "operations/ebook-update.html"
+
+    def form_valid(self, form):
+        form.instance.book=self.request.FILES['book'] or None
+        form.instance.cover_image=self.request.FILES['cimage'] or None
+        return super().form_valid(form)
 
     def get_success_url(self):
         return reverse_lazy("list-ebooks")

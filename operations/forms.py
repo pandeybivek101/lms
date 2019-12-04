@@ -24,7 +24,6 @@ class MessageForm(forms.ModelForm):
 
 
 class AddBooksForm(forms.ModelForm):
-
 	class Meta:
 		model=AddBooks
 		fields=[
@@ -54,7 +53,10 @@ class AddBooksForm(forms.ModelForm):
 
 class IssuebookForm(forms.ModelForm):
 	student=forms.CharField(widget=forms.TextInput(
-		attrs={'class':'form-control', 'placeholder':'Enter Student Id','autofocus':'autofocus'}), required=True, max_length=20)
+		attrs={'class':'form-control',
+		 'placeholder':'Enter Student Id',
+		 'autofocus':'autofocus'}), 
+	required=True, max_length=20)
 	book=forms.CharField(widget=forms.TextInput(
 		attrs={'class':'form-control' ,'placeholder':'Enter Book Id', 'autofocus':'autofocus'}), required=True, max_length=20)
 
@@ -106,3 +108,5 @@ class EbooksForm(forms.ModelForm):
 	class Meta:
 		model=Ebooks
 		fields=['name', 'book', 'cover_image', 'author_name', 'catagory']
+
+		

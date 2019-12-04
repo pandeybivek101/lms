@@ -8,8 +8,13 @@
 			<div class="card-box">
 
 				<h4 class="header-title mt-0 mb-3">Add Books</h4>
-				<input type="text" name="my-text" class="my-input">
-				<input type="text" name="my-text" class="my-input">
+				<!-- <input type="text" name="my-text" class="my-input">
+				<input type="text" name="my-text" class="my-input"> -->
+				<form method="POST" action="{% url 'addbooks'%}" class="col-lg-8" enctype="multipart/form-data">
+					{% csrf_token %}
+					{{form|crispy}}
+					<button class="btn btn-info">ADD</button>
+				</form>
 
 
 
@@ -33,3 +38,5 @@
 
 
 	{% endblock js%}
+
+

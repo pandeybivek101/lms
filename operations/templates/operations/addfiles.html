@@ -1,4 +1,5 @@
 {%extends 'operations/index.html'%}
+{% load static %}
 {% load crispy_forms_tags %}
 
 {% block content%}
@@ -12,6 +13,7 @@
 				<form action="{% url 'add-ebooks'%}" method="POST" class="col-lg-8" enctype="multipart/form-data">
 					{% csrf_token %}
 					{{form|crispy}}
+
 					<input type="submit" name="submit" class="btn btn-primary">
 				</form> 
 			</div>

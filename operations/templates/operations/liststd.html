@@ -32,14 +32,17 @@
           <td>{{std.username}}</td>
           <td>{{std.contact}}</td>
           {% if std.barcode %}
-          <td><button onClick="printJS('{{std.barcode.url}}', 'image')" class="btn btn-warning">Print Barcode</button></td>
+          <td><button onClick="printJS('{{std.barcode.url}}', 'image')" class="btn btn-secondary"><i class="fa fa-print" aria-hidden="true"></i></button></td>
           {%else %}
           <td><a href="{% url 'st-barcode' std.id %}"><button class="btn btn-warning">BarCode</button></a></td>
           {% endif %}
           <td>
-            <a href="{% url 'deletestd' std.id%}"><button class="btn btn-danger">Delete</button></a>
+            <a href="{% url 'deletestd' std.id%}">
+              <button class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></button>
+            </a>
           </td>
-          <td><a href="{% url 'std-detail' std.id%}">detail</a></td>
+          <td><a href="{% url 'std-detail' std.id%}">
+          <button class="btn btn-info">detail</button></a></td>
           {% endfor %}
         </tr>
       </tbody>                                 
