@@ -101,17 +101,8 @@
                             <span>My Account</span>
                         </a>
                         
+    
                         <!-- item-->
-                        <a href="javascript:void(0);" class="dropdown-item notify-item">
-                            <i class="fe-settings"></i>
-                            <span>Settings</span>
-                        </a>
-                        
-                        <!-- item-->
-                        <a href="javascript:void(0);" class="dropdown-item notify-item">
-                            <i class="fe-lock"></i>
-                            <span>Lock Screen</span>
-                        </a>
                         
                         <div class="dropdown-divider"></div>
                         
@@ -135,9 +126,9 @@
             
             <!-- LOGO -->
             <div class="logo-box">
-                <a href="index.html" class="logo text-center">
+                <a href="{% url 'home'%}" class="logo text-center">
                     <span class="logo-lg">
-                        <img src="{% static 'assets/images/slogo.png' %}" alt="" height="60">
+                        <img  src="{% static 'assets/images/slogo.png' %}" style="filter: brightness(300%);" alt="" height="60">
                         <!-- <span class="logo-lg-text-light">Xeria</span> -->
                     </span>
                     <span class="logo-sm">
@@ -155,7 +146,7 @@
                 </li>
                 
                 <li>
-                    <h4 class="page-title-main">LMS</h4>
+                    <h4 class="page-title-main"></h4>
                 </li>
                 
             </ul>

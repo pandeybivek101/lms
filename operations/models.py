@@ -14,7 +14,7 @@ class Catagory(models.Model):
 
 class AddBooks(models.Model):
 	books_name=models.CharField(max_length=100)
-	books_image=models.ImageField(upload_to='image')
+	books_image=models.ImageField(upload_to='image', default='image/bookim.png')
 	books_author_name=models.CharField(max_length=100)
 	books_publication_name=models.CharField(max_length=100)
 	books_purchase_date=models.DateTimeField(auto_now_add=True)
@@ -59,7 +59,7 @@ class Ebooks(models.Model):
 	name=models.CharField(max_length=100)
 	book=models.FileField(upload_to='files')
 	author_name=models.CharField(max_length=100)
-	cover_image=models.ImageField(upload_to='image', blank=True, null=True)
+	cover_image=models.ImageField(upload_to='image', default='image/bookim.png')
 	added_date=models.DateTimeField(auto_now_add=True, null=True)
 	catagory = models.ForeignKey(Catagory, on_delete=models.CASCADE, null=True)
 
@@ -77,7 +77,8 @@ class EbookRequest(models.Model):
 class EbookRequestHistory(models.Model):
 	ebook=models.ForeignKey(Ebooks, on_delete=models.CASCADE,blank=True, null=True)
 	action=models.CharField(max_length=100)
-	requested_by=models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
+	requested_by=models.ForeignKey(settings.AUTH_USER_MODEL, 
+		on_delete=models.CASCADE, null=True)
 	requested_date=models.DateTimeField(auto_now_add=True, null=True)
 	action_date=models.DateTimeField()
 	readable_upto=models.DateTimeField(null=True)
@@ -90,7 +91,8 @@ class Message(models.Model):
 	Posted_on=models.DateTimeField(auto_now_add=True)
 	posted_to=models.ForeignKey(settings.AUTH_USER_MODEL, 
 		related_name='librarian', on_delete=models.CASCADE)
-	posted_by=models.ForeignKey(settings.AUTH_USER_MODEL, related_name='std', on_delete=models.CASCADE)
+	posted_by=models.ForeignKey(settings.AUTH_USER_MODEL, 
+		related_name='std', on_delete=models.CASCADE)
 	read=models.BooleanField(default=False)
 
 

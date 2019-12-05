@@ -79,12 +79,20 @@ def Profile(request):
     issued_by=IssueBooks.objects.filter(issued_by=profile, returned=False)
     my_book=IssueBooks.objects.filter(student=profile, returned=False)
     notify=NotifyMeModel.objects.filter(student=profile)
+    ebook_pending=EbookRequest.objects.filter(requested_by=request.user)
+    ebook_rec=EbookRequestHistory.objects.filter(requested_by=request.user, 
+    	readable=False)
+    ebook_read=EbookRequestHistory.objects.filter(requested_by=request.user, 
+    	readable=True)
     return render(request, 'account/profile.html', 
         {'profile':profile,
         'std':std,
         'issued_by':issued_by,
         'my_book':my_book,
         'notify':notify,
+        'ebook_pending':ebook_pending,
+        'ebook_rec':ebook_rec,
+        'ebook_read':ebook_read,
         }
 )
 
@@ -122,21 +130,19 @@ def ChangeProfile(request):
 
 
 def change_password(request):
+	form_saved=False
 	if request.method == 'POST':
 		form = PasswordChangeForm(request.user, request.POST)
-		validated=False
 		if form.is_valid():
 			user = form.save()
-			validated=True
-			print(validated)
+			form_saved=True
 			update_session_auth_hash(request, user)
 			return redirect('profile')
-		else:
-			messages.error(request, 'Please correct the error below.')
+
 	else:
 		form = PasswordChangeForm(request.user)
-		validated=False
 	return render(request, 'account/change_password.html', 
-		{'form': form,
-		'validated':validated,
+		{
+		'form': form,
+		'form_saved':form_saved,
 		})

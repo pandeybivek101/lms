@@ -28,7 +28,7 @@
             <td>
               <form method="POST" action="{% url 'view' book.ebook.id %}">
                 {% csrf_token %}
-                <a href="{{book.ebook.book.url}}"><button class="btn btn-primary">Read</button></a>
+                <a href="{{book.ebook.book.url}}"><button class="btn btn-primary"> <i class="fas fa-book-open"></i></button></a>
               </form>
             </td>
           </tr>     

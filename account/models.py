@@ -9,7 +9,7 @@ class User(AbstractUser):
         ('Student', 'Student'),
     )
 	Role=models.CharField(max_length=20, choices=CHOICES, default='Student')
-	profile_pic=models.ImageField(upload_to='profile-pic')
+	profile_pic=models.ImageField(upload_to='profile-pic',default='profile-pic/user.jpg')
 	barcode=models.ImageField(blank=True, null=True)
 	contact=models.CharField(max_length=100)
 	

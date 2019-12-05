@@ -75,9 +75,12 @@ class IssuebookForm(forms.ModelForm):
 			raise forms.ValidationError('This book is already assigned to designated student')
 		return cleaned_data
 
+
 	def clean_student(self):
 		std_id=self.cleaned_data['student']
 		std_qs=User.objects.filter(id=std_id)
+		if std_id.isalpha():
+			raise forms.ValidationError('Id arenot in alphabets')
 		if not std_qs.exists():
 			raise forms.ValidationError('Student with this Id doesnot exists')
 		else:
@@ -96,6 +99,8 @@ class IssuebookForm(forms.ModelForm):
 	def clean_book(self):
 		book_id=self.cleaned_data['book']
 		book_obj=AddBooks.objects.filter(id=book_id)
+		if book_id.isalpha():
+			raise forms.ValidationError('Id arenot in alphabets')
 		if not book_obj.exists():
 			raise forms.ValidationError('Book with this id doesnot exists')
 		elif book_obj.first().available_quantity<1:

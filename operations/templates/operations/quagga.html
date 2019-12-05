@@ -5,8 +5,7 @@
     <div class="card-box">
         <!-- Div to show the scanner -->
         <div id="scanner-container"></div>
-        <input class="btn btn-info" type="button" id="btn" value="Start/Stop the scanner" />
-        
+        <input class="btn btn-info" type="button" id="btn" value="Start/Stop the scanner" /><br>
     </div>
 </div>
 </div>
@@ -24,6 +23,15 @@
 <script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js'></script>
 
 <script type="text/javascript">
+document.addEventListener("keypress", function(e) {
+  if (e.target.tagName !== "INPUT") {
+    var input = document.querySelector("#bars");
+    input.focus();
+    input.value = e.key;
+    e.preventDefault();
+    console.log(e.key);
+  }
+});
 
         </script>
 

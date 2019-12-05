@@ -239,17 +239,22 @@ def EditStudent(request, id):
              'form':form})
 
 
+from django.contrib import messages
 @login_required
 @role_required(allowed_roles=['Librarian'])
 def IssueBook(request):
     if request.method=="POST":
         form=IssuebookForm(request.POST)
         if form.is_valid():
-            stdid=form.cleaned_data['student']
-            bkid=form.cleaned_data['book']
+            try:
+                stdid=form.cleaned_data['student']
+                bkid=form.cleaned_data['book']
+            except ValueError:
+                print('cannot issue')
             request.session['issue_std_id']=stdid
             request.session['issue_book_id']=bkid
             return redirect('issue-confirm')
+            
     else:
         form=IssuebookForm()
     return render(request, 'operations/issue_book.html', {
@@ -307,19 +312,19 @@ def ReturnBooks(request, pk):
             )
             notify.delete()
 
-            account_sid=settings.TWILIO_ACCOUNT_SID
+            """account_sid=settings.TWILIO_ACCOUNT_SID
             auth_token=settings.TWILIO_AUTH_TOKEN
             client = Client(account_sid, auth_token)
             message = client.messages.create(
                      body='you have requested for book ('+' '+notify.book.books_name+' '+') which is now available',
                      from_=settings.phone_num,
                      to='+9779844700852',
-                 )
+                 )"""
 
     else:
         bookitem.available_quantity=bookitem.books_quantity
     bookitem.save()
-    return redirect('issuedbooks')
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
     return render(request, 'operations/return_book.html', 
         {'rtnbook':rtnbook}
         )
@@ -563,9 +568,11 @@ class DetailBook(LoginRequiredMixin, DetailView):
         book=AddBooks.objects.get(pk=self.kwargs.get('pk'))
         issued=IssueBooks.objects.filter(book=book, 
             returned=False)
+        notifyme=NotifyMeModel.objects.filter(book=book)
         context.update({
             'book':book,
-            'issued':issued
+            'issued':issued,
+            'notifyme':notifyme
             })
         return context
 

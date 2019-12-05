@@ -16,18 +16,6 @@
 
             <ul class="social-list list-inline mt-3 mb-0">
               <li class="list-inline-item">
-                <a href="javascript: void(0);" class="social-list-item border-purple text-purple"><i class="mdi mdi-facebook"></i></a>
-              </li>
-              <li class="list-inline-item">
-                <a href="javascript: void(0);" class="social-list-item border-danger text-danger"><i class="mdi mdi-google"></i></a>
-              </li>
-              <li class="list-inline-item">
-                <a href="javascript: void(0);" class="social-list-item border-info text-info"><i class="mdi mdi-twitter"></i></a>
-              </li>
-              <li class="list-inline-item">
-                <a href="javascript: void(0);" class="social-list-item border-secondary text-secondary"><i class="mdi mdi-github-circle"></i></a>
-              </li>
-              <li class="list-inline-item">
                 <a href="{% url 'change-profile' %}"><button type="button" class="btn btn-primary btn-rounded waves-effect waves-light">Change Profile</button></a>
               </li>
               <li class="list-inline-item">
@@ -47,22 +35,75 @@
 
       
       <div class="card-box">
-        <h4 class="header-title mt-0 mb-3"><i class="mdi mdi-notification-clear-all mr-1"></i>Messages</h4>
 
-        {% for item  in message|slice:'8'%}
+        {% if request.user.Role == 'Student' %}
+        <h4 class="header-title mt-0 mb-3"><i class="mdi mdi-notification-clear-all mr-1"></i>My Records</h4>
+        <div class="table-responsive">
+          <table class="table table-hover mb-0">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Ebook Name</th>
+                <th>Start Date</th>
+                <th>Due Date</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
 
+              {% for item in ebook_pending %}
+              <tr>
+                <td>{{item.id}}</td>
+                <td>{{item.ebook.name}}</td>
+                <td>{{item.requested_date|date:"M d, Y"}}</td>
+                <td>-</td>
+                <td><span class="badge badge-pink">Pending</span></td>
+              </tr>
+              {% endfor %}
+
+              {%for item in ebook_read %}
+              <tr>
+                <td>{{item.id}}</td>
+                <td>{{item.ebook.name}}</td>
+                <td>{{item.action_date|date:"M d, Y"}}</td>
+                <td>{{item.readable_upto|date:"M d, Y"}}</td>
+                <td>
+                  <span class="badge badge-success">Readable</span>
+                </td>
+              </tr>
+
+              {% endfor %}
+              
+              {%for item in ebook_rec|slice:'10' %}
+              <tr>
+                <td>{{item.id}}</td>
+                <td>{{item.ebook.name}}</td>
+                <td>{{item.action_date|date:"M d, Y"}}</td>
+                <td>{{item.readable_upto|date:"M d, Y"}}</td>
+                <td>
+                  <span class="badge badge-danger">Expired</span>
+                </td>
+              </tr>
+              {% endfor %}
+              
+            </tbody>
+          </table>
+        </div>
+        {% endif %}
+        <!--  media -->
+
+        {% if request.user.Role == 'Librarian' %}
+        <h4 class="header-title mt-0 mb-3"><i class="mdi mdi-notification-clear-all mr-1"></i>Sent Messages</h4>
+        {% for item  in sent_msgs|slice:'30'%}
         <div class="media mb-2">
           <img src="{% static 'assets/images/users/user-1.jpg' %}" alt="" class="comment-avatar avatar-sm rounded mr-2">
           <div class="media-body">
-            <h5 class="mt-0"><a href="#" class="text-dark">{{item.posted_by}}</a><small class="ml-1 text-muted">{{item.Posted_on}}</small></h5>
+            <h5 class="mt-0"><a href="#" class="text-dark">{{item.posted_to}}</a><small class="ml-1 text-muted">{{item.Posted_on}}</small></h5>
             <p>{{item.Description}}</p>
           </div>
         </div>
-
-
         {% endfor %}
-        <!--  media -->
-
+        {% endif %}
 
       </div>
 
@@ -123,15 +164,20 @@
         {% if issued_by %}
         {% for std in issued_by%}
         <li class="list-group-item">
-          <a href="{% url 'std-detail' std.student.id %}" class="user-list-item">
-            <div class="user avatar-sm float-left mr-2">
-              <img src="{{std.student.profile_pic.url}}" alt="" class="img-fluid rounded-circle">
-            </div>
-            <div class="user-desc">
-              <h5 class="name mt-0 mb-1">{{std.student.get_full_name}}</h5>
-              <p class="desc text-muted mb-0 font-12">{{std.student.username}}</p>
-            </div>
-          </a>
+          <div class="user avatar-sm float-left mr-2">
+            <img src="{{std.student.profile_pic.url}}" alt="" class="img-fluid rounded-circle">
+          </div>
+          <div class="user-desc">
+            <h5 class="name mt-0 mb-1"><a href="{% url 'std-detail' std.student.id %}" class="user-list-item">{{std.student.get_full_name}}</a>
+              <button class="btn btn-info btn-xs" style="float: right; " id="{{std.id}}" onclick="alert(this.id)">Return </button>
+
+            </h5>
+            <p class="desc text-muted mb-0 font-12">{{std.book.books_name}}
+
+            </p>
+
+          </div>
+          
         </li>
         {% endfor %}
         {% endif %}
@@ -140,10 +186,11 @@
       </ul>
       {% endif %}
 
-      {% if request.user.Role == 'Student' %}
-       <h4 class="header-title mt-0 mb-3"><i class="mdi mdi-notification-clear-all mr-1"></i>My issued Books</h4>
 
-       <ul class="list-group mb-0 user-list">
+      {% if request.user.Role == 'Student' %}
+      <h4 class="header-title mt-0 mb-3"><i class="mdi mdi-notification-clear-all mr-1"></i>My issued Books</h4>
+
+      <ul class="list-group mb-0 user-list">
         {% if my_book %}
         {% for book in my_book %}
         <li class="list-group-item">
@@ -164,7 +211,7 @@
         
 
       </ul>
-      {% endif %}
+
     </div>
 
     <div class="card-box">
@@ -176,15 +223,15 @@
         {% for item in notify %}
 
         <li class="list-group-item">
-          <a href="" class="user-list-item">
             <div class="user float-left mr-3">
               <i class="mdi mdi-circle text-info"></i>
             </div>
             <div class="user-desc overflow-hidden">
+            <a href="" class="user-list-item">
               <h5 class="name mt-0 mb-1">{{item.book.books_name}}</h5>
               <span class="desc text-muted font-12 text-truncate d-block">{{item.req_date}}</span>
+              </a>
             </div>
-          </a>
         </li>
         {% endfor %}
         {% else %}
@@ -192,7 +239,7 @@
         {% endif %}
       </ul>
     </div>
-
+    {% endif %}
 
   </div>
 </div>        
@@ -203,6 +250,12 @@
 
 
 {% endblock %}
+
+
+{% block js %}
+{% include 'operations/js.html'%} 
+{% endblock js%}
+
 
 
 © 2019 GitHub, Inc.

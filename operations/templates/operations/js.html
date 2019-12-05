@@ -14,11 +14,14 @@ $(document).ready(function() {
     dom: "Bfrtip",
     lengthMenu: [
             [ 5, 10, 20, -1 ],
-            [ '5 rows', '10 rows', '20 rows', 'All' ]
+            [ '5 rows',
+             '10 rows',
+             '20 rows',
+            'All' ]
         ],
         buttons: [
             { extend:'pageLength',
-            className: 'btn btn-lg btn-success font-16',
+            className: 'btn btn-lg btn-success font-16 dropdown-toggle',
              },
 
             { extend: 'copy', 
