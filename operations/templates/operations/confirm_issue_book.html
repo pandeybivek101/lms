@@ -1,39 +1,50 @@
 {%extends 'operations/index.html'%}
+{% load static%}
 {% block content %}
+<div class="row">
+  <div class="col-sm-6">
+    <div class="card card-body">
+      <h4 class="card-title">Book</h4>
 
-<table class='table table-bordered'>
- <tr>
-   <td style="text-align: center;"><b>Student Image</b></td>
-   <td style="text-align: center;"><b>Book Image</b></td>
- </tr>
- <tr>
- <td style="text-align: center;"><img src="{{studentinfo.profile_pic.url}}" height="300" width="300"></td>
- <td style="text-align: center;"><img src="{{bookinfo.books_image.url}}" height="300" width="300"></td>
- </tr>
- <table class='table table-bordered'>
- <tr>
-   <td>Id:{{studentinfo.id}}</td>
-   <td>Id:{{bookinfo.id}}</td>
- </tr>
-   <tr>
-   <td>Name:{{studentinfo.first_name}} {{studentinfo.last_name}}</td>
-   <td>Name:{{bookinfo.books_name}}</td>
- </tr>
- <tr>
-   <td>UserName:{{studentinfo.username}}</td>
-   <td>Name:{{bookinfo.books_author_name}}</td>
- </tr>
- </table>
- <tr>
-   <form method="POST" action="{% url 'issue-confirm' %}"">
+
+      <div class="card mb-4">
+         <img class="card-img-top img-fluid" src="{{bookinfo.books_image.url}}" alt="Card image cap">
+         <div class="card-body">
+           <h4 class="card-title">{{bookinfo.books_name}}</h4>
+           <p class="card-text">Author Name:{{bookinfo.books_author_name}}</p>
+        </div>
+     </div>
+
+
+
+     <p class="card-text">With supporting text below as a natural lead-in to additional
+        content.</p>
+     </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="card card-body">
+      <h4 class="card-title">Student</h4>
+
+      <div class="card mb-4">
+         <img class="card-img-top img-fluid" src="{{studentinfo.profile_pic.url}}" alt="Card image cap">
+         <div class="card-body">
+           <h4 class="card-title">{{studentinfo.first_name}} {{studentinfo.last_name}}</h4>
+           <p class="card-text">Username:{{studentinfo.username}}</p>
+        </div>
+     </div>
+
+
+     <p class="card-text">With supporting text below as a natural lead-in to additional
+        content.</p>
+     </div>
+  </div>
+</div>
+<div class="col-sm-6">
+<form method="POST" action="{% url 'issue-confirm' %}"">
    {%csrf_token%}
-   <button class="btn btn-info">Issue</button>
-   </form>
- </tr>
- </table>
-                            
-
-
+   <button class="btn btn-primary">Issue</button>
+</form>
+</div>
 {% endblock %}
 
 

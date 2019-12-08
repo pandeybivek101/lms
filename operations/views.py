@@ -50,7 +50,8 @@ def Home(request):
 @login_required
 @role_required(allowed_roles=['Librarian'])
 def Scan(request):
-    return render(request, 'operations/quagga.html',{})
+    return render(request, 'operations/quagga.html',
+        {})
 
 @login_required
 @role_required(allowed_roles=['Student'])
@@ -538,24 +539,27 @@ def NotifyMe(request, id):
 def StdDetail(request, id):
     total=0
     std=User.objects.get(id=id)
-    course=Student.objects.filter(student=std).first()
-    book_issued=IssueBooks.objects.filter(student=std, 
-        returned=False)
-    issue_rec=IssueBooks.objects.filter(student=std, returned=False)
-    notify=NotifyMeModel.objects.filter(student=std)
-    message=Message.objects.filter(posted_to=std).order_by('Posted_on')[::-1]
-    for item in issue_rec:
-        total=total+item.fine
-    return render(request, 'operations/std-detail.html', 
-        {
-        'std':std,
-        'course':course,
-        'book_issued':book_issued,
-        'notify':notify,
-        'message':message,
-        'issue_rec':issue_rec,
-        'total':total,
-        })
+    if std:
+        course=Student.objects.filter(student=std).first()
+        book_issued=IssueBooks.objects.filter(student=std, 
+            returned=False)
+        issue_rec=IssueBooks.objects.filter(student=std, returned=False)
+        notify=NotifyMeModel.objects.filter(student=std)
+        message=Message.objects.filter(posted_to=std).order_by('Posted_on')[::-1]
+        for item in issue_rec:
+            total=total+item.fine
+        return render(request, 'operations/std-detail.html', 
+            {
+            'std':std,
+            'course':course,
+            'book_issued':book_issued,
+            'notify':notify,
+            'message':message,
+            'issue_rec':issue_rec,
+            'total':total,
+            })
+    else:
+        return render(request, 'operations/quagga.html')
 
 
 class DetailBook(LoginRequiredMixin, DetailView):

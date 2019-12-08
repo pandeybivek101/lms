@@ -55,10 +55,16 @@ class IssuebookForm(forms.ModelForm):
 	student=forms.CharField(widget=forms.TextInput(
 		attrs={'class':'form-control',
 		 'placeholder':'Enter Student Id',
-		 'autofocus':'autofocus'}), 
+		 'autofocus':'autofocus',
+		 'id':'std'
+		 }), 
 	required=True, max_length=20)
 	book=forms.CharField(widget=forms.TextInput(
-		attrs={'class':'form-control' ,'placeholder':'Enter Book Id', 'autofocus':'autofocus'}), required=True, max_length=20)
+		attrs={'class':'form-control' ,
+		'placeholder':'Enter Book Id', 
+		'autofocus':'autofocus',
+		'id':'bk'
+		}), required=True, max_length=20)
 
 	class Meta:
 		model=Ebooks

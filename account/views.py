@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, HttpResponseRedirect
+from django.shortcuts import render, redirect, HttpResponseRedirect,HttpResponse
 from .forms import *
 from .models import *
 from operations.models import *
@@ -130,19 +130,17 @@ def ChangeProfile(request):
 
 
 def change_password(request):
-	form_saved=False
 	if request.method == 'POST':
 		form = PasswordChangeForm(request.user, request.POST)
 		if form.is_valid():
 			user = form.save()
-			form_saved=True
 			update_session_auth_hash(request, user)
 			return redirect('profile')
 
 	else:
 		form = PasswordChangeForm(request.user)
+		old_pass=0
 	return render(request, 'account/change_password.html', 
 		{
 		'form': form,
-		'form_saved':form_saved,
 		})

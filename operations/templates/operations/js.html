@@ -126,7 +126,6 @@ function alert(id){
 
       })
     }
-   
 
 
    var _scannerIsRunning = false;
@@ -223,6 +222,7 @@ function alert(id){
         document.getElementById("btn").addEventListener("click", function () {
             if (_scannerIsRunning) {
                 Quagga.stop();
+                window.location.reload();
             } else {
                 startScanner();
             }

@@ -7,16 +7,66 @@
 		<div class="col-xl-12">
 			<div class="card-box">
 
-			<h4 class="header-title mt-0 mb-3">Issue Books</h4>
-				<form action="{% url 'issuebooks'%}" method="POST" class="col-lg-8" enctype="multipart/form-data">
+				<h4 class="header-title mt-0 mb-3">Issue Books</h4>
+				<form action="{% url 'issuebooks'%}" method="POST" class="col-lg-8" enctype="multipart/form-data" id="issform" onkeyup="barcodeScanCheck();">
 					{% csrf_token %}
 					{{form|crispy}}
-					<input type="submit" name="submit" class="btn btn-primary">
+					<input type="submit" name="submit" class="btn btn-primary" id="issbtn">
+
 				</form>
 			</div>
 		</div>
 	</div>
 
 	{%endblock%}
+
+
+	{% block js%}
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+
+	<script type="text/javascript">
+		//setInterval(click, 5000);
+		//function click()
+		//{
+			//$("#issbtn").click();
+		//}
+
+
+		document.addEventListener("keypress", function(e) {
+			if (e.target.tagName !== "INPUT") {
+				var input = document.querySelector("#std");
+				input.focus();
+				input.value = e.key;
+				e.preventDefault();
+			}
+		});
+
+		
+
+
+	/*var startTime = new Date().getTime();
+
+	function barcodeScanCheck(){
+		var input = document.getElementById("std").value;
+
+		if(input.length == 1){
+			startTime = new Date().getTime();
+		}
+		else if(input.length == 2){
+			var elapsedTime = new Date().getTime() - startTime;
+			if(elapsedTime < 20)
+			{
+				console.log('barcode')
+				
+			}
+			if(elapsedTime > 20)
+			{
+				console.log('typed')	
+			}
+		}
+	}*/
+	</script>
+	{% endblock js%}
 
 
