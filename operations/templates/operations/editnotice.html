@@ -1,8 +1,0 @@
-{%extends 'operations/main.html'%}
-{% block content%}
-<form method="POST" action="{% url 'editnotice' notice.id %}">
-{%csrf_token%}
-	{{form.as_p}}
-	<input type="submit" name="submit" class="btn btn-primary">
-</form>
-{%endblock%}

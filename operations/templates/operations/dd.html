@@ -287,3 +287,47 @@ https://stackoverflow.com/questions/49361463/datatables-change-button-style
 Enter/Scan Barcode : <input type="text" id="txtCode" class="barcodeinput"/>
 <input type="<span id="IL_AD6" class="IL_AD">button</span>" value="OK" class="nextcontrol"/>
 <h3 id="msg"/>
+
+
+
+
+function barcodeScanCheck(){
+    var input = document.getElementById("std_id").value;
+
+    if(input.length == 1){
+        startTime = new Date().getTime();
+    }
+    else if(input.length == 2){
+        var elapsedTime = new Date().getTime() - startTime;
+        if(elapsedTime < 500)
+        {
+            window.location.href = "{{request.scheme}}://{{request.get_host}}/liststd/"+input+"/detail"
+
+        }
+        else{
+            return false;
+        }
+
+    }
+}
+
+
+$('#formq').submit(function(e){
+    e.preventDefault();
+    var input = document.getElementById("std_id").value;
+    if(input.length == 1){
+        startTime = new Date().getTime();
+    }
+    else if(input.length == 2){
+        var elapsedTime = new Date().getTime() - startTime;
+        if(elapsedTime < 500)
+        {
+            window.location.href = "{{request.scheme}}://{{request.get_host}}/liststd/"+input+"/detail"
+
+        }
+        else{
+            return false;
+        }
+
+    }
+});

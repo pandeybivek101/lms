@@ -5,12 +5,12 @@
     <div class="card-box">
         <!-- Div to show the scanner -->
         <div id="scanner-container"></div>
-        <input class="btn btn-info" type="button" id="btn" value="Start/Stop the scanner" /><br>
-    </div>
-    <form action="" method="POST">
-    {% csrf_token %}
-        <input type="number" name="std_id" id="std_id" onkeyup="sub()" style="opacity: 0;">
+        <input class="btn btn-info col-md-6" type="button" id="btn" value="Start/Stop the scanner" /><br>
+        <form method="POST" id="formq" class="my-2">
+        {% csrf_token %}
+        <input type="number" name="std_id" id="std_id"  class="col-md-6 form-control">
     </form>
+    </div>
 </div>
 </div>
 {% endblock %}
@@ -26,6 +26,7 @@
 <script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.js'></script>
 
 <script type="text/javascript">
+
 document.addEventListener("keypress", function(e) {
   if (e.target.tagName !== "INPUT") {
     var input = document.querySelector("#std_id");
@@ -33,12 +34,23 @@ document.addEventListener("keypress", function(e) {
   }
 });
 
-function sub(){
-    var std=document.getElementById('std_id').value
-    if(std.trim() != ""){
-    window.location.href = "{{request.scheme}}://{{request.get_host}}/liststd/"+std+"/detail"
-}
-}
+
+
+
+$('#formq').submit(function(e){
+    var input =document.getElementById('std_id').value
+    e.preventDefault();
+    
+   if(input.trim() != "")
+    {
+
+     window.location.href = "{{request.scheme}}://{{request.get_host}}/liststd/"+input+"/detail"
+
+    }
+    var input =document.getElementById('std_id').value=""
+        
+});
+
 </script>
 
 {% endblock js %}
@@ -55,3 +67,11 @@ function sub(){
 
 </style>
 {% endblock css %}
+
+
+{% block title %}
+   <title>Scan-Library Management System</title>
+ {% endblock title %}
+
+
+

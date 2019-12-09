@@ -1,6 +1,7 @@
     {%extends 'operations/index.html'%}
     {%block content%}
     <!-- page content area main -->
+    <h4 class="header-title mt-0 mb-3">Add Message</h4>
     <form method="post" class="card-box" action="{% url 'msg_std' msg_std.id %}">
     	{% csrf_token %}
     	{{form.title}}
@@ -32,5 +33,11 @@
 
 
     {%endblock%}
+
+    {% block title %}
+   <title>Add Message-Library Management System</title>
+ {% endblock title %}
+
+
 
 

@@ -172,7 +172,6 @@ class EditBook(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     template_name = 'operations/updatebooks.html'
     form_class=AddBooksForm
 
-
     def form_valid(self, form):
         book=AddBooks.objects.get(pk=self.kwargs.get('pk'))
         issued=IssueBooks.objects.filter(book=book, 
@@ -313,14 +312,14 @@ def ReturnBooks(request, pk):
             )
             notify.delete()
 
-            """account_sid=settings.TWILIO_ACCOUNT_SID
+            account_sid=settings.TWILIO_ACCOUNT_SID
             auth_token=settings.TWILIO_AUTH_TOKEN
             client = Client(account_sid, auth_token)
             message = client.messages.create(
                      body='you have requested for book ('+' '+notify.book.books_name+' '+') which is now available',
-                     from_=settings.phone_num,
+                     from_='+19252593370',
                      to='+9779844700852',
-                 )"""
+                 )
 
     else:
         bookitem.available_quantity=bookitem.books_quantity
@@ -512,10 +511,6 @@ class EditEbooks(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     form_class = EbooksForm
     template_name = "operations/ebook-update.html"
 
-    def form_valid(self, form):
-        form.instance.book=self.request.FILES['book'] or None
-        form.instance.cover_image=self.request.FILES['cimage'] or None
-        return super().form_valid(form)
 
     def get_success_url(self):
         return reverse_lazy("list-ebooks")

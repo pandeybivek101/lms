@@ -10,7 +10,7 @@
 <div class="row">
   <div class="col-12">
     <div class="card-box table-responsive">
-      <h4 class="mt-0 header-title">Multi item selection</h4>
+      <h4 class="mt-0 header-title">Ebook Records</h4>
       <p class="text-muted font-14 mb-3">
       </p>
 
@@ -21,6 +21,7 @@
       <th>Books Name</th>
       <th>Author Name</th>
       <th>Name</th>
+      <th>Action date</th>
       <th>UserName</th>
       <th>Action</th>
       </tr>
@@ -31,6 +32,7 @@
         <td>{{book.ebook.id}}</td>
         <td>{{book.ebook.name}}</td>
         <td>{{book.ebook.author_name}}</td>
+        <td>{{book.action_date|date:"M d, Y"}}</td>
         <td>{{book.requested_by.first_name}} {{book.requested_by.first_name}}</td>
         <td>{{book.requested_by.username}}</td>
         {% if book.action == 'Allowed' %}
@@ -58,4 +60,12 @@
 {% block js %}
  {% include 'operations/js.html'%}
  {% endblock js %}
+
+
+
+{% block title %}
+   <title>Ebook  Records-Library Management System</title>
+ {% endblock title %}
+
+
   
