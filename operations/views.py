@@ -297,6 +297,7 @@ def ReturnBooks(request, pk):
     rtnbook=IssueBooks.objects.get(pk=pk)
     rtnbook.returned=True
     rtnbook.returned_date=datetime.datetime.utcnow().replace(tzinfo=pytz.UTC)
+    rtnbook.returned_by=request.user
     rtnbook.save()
     bookitem=AddBooks.objects.get(id=rtnbook.book.id)
     if bookitem.available_quantity < bookitem.books_quantity:
@@ -312,14 +313,14 @@ def ReturnBooks(request, pk):
             )
             notify.delete()
 
-            account_sid=settings.TWILIO_ACCOUNT_SID
+            """account_sid=settings.TWILIO_ACCOUNT_SID
             auth_token=settings.TWILIO_AUTH_TOKEN
             client = Client(account_sid, auth_token)
             message = client.messages.create(
                      body='you have requested for book ('+' '+notify.book.books_name+' '+') which is now available',
-                     from_='+19252593370',
+                     from_=settings.phone_num,
                      to='+9779844700852',
-                 )
+                 )"""
 
     else:
         bookitem.available_quantity=bookitem.books_quantity

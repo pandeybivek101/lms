@@ -31,14 +31,20 @@ class AddBooks(models.Model):
 
 
 class IssueBooks(models.Model):
-	student=models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+	student=models.ForeignKey(settings.AUTH_USER_MODEL, 
+		on_delete=models.CASCADE)
 	book=models.ForeignKey(AddBooks, on_delete=models.CASCADE)
 	issued_date=models.DateTimeField(auto_now_add=True)
 	return_date=models.DateTimeField()
 	fine=models.IntegerField(default=0)
 	returned=models.BooleanField(default=False)
 	returned_date=models.DateTimeField(blank=True, null=True)
-	issued_by=models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='User', null=True)
+	returned_by=models.ForeignKey(settings.AUTH_USER_MODEL, 
+		on_delete=models.CASCADE, 
+		related_name='return_by_User', null=True, blank=True)
+	issued_by=models.ForeignKey(settings.AUTH_USER_MODEL, 
+		on_delete=models.CASCADE, 
+		related_name='User', null=True)
 
 	def count_issued(self):
 		count=self.object.count()
