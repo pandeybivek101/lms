@@ -84,14 +84,19 @@ class IssuebookForm(forms.ModelForm):
 
 	def clean_student(self):
 		std_id=self.cleaned_data['student']
-		std_qs=User.objects.filter(id=std_id)
-		if std_id.isalpha():
-			raise forms.ValidationError('Id arenot in alphabets')
+
+		try:
+		    std_qs=User.objects.filter(id=std_id)
+		except(ValueError):
+			raise forms.ValidationError('Student Id arenot in alphabets')
+
 		if not std_qs.exists():
 			raise forms.ValidationError('Student with this Id doesnot exists')
 		else:
-			iss_record=IssueBooks.objects.filter(student=std_qs.first(), returned=False)
-			iss_fine=IssueBooks.objects.filter(student=std_qs.first(), returned=False, fine__gt=0)
+			iss_record=IssueBooks.objects.filter(student=std_qs.first(), 
+				returned=False)
+			iss_fine=IssueBooks.objects.filter(student=std_qs.first(), 
+				returned=False, fine__gt=0)
 			if iss_record.exists():
 				if iss_record.count()>=2:
 					raise forms.ValidationError("Already Issued Two books")
@@ -104,7 +109,12 @@ class IssuebookForm(forms.ModelForm):
 
 	def clean_book(self):
 		book_id=self.cleaned_data['book']
-		book_obj=AddBooks.objects.filter(id=book_id)
+
+		try:
+		    book_obj=AddBooks.objects.filter(id=book_id)
+		except(ValueError):
+			raise forms.ValidationError('Book Id arenot in alphabets')
+
 		if book_id.isalpha():
 			raise forms.ValidationError('Id arenot in alphabets')
 		if not book_obj.exists():

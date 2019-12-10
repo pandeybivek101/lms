@@ -2,10 +2,10 @@
 {% load static %}
 {% block content %}
 <div class="container-fluid">
-
   <div class="row">
     <div class="col-sm-8">
       <div class="bg-picture card-box">
+
         <div class="profile-info-name">
           <img src="{{std.profile_pic.url}}" class="rounded-circle avatar-xl img-thumbnail float-left mr-3" alt="profile-image">
 
@@ -15,21 +15,11 @@
             <p class="font-13">Hi I'm {{std.first_name}},has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type.Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature it over 2000 years to popular belief Ipsum is not simplyrandom text.</p>
 
             <ul class="social-list list-inline mt-3 mb-0">
-              <li class="list-inline-item">
-                <a href="javascript: void(0);" class="social-list-item border-purple text-purple"><i class="mdi mdi-facebook"></i></a>
-              </li>
-              <li class="list-inline-item">
-                <a href="javascript: void(0);" class="social-list-item border-danger text-danger"><i class="mdi mdi-google"></i></a>
-              </li>
-              <li class="list-inline-item">
-                <a href="javascript: void(0);" class="social-list-item border-info text-info"><i class="mdi mdi-twitter"></i></a>
-              </li>
-              <li class="list-inline-item">
-                <a href="javascript: void(0);" class="social-list-item border-secondary text-secondary"><i class="mdi mdi-github-circle"></i></a>
-              </li>
+            {% if std %}
               <li class="list-inline-item">
                 <a href="{% url 'msg_std' std.id %}"><button type="button" class="btn btn-primary btn-rounded waves-effect waves-light">Send Message</button></a>
               </li>
+            {% endif %}
             </ul>
 
           </div>
@@ -194,17 +184,17 @@
                 {% for book in book_issued%}
 
                 <li class="list-group-item">
-                  
-                    <div class="user avatar-sm float-left mr-2">
-                      <img src="{{book.book.books_image.url}}" alt="" class="img-fluid rounded-circle">
-                    </div>
-                    <div class="user-desc">
-                      <h5 class="name mt-0 mb-1"><a href="#" class="user-list-item">{{book.book.books_name}}</a>
+
+                  <div class="user avatar-sm float-left mr-2">
+                    <img src="{{book.book.books_image.url}}" alt="" class="img-fluid rounded-circle">
+                  </div>
+                  <div class="user-desc">
+                    <h5 class="name mt-0 mb-1"><a href="#" class="user-list-item">{{book.book.books_name}}</a>
                       <button class="btn btn-info btn-xs" style="float: right; " id="{{book.id}}" onclick="alert(this.id)">Return</button>
 
-                      </h5>
-                      <p class="desc text-muted mb-0 font-12">{{book.book.books_author_name}}</p>
-                    </div>
+                    </h5>
+                    <p class="desc text-muted mb-0 font-12">{{book.book.books_author_name}}</p>
+                  </div>
                 </li>
 
                 {% endfor %}
@@ -252,14 +242,14 @@
       {% endblock %}
 
 
-{% block js %}
-{% include 'operations/js.html'%} 
-{% endblock js%}
+      {% block js %}
+      {% include 'operations/js.html'%} 
+      {% endblock js%}
 
 
-{% block title %}
-   <title>Student Detail-Library Management System</title>
- {% endblock title %}
+      {% block title %}
+      <title>Student Detail-Library Management System</title>
+      {% endblock title %}
 
 
 

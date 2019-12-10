@@ -54,6 +54,13 @@ def Scan(request):
         {})
 
 @login_required
+@role_required(allowed_roles=['Librarian'])
+def ScanError(request):
+    return render(request, 'operations/notfound.html',
+        {})
+
+
+@login_required
 @role_required(allowed_roles=['Student'])
 def myissuedbook(request):
     issuedbooks=IssueBooks.objects.filter(student=request.user.id,
@@ -246,11 +253,8 @@ def IssueBook(request):
     if request.method=="POST":
         form=IssuebookForm(request.POST)
         if form.is_valid():
-            try:
-                stdid=form.cleaned_data['student']
-                bkid=form.cleaned_data['book']
-            except ValueError:
-                print('cannot issue')
+            stdid=form.cleaned_data['student']
+            bkid=form.cleaned_data['book']
             request.session['issue_std_id']=stdid
             request.session['issue_book_id']=bkid
             return redirect('issue-confirm')
@@ -534,17 +538,22 @@ def NotifyMe(request, id):
 @role_required(allowed_roles=['Librarian'])
 def StdDetail(request, id):
     total=0
-    std=User.objects.get(id=id)
-    if std:
+    try:
+        std=User.objects.get(id=id)
         course=Student.objects.filter(student=std).first()
         book_issued=IssueBooks.objects.filter(student=std, 
+                returned=False)
+        issue_rec=IssueBooks.objects.filter(student=std, 
             returned=False)
-        issue_rec=IssueBooks.objects.filter(student=std, returned=False)
         notify=NotifyMeModel.objects.filter(student=std)
         message=Message.objects.filter(posted_to=std).order_by('Posted_on')[::-1]
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        return redirect('scanerror')
+
+    if issue_rec is not None :
         for item in issue_rec:
             total=total+item.fine
-        return render(request, 'operations/std-detail.html', 
+    return render(request, 'operations/std-detail.html', 
             {
             'std':std,
             'course':course,
@@ -554,8 +563,6 @@ def StdDetail(request, id):
             'issue_rec':issue_rec,
             'total':total,
             })
-    else:
-        return render(request, 'operations/quagga.html')
 
 
 class DetailBook(LoginRequiredMixin, DetailView):
