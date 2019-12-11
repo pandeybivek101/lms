@@ -53,6 +53,7 @@ def Scan(request):
     return render(request, 'operations/quagga.html',
         {})
 
+
 @login_required
 @role_required(allowed_roles=['Librarian'])
 def ScanError(request):
@@ -604,7 +605,7 @@ class DetailEBook(LoginRequiredMixin, DetailView):
 @login_required
 def ViewEbook(request, id):
     if request.method != "POST":
-        return redirect('home')
+        return redirect('list-ebooks')
     else:
         read=Ebooks.objects.get(id=id)
     return render(request, 'operations/pdf.html', 
@@ -723,16 +724,6 @@ class EbookActivities(ListView, LoginRequiredMixin, UserPassesTestMixin):
             return True
         else:
             return False
-
-
-def error_404(request):
-        data = {}
-        return render(request,'operations/400.html', data)
-
-
-def error_500(request):
-        data = {}
-        return render(request,'myapp/error_500.html', data)
 
 
 @login_required

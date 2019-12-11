@@ -7,9 +7,9 @@
 
         <div class="row">
             <div class="col-md-12">
-                <div class="card-box">
+                <div class="card-box" id="pageContainer">
 
-                    <canvas id="pdf-render"></canvas>
+                    <canvas id="pdf-render"  style="width: 100%; height: 100%"></canvas>
                     <div class="text-center mb-4">
                     <button class="btn btn-info" id="prev-page">
                         <i class="fas fa-arrow-circle-left"></i> Prev Page
@@ -36,7 +36,7 @@
 <script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
 <script src="js/main.js"></script>
 <script type="text/javascript">
-  const url = '{{read.book.url}}';
+ const url = '{{read.book.url}}';
   let pdfDoc = null,
   pageNum = 1,
   pageIsRendering = false,
@@ -112,17 +112,11 @@ pdfjsLib
 // Button Events
 document.querySelector('#prev-page').addEventListener('click', showPrevPage);
 document.querySelector('#next-page').addEventListener('click', showNextPage);
-</script>
+ </script>
 {% endblock js%}
-
-
-{% block css %}
-
-{% endblock css %}
 
 
 {% block title %}
    <title>View Ebook-Library Management System</title>
  {% endblock title %}
-
 

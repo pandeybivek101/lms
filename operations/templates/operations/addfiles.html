@@ -10,7 +10,7 @@
 			<div class="card-box">
 
 				<h4 class="header-title mt-0 mb-3">Add EBooks</h4>
-				<form action="{% url 'add-ebooks'%}" method="POST" class="col-lg-8" enctype="multipart/form-data">
+				<form action="{% url 'add-ebooks'%}" method="POST" class="col-lg-8" enctype="multipart/form-data" onsubmit="validateFileType();">
 					{% csrf_token %}
 					{{form|crispy}}
 
@@ -24,7 +24,6 @@
 {% block title %}
    <title>AddEBooks-Library Management System</title>
  {% endblock title %}
-
 
 
 

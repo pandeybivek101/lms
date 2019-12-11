@@ -4,6 +4,7 @@ from django.db.models.signals import post_save, post_init
 from django.utils import timezone
 import datetime
 import pytz
+from django.core.validators import FileExtensionValidator
 from account.models import User
 
 class Catagory(models.Model):
@@ -63,7 +64,10 @@ class IssueBooks(models.Model):
 
 class Ebooks(models.Model):
 	name=models.CharField(max_length=100)
-	book=models.FileField(upload_to='files')
+	book=models.FileField(upload_to='files', 
+		validators=[FileExtensionValidator(allowed_extensions=('pdf','epub'))], 
+		help_text=('Required. Please upload  an epub or pdf file.'),
+		)
 	author_name=models.CharField(max_length=100)
 	cover_image=models.ImageField(upload_to='image', default='image/bookim.png')
 	added_date=models.DateTimeField(auto_now_add=True, null=True)

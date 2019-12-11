@@ -2,6 +2,8 @@ from django import forms
 from .models import *
 from django.http import HttpResponseRedirect
 from account.models import User
+from django.core.validators import FileExtensionValidator
+
 
 
 class MessageForm(forms.ModelForm):
@@ -107,6 +109,7 @@ class IssuebookForm(forms.ModelForm):
 			else:
 			    return std_id
 
+
 	def clean_book(self):
 		book_id=self.cleaned_data['book']
 
@@ -129,5 +132,16 @@ class EbooksForm(forms.ModelForm):
 	class Meta:
 		model=Ebooks
 		fields=['name', 'book', 'cover_image', 'author_name', 'catagory']
+
+	'''def clean_book(self):
+		book=self.cleaned_data['book']
+		if not book.name.endswith('.pdf') or not book.name.endswith('.epub'):
+			raise forms.ValidationError('Unsupported format')
+		else:
+			return book'''
+
+
+
+
 
 		
