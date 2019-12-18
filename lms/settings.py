@@ -41,8 +41,9 @@ INSTALLED_APPS = [
     'crispy_forms',
     'django.contrib.admin',
     'django_twilio',
-    
 ]
+
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

@@ -1,0 +1,16 @@
+{% extends 'account/baselogin.html' %}
+{% load static %}
+{% block content %}
+<div class="card text-center">
+
+	<div class="card-body p-4">
+
+		<div class="mb-4">
+			<h4 class="text-uppercase mt-0">INVALID LINK</h4>
+		</div>
+		<img src="{% static 'assets/images/mail_confirm.png' %}" alt="img" width="86" class="mx-auto d-block">
+
+		<p class="text-muted font-14 mt-2">Activation link is invalid!</p>
+		</div> <!-- end card-body -->
+	</div>
+	{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'account/baselogin.html' %}
+{% load static %}
+{% block content %}
+<div class="card text-center">
+
+	<div class="card-body p-4">
+
+		<div class="mb-4">
+			<h4 class="text-uppercase mt-0">ACTIVATION SUCCESS</h4>
+		</div>
+		<img src="{% static 'assets/images/mail_confirm.png' %}" alt="img" width="86" class="mx-auto d-block">
+
+		<p class="text-muted font-14 mt-2"> Thank you for your email confirmation. Now you can login your account.</p>
+
+			<a href="{% url 'login' %}" class="btn btn-block btn-pink waves-effect waves-light mt-3">Back to Home</a>
+
+		</div> <!-- end card-body -->
+	</div>
+	{% endblock %}

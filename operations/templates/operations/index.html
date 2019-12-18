@@ -275,7 +275,7 @@
             <!-- User box -->
             <div class="user-box">
                 <div class="user-img">
-                    <img src="{% static 'assets/images/users/user-1.jpg' %}" alt="user-img" title="Mat Helme" class="rounded-circle img-fluid">
+                    <img src="{{request.user.profile_pic.url}}" alt="user-img" title="Mat Helme" class="rounded-circle img-fluid">
                     <a href="{% url 'change-profile' %}" class="user-edit"><i class="mdi mdi-pencil"></i></a>
                 </div>
                 

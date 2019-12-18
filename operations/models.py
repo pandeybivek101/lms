@@ -64,10 +64,7 @@ class IssueBooks(models.Model):
 
 class Ebooks(models.Model):
 	name=models.CharField(max_length=100)
-	book=models.FileField(upload_to='files', 
-		validators=[FileExtensionValidator(allowed_extensions=('pdf','epub'))], 
-		help_text=('Required. Please upload  an epub or pdf file.'),
-		)
+	book=models.FileField(upload_to='files')
 	author_name=models.CharField(max_length=100)
 	cover_image=models.ImageField(upload_to='image', default='image/bookim.png')
 	added_date=models.DateTimeField(auto_now_add=True, null=True)

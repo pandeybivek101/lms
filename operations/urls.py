@@ -19,6 +19,7 @@ from operations import views
 from operations.views import *
 from django.conf.urls import handler404, handler500
 
+
 urlpatterns = [
     path('', views.Home, name='home'),
     path('scan/', views.Scan, name='scan'),
