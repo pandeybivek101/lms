@@ -2,14 +2,9 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.utils import timezone
 from django.shortcuts import render, redirect, render_to_response, get_object_or_404
 from .models import *
-from django.utils import timezone
 from django.contrib import auth
 from .forms import *
 from django.core.mail import send_mail
-import io
-from io import BytesIO
-from django.core.files.base import ContentFile
-from django.core.files import File
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 import os
@@ -21,19 +16,13 @@ from django.contrib.auth.decorators import login_required
 from account.models import User
 from .decorators import role_required
 import barcode
-from barcode.writer import ImageWriter
-from django.db.models import Q
 from django.conf import settings
 from django.urls import reverse_lazy
-from PIL import Image
-import PyPDF2
 from django.db.models import Q
-from django.core.files.base import ContentFile
-from account.models import Student
-from django.core.paginator import Paginator
-from django.views import View
 import shutil
+from barcode.writer import ImageWriter
 from django.core.exceptions import ObjectDoesNotExist
+from itertools import chain
 from twilio.rest import Client
 from twilio.rest import TwilioRestClient
 
@@ -612,54 +601,48 @@ def ViewEbook(request, id):
         {'read':read})
 
 
-@login_required
-@role_required(allowed_roles=['Librarian'])
-def SearchStudent(request):
-    query=request.POST['qs']
-    if query:
-        stdrecord=User.objects.filter(
-            Q(username__icontains = query) 
-            | Q(first_name__icontains = query) | 
-            Q(id__icontains = query)
-            ) 
-    else:
-        stdrecord=[]
-    return render(request, 'operations/liststd.html', 
-        {'stdrecord':stdrecord}
-       )
 
 @login_required
-@role_required(allowed_roles=['Librarian'])
-def SearchIssued(request):
-    query=request.POST['issued']
+def Search(request):
+    query=request.POST.get('qs')
     if query:
-        returned_item=IssueBooks.objects.filter(returned=True)
-        issueditems=IssueBooks.objects.filter(
-            Q(student__first_name__icontains = query) 
-            | Q(student__id__iexact = query) |
-            Q(student__username__iexact = query)
-            ).exclude(id__in=returned_item)
-    else:
-        stdrecord=[]
-    return render(request, 'operations/issued_list.html', 
-        {'issueditems':issueditems}
-       )
-
-
-@login_required
-def SearchEBooks(request):
-    query=request.POST['ebk']
-    if query:
-        ebooks=Ebooks.objects.filter(
+        if request.user.Role=='Librarian':
+            stdrecord=User.objects.filter((
+                Q(username__icontains = query) 
+                | Q(first_name__icontains = query) | 
+                Q(id__icontains = query)
+                ), Role="Student"
+                
+                )
+        else:
+            stdrecord=[]
+        ebookrecords=Ebooks.objects.filter(
             Q(name__icontains = query) 
             | Q(id__iexact = query) |
             Q(author_name__iexact = query)
             )
+        bookrecords=AddBooks.objects.filter(
+            Q(books_name__icontains = query) 
+            | Q(books_author_name__icontains = query) | 
+            Q(books_publication_name__icontains = query)|
+            Q(catagory__catagory__icontains= query)|
+            Q(id__iexact= query)
+            )
     else:
-        ebooks=[]
-    return render(request, 'operations/ebook-list.html', 
-        {'ebooks':ebooks}
+        stdrecord=[]
+        ebookrecords=[]
+        bookrecords=[]
+        query=[]
+    print(stdrecord)
+    return render(request, 'operations/search.html', 
+        {'stdrecord':stdrecord,
+        'ebookrecords':ebookrecords,
+        'bookrecords':bookrecords,
+        'query':query,
+        }
        )
+
+
 
 
 @login_required
@@ -730,10 +713,13 @@ class EbookActivities(ListView, LoginRequiredMixin, UserPassesTestMixin):
 @role_required(allowed_roles=['Student'])
 def MYFine(request):
     sum=0
-    issue_rec=IssueBooks.objects.filter(student=request.user, returned=False)
+    issue_rec=IssueBooks.objects.filter(student=request.user, 
+        returned=False)
     for i in issue_rec:
         sum=sum+i.fine
-    return render(request,'operations/my_fine.html', {'issue_rec':issue_rec, 'sum':sum})
+    return render(request,'operations/my_fine.html', {
+        'issue_rec':issue_rec, 
+        'sum':sum})
 
 
 

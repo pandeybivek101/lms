@@ -24,21 +24,6 @@ from django.core.mail import EmailMessage
 
 # Create your views here.
 
-'''def URegister(request):
-	if request.method=="POST":
-		form=UserRegistrationForm(request.POST, request.FILES)
-		if form.is_valid():
-			Role=form.cleaned_data['Role']
-			form.save()
-			if Role == "Student":
-			    return redirect('sinfo')
-			else:
-				return redirect('login')
-	else:
-		form=UserRegistrationForm()
-	return render(request, 'account/uregistration.html', {'form':form})'''
-
-
 def URegister(request):
 	if request.method=="POST":
 		form=UserRegistrationForm(request.POST, request.FILES)
@@ -143,7 +128,8 @@ def Profile(request):
 def ChangeProfile(request):
 	if request.user.Role=='Student':
 		if request.method == 'POST':
-			form1 = UserUpdateForm(request.POST, request.FILES, instance=request.user)
+			form1 = UserUpdateForm(request.POST, request.FILES, 
+				instance=request.user)
 			form2=StudentForm(request.POST, instance=request.user.student)
 			if form1.is_valid() and form2.is_valid():
 				form1.save()
@@ -159,7 +145,8 @@ def ChangeProfile(request):
 			})
 	else:
 		if request.method == 'POST':
-			form1 = UserUpdateForm(request.POST, request.FILES, instance=request.user)
+			form1 = UserUpdateForm(request.POST, 
+				request.FILES, instance=request.user)
 			if form1.is_valid():
 				form1.save()
 				return redirect('profile')
@@ -181,7 +168,6 @@ def change_password(request):
 
 	else:
 		form = PasswordChangeForm(request.user)
-		old_pass=0
 	return render(request, 'account/change_password.html', 
 		{
 		'form': form,

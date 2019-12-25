@@ -1,13 +1,200 @@
-<div class="title_right">
-                    <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
-                        <div class="input-group">
-                            <input type="text" name='q' class="form-control" placeholder="Search for...">
-                            <span class="input-group-btn">
-                              <a href="{% url 'search-books'%}">
-                                  <button class="btn btn-default" type="button">Go!</button>
-                              </a>
-                          </span>
-                      </div>
-                      
-                  </div>
-              </div>
+{%extends 'operations/index.html'%}
+{% load static %}
+{% block content %}
+
+
+<div class="row">
+  <div class="col-12">
+    <div class="card-box table-responsive">
+      <h4 class="mt-0 header-title">Search result for {{query}}</h4>
+      <p class="text-muted font-14 mb-3"></p>
+      {% if stdrecord%}
+      <table id="responsive-datatable1" class="table table-bordered table-bordered dt-responsive nowrap">
+        <thead>
+         <tr>
+           <th>ID</th>
+           <th>Firstname</th>
+           <th> Lastname </th>
+           <th> Username</th>
+           <th> Contact</th>
+           <th>Get Barcode</th>
+           <th>Action</th>
+           <th>detail</th>
+         </tr>
+       </thead>
+       <tbody>
+         {% for std in stdrecord.all %}
+         <tr>
+          <td>{{std.id}}</td>
+          <td>{{std.first_name}}</td>
+          <td>{{std.last_name}}</td>
+          <td>{{std.username}}</td>
+          <td>{{std.contact}}</td>
+          {% if std.barcode %}
+          <td><button onClick="printJS('{{std.barcode.url}}', 'image')" class="btn btn-secondary"><i class="fa fa-print" aria-hidden="true"></i></button></td>
+          {%else %}
+          <td><a href="{% url 'st-barcode' std.id %}"><button class="btn btn-warning">BarCode</button></a></td>
+          {% endif %}
+          <td>
+            <a href="{% url 'deletestd' std.id%}">
+              <button class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></button>
+            </a>
+          </td>
+          <td><a href="{% url 'std-detail' std.id%}">
+            <button class="btn btn-info">detail</button></a></td>
+            {% endfor %}
+          </tr>
+        </tbody>                                 
+      </table>
+
+      {% endif %}
+
+
+
+      {% if ebookrecords%}
+      <table id="responsive-datatable1" class="table table-bordered table-bordered dt-responsive nowrap">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Books Name</th>
+              <th>Author Name</th>
+              {% if request.user.Role == 'Librarian'%}
+              <th>Book File</th>
+              <th>Action</th>
+              {% endif %}
+
+              {% if request.user.Role == 'Student'%}
+              <th>Action</th>
+              {% endif %}
+              <td><b>Detail</b></td>
+            </tr>
+          </thead>
+
+          <tbody>
+            {% for book in ebookrecords.all %}
+            <tr>
+              <td>{{book.id}}</td>
+              <td>{{book.name}}</td>
+              <td>{{book.author_name}}</td>
+
+              {% if request.user.Role == 'Librarian'%}
+              <td>
+                <form method="POST" action="{% url 'view' book.id %}">
+                  {% csrf_token %}
+                  <input type="numbers" name="q" value="{{book.id}}" hidden="true">
+                  <button class="btn btn-primary"><i class="fas fa-book-open"></i></button>
+                </form>
+              </td>
+              <td><a href="{%url 'edit-ebook' book.id%}"><button class="btn btn-warning"><i class="fas fa-edit"></i></button></a>
+               <a href="{%url 'delete-ebook' book.id%}"><button class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></button></a></td>
+               {% endif %}
+
+               {% if request.user.Role == 'Student'%}
+               {% if book.id in req_list %}
+               <td><a href="{% url 'view-request' book.id%}">
+                 <button type="button" class="btn btn-lighten-success waves-effect  width-md waves-success" disabled="">send view request</button>
+               </a> </td>
+               {% else %}
+               <td>
+                 <a href="{% url 'view-request' book.id%}">
+                   <button type="button" onclick="ebookreqalert()" class="btn btn-success waves-effect width-md waves-light">send view request</button>
+                 </a>
+               </form>
+             </td>
+             {% endif %}
+             {% endif %}
+             <td><a href="{% url 'detail-ebook' book.id%}">
+               <button class="btn btn-primary">detail</button>
+             </a></td>
+           </tr>   
+           {% endfor %}
+         </tbody>
+       </table>
+       {% endif %}
+
+ {% if bookrecords %}
+ <table id="responsive-datatable1" class="table table-bordered table-bordered dt-responsive nowrap">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Books Name</th>
+        <th>Books Image</th>
+        <th>Author Name</th>
+        <th>Publication Name</th>
+        {% if request.user.Role == 'Librarian' %}
+        <th>Total Quantity</th>
+        <th>Available Quantity</th>
+        <th>Barcode</th>
+        <th>Edit/Delete</th>
+        {% endif %}
+
+        {% if request.user.Role == 'Student' %}
+        <th>Availability</th>
+        {% endif %}
+        <th>Detail</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for book in bookrecords.all %}
+      <tr>
+        <td>{{book.id}}</td>
+        <td>{{book.books_name}}</td>
+        <td><img src="{{book.books_image.url}}" height=50 width=50></td>
+        <td>{{book.books_author_name}}</td>
+        <td>{{book.books_publication_name}}</td>
+
+        {% if request.user.Role == 'Librarian'%}
+        <td>{{book.books_quantity}}</td> 
+        <td>{{book.available_quantity}}</td> 
+        {% if book.barcode %}
+        <td>
+          <button onclick="printJS('{{book.barcode.url}}', 'image')" class="btn btn-secondary width-md"><i class="fa fa-print" aria-hidden="true"></i></button>
+        </td>
+        {% else %}
+        <td>
+          <a href="{% url 'book-barcode' book.id %}"><button class="btn btn-warning">Generate BarCode</button></a>
+        </td>
+        {% endif %}
+        <td>
+         <a href="{% url 'editbook' book.id %}"><button class="btn btn-warning"><i class="fas fa-edit"></i></button></a>
+         <a href="{% url 'deletebook' book.id %}"><button class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></button></a>
+       </td>
+
+       {% endif %}
+       {% if request.user.Role == 'Student' %}
+       {%if book.available_quantity > 0 %}
+       <td style='color: blue;'><b>Available</b></td>
+       {% else %}
+       <td style="color: red;"><b>Unavailable</b><br/>
+         {% if book.id in noti_lst %}
+         <p>Notify on Available</p>
+         {% else %}
+         <a href="{% url 'notifyme' book.id%}" onclick="notify()">Notify on Available</a>
+         {% endif %}
+       </td>
+       {%endif%}
+       {% endif %}
+       <td><a class="btn btn-primary" href="{% url 'detail-book' book.id%}">detail</a></td>
+     </tr>     
+     {% endfor %}
+   </tbody>
+ </table>
+ {% endif %}
+
+ </div>
+   </div>
+ </div>
+ {% endblock %}
+
+
+ {% block js %}
+ {% include 'operations/js.html'%} 
+ {% endblock js%}
+
+ {% block title %}
+ <title>All student Records-Library Management System</title>
+ {% endblock title %}
+
+
+

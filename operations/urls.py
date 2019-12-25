@@ -30,14 +30,13 @@ urlpatterns = [
     path('view-message/<int:id>/detail', 
         views.ViewMessageDetail, name='view-msg-detail'),
     path('direct-view/<int:id>/', views.DirectView, name='direct-view'),
+    path('search', views.Search, name='search'),
 
 
     path('issuebooks', views.IssueBook, name='issuebooks'),
     path('issuebooks/confirm',views.IssueBookconfirm, name='issue-confirm'),
     path('issuedbooks/<int:pk>/returnbooks', views.ReturnBooks, 
         name='returnbooks'),
-    path('issuedbooks/search-issued/', views.SearchIssued, 
-        name='search-issued'),
     path('issue-activities/', IssueActivities.as_view(), 
         name='issue-activities'),
 
@@ -51,7 +50,6 @@ urlpatterns = [
     path('liststd/<int:pk>/delete', DeleteStd.as_view(), name='deletestd'),
     path('liststd/<str:id>/std-barcode', views.printBarCode, name='st-barcode'),
     path('liststd/<int:id>/detail', views.StdDetail, name='std-detail'),
-    path('liststd/search-student/', views.SearchStudent, name='search-student'),
     path('liststd/<int:id>/detail/message', views.Messagestd, name='msg_std'),
 
     path('displaybooks', DisplayBooks.as_view(), name='displaybooks'),
@@ -67,21 +65,19 @@ urlpatterns = [
     path('list-ebooks/', ListEbooks.as_view(), name='list-ebooks'),
     path('list-ebooks/<int:pk>/delete', DeleteEBooks.as_view(), name='delete-ebook'),
     path('list-ebooks/<int:pk>/edit', EditEbooks.as_view(), name='edit-ebook'),
-    #path('list-ebooks/<int:pk>/read', views.ReadEbook, name='read-ebook'),
     path('list-ebooks/<int:id>/view-request', views.EBookRequest, name='view-request'),
     path('list-ebooks/<str:catagory>', EBookcatagorylist.as_view(), name='ebook-catagory'),
     path('list-ebooks/<int:pk>/detail', DetailEBook.as_view(), name='detail-ebook'),
     path('list-ebooks/<int:id>/view', views.ViewEbook, name='view'),
-    path('list-ebooks/search-ebook/', views.SearchEBooks, name='search-ebooks'),
     path('ebook-activities/', EbookActivities.as_view(), name='ebook-activities'),
 
 
     path('add-ebooks/', views.AddEbooks, name='add-ebooks'),
 
-    path('displaybooks/search-book/', views.SearchBooks, name='search-books'),
 
     path('view-ebook-request/', views.ViewEbookRequest, name='view-ebook-request'),
     path('view-ebook-request/<int:id>/allow', views.View_Ebook_Request_allow, name='allow'),
     path('view-ebook-request/<int:id>/deny', views.View_Ebook_Request_deny, name='deny'),
     path('readable-ebook/', views.View_my_readable_book, name='readable-book'),
+  
 ]

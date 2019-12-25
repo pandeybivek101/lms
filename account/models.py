@@ -12,6 +12,8 @@ class User(AbstractUser):
 	profile_pic=models.ImageField(upload_to='profile-pic',default='profile-pic/user.jpg')
 	barcode=models.ImageField(blank=True, null=True)
 	contact=models.CharField(max_length=100)
+	is_active=models.BooleanField(default=False)
+
 	
 
 

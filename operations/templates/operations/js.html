@@ -77,7 +77,7 @@ function Actionrequest(id, value){
           window.location.href = "{{request.scheme}}://{{request.get_host}}/view-ebook-request/"+id+"/"+value
           Swal.fire(
             value+'ed',
-            'Your Book has been returned.',
+            'Your Book has been'+' '+value+'ed',
             'success'
             )
         }

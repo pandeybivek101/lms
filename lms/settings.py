@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'operations',
     'crispy_forms',
     'django.contrib.admin',
-    'django_twilio',
 ]
 
 
