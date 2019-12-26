@@ -6,7 +6,7 @@ from django.contrib import auth
 from .forms import *
 from django.core.mail import send_mail
 from django.conf import settings
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 import os
 from account.models import *
 from django.contrib.auth import authenticate, login, logout
@@ -23,6 +23,7 @@ import shutil
 from barcode.writer import ImageWriter
 from django.core.exceptions import ObjectDoesNotExist
 from itertools import chain
+from django.utils.decorators import method_decorator
 from twilio.rest import Client
 from twilio.rest import TwilioRestClient
 
@@ -60,6 +61,7 @@ def myissuedbook(request):
         {'issuedbooks':issuedbooks})
 
 
+
 @login_required
 @role_required(allowed_roles=['Student'])
 def DirectView(request, id):
@@ -67,6 +69,8 @@ def DirectView(request, id):
     msg_detail.read=True
     msg_detail.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
 
 class ListEbooks(LoginRequiredMixin, ListView):
     template_name='operations/ebook-list.html'
@@ -78,7 +82,9 @@ class ListEbooks(LoginRequiredMixin, ListView):
         catagory=Catagory.objects.all()
         req_list=[]
         ebook_req=EbookRequest.objects.filter(requested_by=self.request.user)
-        readable=EbookRequestHistory.objects.filter(requested_by=self.request.user, readable=True)
+        readable=EbookRequestHistory.objects.filter(
+            requested_by=self.request.user, 
+            readable=True)
         for i in readable:
             req_list.append(i.ebook.id)
         for i in ebook_req:
@@ -91,17 +97,13 @@ class ListEbooks(LoginRequiredMixin, ListView):
         return context
 
 
-
-class ListStd(LoginRequiredMixin, UserPassesTestMixin, ListView):
+@method_decorator(role_required(allowed_roles=['Librarian']), 
+    name='dispatch')
+class ListStd(LoginRequiredMixin, ListView):
     template_name='operations/liststd.html'
     queryset=User.objects.filter(Role='Student')
     context_object_name='stdrecord'
 
-    def test_func(self):
-        if  self.request.user.Role=='Librarian':
-            return True
-        else:
-            return False
 
 
 @login_required
@@ -150,21 +152,21 @@ class DisplayBooks(LoginRequiredMixin, ListView):
 
 
 
-class DeleteBook(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+@method_decorator(role_required(allowed_roles=['Librarian']), 
+    name='dispatch')
+class DeleteBook(LoginRequiredMixin, DeleteView):
     model = AddBooks
     template_name = 'operations/deletebooks.html'
     
     def get_success_url(self):
         return reverse_lazy("displaybooks")
 
-    def test_func(self):
-        if  self.request.user.Role=='Librarian':
-            return True
-        else:
-            return False
 
 
-class EditBook(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+
+@method_decorator(role_required(allowed_roles=['Librarian']), 
+    name='dispatch')
+class EditBook(LoginRequiredMixin, UpdateView):
     model = AddBooks
     template_name = 'operations/updatebooks.html'
     form_class=AddBooksForm
@@ -180,11 +182,6 @@ class EditBook(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def get_success_url(self):
         return reverse_lazy("displaybooks")
 
-    def test_func(self):
-        if  self.request.user.Role=='Librarian':
-            return True
-        else:
-            return False
 
 
 
@@ -207,19 +204,15 @@ def Messagestd(request, id):
 
 
 
-
-class DeleteStd(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+@method_decorator(role_required(allowed_roles=['Librarian']), 
+    name='dispatch')
+class DeleteStd(LoginRequiredMixin, DeleteView):
     model = User
     template_name = 'operations/deletestd.html'
     
     def get_success_url(self):
         return reverse_lazy("liststd")
 
-    def test_func(self):
-        if  self.request.user.Role=='Librarian':
-            return True
-        else:
-            return False
 
 
 @login_required
@@ -234,6 +227,7 @@ def EditStudent(request, id):
         return render(request,'SRegistration.html', 
             {'student':student,
              'form':form})
+
 
 
 from django.contrib import messages
@@ -486,22 +480,21 @@ class Bookcatagorylist(LoginRequiredMixin, ListView):
         return AddBooks.objects.filter(catagory = catagory)
 
 
-class DeleteEBooks(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+
+@method_decorator(role_required(allowed_roles=['Librarian']), 
+    name='dispatch')
+class DeleteEBooks(LoginRequiredMixin, DeleteView):
     model = Ebooks
     template_name = 'operations/delete-ebooks.html'
     
     def get_success_url(self):
         return reverse_lazy("list-ebooks")
 
-    def test_func(self):
-        if  self.request.user.Role=='Librarian':
-            return True
-        else:
-            return False
 
 
-
-class EditEbooks(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+@method_decorator(role_required(allowed_roles=['Librarian']), 
+    name='dispatch')
+class EditEbooks(LoginRequiredMixin, UpdateView):
     model = Ebooks
     form_class = EbooksForm
     template_name = "operations/ebook-update.html"
@@ -510,12 +503,7 @@ class EditEbooks(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def get_success_url(self):
         return reverse_lazy("list-ebooks")
 
-    def test_func(self):
-        if  self.request.user.Role=='Librarian':
-            return True
-        else:
-            return False
-
+    
 @login_required
 def NotifyMe(request, id):
     book=AddBooks.objects.get(id=id)
@@ -669,7 +657,9 @@ def ViewMessageDetail(request, id):
 
 
 
-class IssueActivities(ListView, LoginRequiredMixin, UserPassesTestMixin):
+@method_decorator(role_required(allowed_roles=['Librarian']), 
+    name='dispatch')
+class IssueActivities(ListView, LoginRequiredMixin):
     template_name='operations/issue-activities.html'
     queryset=IssueBooks.objects.all().order_by('-issued_date')
 
@@ -682,15 +672,11 @@ class IssueActivities(ListView, LoginRequiredMixin, UserPassesTestMixin):
             })
         return context
 
-    def test_func(self):
-        if  self.request.user.Role=='Librarian':
-            return True
-        else:
-            return False
 
 
-
-class EbookActivities(ListView, LoginRequiredMixin, UserPassesTestMixin):
+@method_decorator(role_required(allowed_roles=['Librarian']), 
+    name='dispatch')
+class EbookActivities(ListView, LoginRequiredMixin):
     template_name='operations/ebook-activities.html'
     queryset=EbookRequestHistory.objects.all().order_by('-requested_date')
 
@@ -702,11 +688,6 @@ class EbookActivities(ListView, LoginRequiredMixin, UserPassesTestMixin):
             })
         return context
 
-    def test_func(self):
-        if  self.request.user.Role=='Librarian':
-            return True
-        else:
-            return False
 
 
 @login_required

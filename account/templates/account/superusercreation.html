@@ -1,0 +1,36 @@
+{% extends 'account/baselogin.html'%}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="card">
+
+    <div class="card-body p-4">
+
+        <div class="text-center mb-4">
+            <h4 class="text-uppercase mt-0">Register</h4>
+        </div>
+
+        <form  method="POST" action="{% url 'supuser'%}" enctype="multipart/form-data" id='regform' onsubmit="checkForm();">
+            {% csrf_token %}
+            {{form|crispy}}
+            <div class="form-group">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="checkbox-signup" required="">
+                    <label class="custom-control-label" for="checkbox-signup">I accept <a href="javascript: void(0);" class="text-dark" required>Terms and Conditions</a></label>
+                </div>
+            </div>
+            <div class="form-group mb-0 text-center">
+                <button class="btn btn-primary btn-block" type="submit"> Sign Up </button>
+            </div>
+
+        </form>
+
+    </div> <!-- end card-body -->
+</div>
+<!-- end card -->
+
+<div class="row mt-3">
+    <div class="col-12 text-center">
+        <p class="text-muted">Already have account?  <a href="{% url 'login'%}" class="text-dark ml-1"><b>Sign In</b></a></p>
+    </div> <!-- end col -->
+</div>
+{% endblock %}

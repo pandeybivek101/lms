@@ -11,8 +11,6 @@ from django.urls import reverse
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib import messages
-
-#for email confirmation
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -29,22 +27,11 @@ def URegister(request):
 		form=UserRegistrationForm(request.POST, request.FILES)
 		if form.is_valid():
 			Role=form.cleaned_data['Role']
+			email=form.cleaned_data['email']
 			user=form.save(commit=False)
 			user.is_active = False
 			user.save()
-			current_site = get_current_site(request)
-			mail_subject = 'Activate your blog account.'
-			message = render_to_string('account/acc_active_email.html', {
-				'user': user,
-				'domain': current_site.domain,
-				'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
-				'token':account_activation_token.make_token(user),
-				})
-			to_email = form.cleaned_data.get('email')
-			email = EmailMessage(
-				mail_subject, message, to=[to_email]
-				)
-			email.send()
+			sendemail(request, user, email)
 			if Role == "Student":
 			    return redirect('sinfo')
 			return render(request, 'account/user_confirmation.html')
@@ -157,7 +144,7 @@ def ChangeProfile(request):
 			})
 
 
-
+@login_required
 def change_password(request):
 	if request.method == 'POST':
 		form = PasswordChangeForm(request.user, request.POST)
@@ -172,6 +159,44 @@ def change_password(request):
 		{
 		'form': form,
 		})
+
+
+def Supuser(request):
+	if request.method=="POST":
+		form=SupUserRegistrationForm(request.POST)
+		if form.is_valid():
+			email=form.cleaned_data['email']
+			user=form.save(commit=False)
+			user.Role='Librarian'
+			user.is_active=False
+			user.is_superuser=True
+			user.is_staff=True
+			user.save()
+			sendemail(request, user, email)
+			return render(request, 'account/user_confirmation.html')
+	else:
+		form=SupUserRegistrationForm()
+	context={"form":form}
+	return render(request, 
+		'account/superusercreation.html', 
+		context)
+
+
+def sendemail(request, user, email):
+	current_site = get_current_site(request)
+	mail_subject = 'Activate your blog account.'
+	message = render_to_string('account/acc_active_email.html', {
+		'user': user,
+		'domain': current_site.domain,
+		'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+		'token':account_activation_token.make_token(user),
+		})
+	to_email = email
+	email = EmailMessage(
+		mail_subject, message, to=[to_email]
+		)
+	email.send()
+
 
 
 def activate(request, uidb64, token):

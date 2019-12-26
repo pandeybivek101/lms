@@ -73,3 +73,15 @@ class StudentForm(forms.ModelForm):
 	class Meta:
 		model=Student
 		fields=['year', 'Enrollment']
+
+class SupUserRegistrationForm(UserCreationForm):
+	class Meta:
+		model=User
+		fields=[
+		'username', 
+		'email',
+		'password1',
+		'password2',
+		'contact',
+		]
+		exclude=('password',)
