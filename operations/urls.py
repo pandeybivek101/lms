@@ -47,7 +47,9 @@ urlpatterns = [
     path('addbooks', views.AddBook, name='addbooks'),
 
     path('liststd', ListStd.as_view(), name='liststd'),
-    path('liststd/<int:pk>/delete', DeleteStd.as_view(), name='deletestd'),
+    #path('liststd/<int:pk>/delete', DeleteStd.as_view(), name='deletestd'),
+    path('liststd/<int:id>/active', views.Activatestd, name='activate'),
+    path('liststd/<int:id>/inactive', views.InActivatestd, name='inactivate'),
     path('liststd/<str:id>/std-barcode', views.printBarCode, name='st-barcode'),
     path('liststd/<int:id>/detail', views.StdDetail, name='std-detail'),
     path('liststd/<int:id>/detail/message', views.Messagestd, name='msg_std'),

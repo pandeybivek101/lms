@@ -105,7 +105,6 @@ class ListStd(LoginRequiredMixin, ListView):
     context_object_name='stdrecord'
 
 
-
 @login_required
 @role_required(allowed_roles=['Librarian'])
 def AddBook(request):
@@ -163,7 +162,6 @@ class DeleteBook(LoginRequiredMixin, DeleteView):
 
 
 
-
 @method_decorator(role_required(allowed_roles=['Librarian']), 
     name='dispatch')
 class EditBook(LoginRequiredMixin, UpdateView):
@@ -213,6 +211,23 @@ class DeleteStd(LoginRequiredMixin, DeleteView):
     def get_success_url(self):
         return reverse_lazy("liststd")
 
+
+@login_required
+@role_required(allowed_roles=['Librarian'])
+def Activatestd(request, id):
+    std=User.objects.get(id=id)
+    std.is_active=True
+    std.save()
+    return redirect('liststd')
+
+
+@login_required
+@role_required(allowed_roles=['Librarian'])
+def InActivatestd(request, id):
+    std=User.objects.get(id=id)
+    std.is_active=False
+    std.save()
+    return redirect('liststd')
 
 
 @login_required
@@ -654,7 +669,6 @@ def ViewMessageDetail(request, id):
     return render(request, 'operations/msg-detail.html',
         {'msg_detail':msg_detail}
         )
-
 
 
 @method_decorator(role_required(allowed_roles=['Librarian']), 
