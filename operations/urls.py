@@ -27,8 +27,10 @@ urlpatterns = [
     path('my-fine/', views.MYFine, name='my_fine'),
     path('view-message/', 
         views.ViewMessage, name='view-message'),
+
     path('view-message/<int:id>/detail', 
         views.ViewMessageDetail, name='view-msg-detail'),
+    
     path('direct-view/<int:id>/', views.DirectView, name='direct-view'),
     path('search', views.Search, name='search'),
 
@@ -37,11 +39,11 @@ urlpatterns = [
     path('issuebooks/confirm',views.IssueBookconfirm, name='issue-confirm'),
     path('issuedbooks/<int:pk>/returnbooks', views.ReturnBooks, 
         name='returnbooks'),
+    path('issuedbooks/<int:id>/renew-books', views.RenewBooks, 
+        name='renew-books'),
     path('issue-activities/', IssueActivities.as_view(), 
         name='issue-activities'),
 
-
-    #path('issuedbooks/<int:pk>/returnbooks', ReturnBooks.as_view(), name='returnbooks'),
     path('issuedbooks',views.IssuedBook, name='issuedbooks'),
 
     path('addbooks', views.AddBook, name='addbooks'),

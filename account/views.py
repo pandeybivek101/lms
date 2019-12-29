@@ -92,7 +92,8 @@ def Profile(request):
     std=Student.objects.filter(student=profile).first()
     issued_by=IssueBooks.objects.filter(issued_by=profile, returned=False)
     my_book=IssueBooks.objects.filter(student=profile, returned=False)
-    notify=NotifyMeModel.objects.filter(student=profile)
+    notify=NotifyMeModel.objects.filter(student=profile, 
+    	notified=False, cancelled=False)
     ebook_pending=EbookRequest.objects.filter(requested_by=request.user)
     ebook_rec=EbookRequestHistory.objects.filter(requested_by=request.user, 
     	readable=False)
@@ -211,3 +212,12 @@ def activate(request, uidb64, token):
         return render(request, 'account/activation_success.html')
     else:
         return render(request, 'account/invalid.html')
+
+
+def CancelNotify(request, id):
+	record=NotifyMeModel.objects.get(id=id)
+	if record.notified == False:
+		record.cancelled=True
+		record.save()
+	return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+

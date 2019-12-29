@@ -23,6 +23,7 @@
             <th>Return Date</th>
             <th>Fine</th>
             <th>Return</th>
+            <th>Renew</th>
           </tr>
         </thead>
         <tbody>
@@ -45,6 +46,16 @@
                 
                 <button value="{{item.id}}" id="{{item.id}}" type="button" class="btn btn-info btn-xs" onclick="alert(this.id)">Return</button>
               </form>
+            </td>
+            <td>
+            {% if item.renewed == False %}
+              <form method="POST" action="{%url 'renew-books' item.id %}">
+                {% csrf_token %}
+                <button value="{{item.id}}" id="{{item.id}}" type="button" class="btn btn-info btn-xs" onclick="renewalert(this.id)">Renew</button>
+              </form>
+            {% else %}
+                <button  type="button" class="btn btn-info btn-xs" disabled="">Renewed</button>
+            {% endif %}
             </td>
           </tr>
           {% endfor%}

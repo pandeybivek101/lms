@@ -25,6 +25,10 @@ urlpatterns = [
     path('login/' ,views.LoginView, name='login'),
     path('logout', views.Logout, name='logout'),
     path('profile/', views.Profile, name='profile'),
+
+    path('notify-available/<int:id>/cancel', 
+        views.CancelNotify, name='cancelnotify'),
+    
     path('Xab/sup-user', views.Supuser, name='supuser'),
     path('change-profile/', views.ChangeProfile, name='change-profile'),
     path('change-password/', views.change_password, name='change_password'),

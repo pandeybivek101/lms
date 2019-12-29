@@ -242,5 +242,26 @@ function alert(id){
         }
 
 
+function renewalert(id){
+  Swal.fire({
+    title:"Are you sure to Renew this Book?",
+    text:"You won't be able to revert this!",
+    type:"warning",
+    showCancelButton:!0,
+    confirmButtonColor:"#3085d6",
+    cancelButtonColor:"#d33",
+    confirmButtonText:"Yes,Renew this!",
+}).then((result) => {
+    if (result.value) {
+      window.location.href = "{{request.scheme}}://{{request.get_host}}/issuedbooks/"+id+"/renew-books"
+      Swal.fire(
+        'Renewed!',
+        'Your Book has been renwed to user.',
+        'success'
+        )
+  }
+
+})
+}
     
 </script>

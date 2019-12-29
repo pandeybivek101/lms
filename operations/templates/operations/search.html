@@ -36,9 +36,15 @@
           <td><a href="{% url 'st-barcode' std.id %}"><button class="btn btn-warning">BarCode</button></a></td>
           {% endif %}
           <td>
-            <a href="{% url 'deletestd' std.id%}">
-              <button class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></button>
+            {%if std.is_active == True %}
+            <a href="{% url 'inactivate' std.id%}">
+              <button class="btn btn-info">Active</button>
             </a>
+          {% else %}
+          <a href="{% url 'activate' std.id%}">
+              <button class="btn btn-danger">Inactive</button>
+            </a>
+          {% endif%}
           </td>
           <td><a href="{% url 'std-detail' std.id%}">
             <button class="btn btn-info">detail</button></a></td>

@@ -17,7 +17,7 @@ class MessageAdmin(admin.ModelAdmin):
 admin.site.register(Message, MessageAdmin)
 
 class NotifyAdmin(admin.ModelAdmin):
-	list_display=['student', 'book', 'req_date']
+	list_display=['student', 'book', 'req_date', 'notified', 'cancelled']
 admin.site.register(NotifyMeModel, NotifyAdmin)
 
 

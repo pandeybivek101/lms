@@ -46,6 +46,10 @@ class IssueBooks(models.Model):
 	issued_by=models.ForeignKey(settings.AUTH_USER_MODEL, 
 		on_delete=models.CASCADE, 
 		related_name='User', null=True)
+	renewed=models.BooleanField(default=False)
+	renewed_date=models.DateTimeField(blank=True, null=True)
+	renewed_by=models.ForeignKey(settings.AUTH_USER_MODEL, 
+		on_delete=models.CASCADE, null=True, related_name='renewser') 
 
 	def count_issued(self):
 		count=self.object.count()
@@ -93,7 +97,7 @@ class EbookRequestHistory(models.Model):
 				
 
 class Message(models.Model):
-	title=models.CharField(max_length=20)
+	title=models.CharField(max_length=120)
 	Description=models.TextField()
 	Posted_on=models.DateTimeField(auto_now_add=True)
 	posted_to=models.ForeignKey(settings.AUTH_USER_MODEL, 
@@ -104,6 +108,11 @@ class Message(models.Model):
 
 
 class NotifyMeModel(models.Model):
-	student=models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+	student=models.ForeignKey(settings.AUTH_USER_MODEL, 
+		on_delete=models.CASCADE)
 	book=models.ForeignKey(AddBooks, on_delete=models.CASCADE)
 	req_date=models.DateTimeField(auto_now_add=True)
+	notified=models.BooleanField(default=False)
+	notified_at=models.DateTimeField(blank=True, null=True)
+	cancelled=models.BooleanField(default=False)
+

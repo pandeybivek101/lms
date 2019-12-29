@@ -169,7 +169,8 @@
           </div>
           <div class="user-desc">
             <h5 class="name mt-0 mb-1"><a href="{% url 'std-detail' std.student.id %}" class="user-list-item">{{std.student.get_full_name}}</a>
-              <button class="btn btn-info btn-xs" style="float: right; " id="{{std.id}}" onclick="alert(this.id)">Return </button>
+              <button class="btn btn-info btn-xs" style="float: right; " id="{{book.id}}" onclick="renewalert(this.id)">renew</button>
+              <button class="btn btn-info btn-xs" style="float: right; " id="{{book.id}}" onclick="alert(this.id)">Return</button>
 
             </h5>
             <p class="desc text-muted mb-0 font-12">{{std.book.books_name}}
@@ -201,6 +202,8 @@
             <div class="user-desc">
               <h5 class="name mt-0 mb-1">{{book.book.books_name}}</h5>
               <p class="desc text-muted mb-0 font-12">{{book.book.books_author_name}}</p>
+
+
             </div>
           </a>
         </li>
@@ -228,10 +231,15 @@
             </div>
             <div class="user-desc overflow-hidden">
             <a href="" class="user-list-item">
-              <h5 class="name mt-0 mb-1">{{item.book.books_name}}</h5>
+              <h5 class="name mt-0 mb-1">{{item.book.books_name}}
+              <a href="{% url 'cancelnotify' item.id %}"><button class="btn btn-info btn-xs" style="float: right;">cancel</button></a>
+
+              </h5>
+              
+              </div>
               <span class="desc text-muted font-12 text-truncate d-block">{{item.req_date}}</span>
               </a>
-            </div>
+
         </li>
         {% endfor %}
         {% else %}

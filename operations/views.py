@@ -132,7 +132,7 @@ class DisplayBooks(LoginRequiredMixin, ListView):
         books=self.queryset
         noti_lst=[]
         noti_req=NotifyMeModel.objects.filter(
-            student=self.request.user
+            student=self.request.user, notified=False, cancelled=False
             )
         iss_qs=IssueBooks.objects.filter(
             student=self.request.user, returned=False
@@ -272,7 +272,8 @@ def IssueBookconfirm(request):
     studentinfo=User.objects.get(id=request.session['issue_std_id'])
     bookinfo=AddBooks.objects.get(id=request.session['issue_book_id'])
     if request.method=="POST":
-        return_date=datetime.datetime.utcnow().replace(tzinfo=pytz.UTC) + datetime.timedelta(days=30)
+        return_date=datetime.datetime.utcnow().replace(
+            tzinfo=pytz.UTC) + datetime.timedelta(days=30)
         mdl=IssueBooks.objects.create(
             student=studentinfo,
             book=bookinfo,
@@ -305,7 +306,8 @@ def ReturnBooks(request, pk):
     bookitem=AddBooks.objects.get(id=rtnbook.book.id)
     if bookitem.available_quantity < bookitem.books_quantity:
         bookitem.available_quantity=bookitem.available_quantity+1
-        notify=NotifyMeModel.objects.filter(book=bookitem).first()
+        notify=NotifyMeModel.objects.filter(book=bookitem, 
+            cancelled=False, notified=False).first()
         if notify:
             send_mail(
                 'for your request',
@@ -314,7 +316,10 @@ def ReturnBooks(request, pk):
                 [notify.student.email],
                 fail_silently=False,
             )
-            notify.delete()
+            notify.notified_at=datetime.datetime.utcnow().replace(
+                tzinfo=pytz.UTC)
+            notify.notified=True
+            notify.save()
 
             """account_sid=settings.TWILIO_ACCOUNT_SID
             auth_token=settings.TWILIO_AUTH_TOKEN
@@ -472,7 +477,9 @@ def View_my_readable_book(request):
             i.readable=False
             i.save()
     readable_book=EbookRequestHistory.objects.filter(requested_by=request.user, readable=True)
-    return render(request, 'operations/my-readable-book.html', {'readable_book':readable_book})
+    return render(request, 'operations/my-readable-book.html', {
+        'readable_book':readable_book
+        })
 
 
 class EBookcatagorylist(LoginRequiredMixin, ListView):
@@ -481,7 +488,8 @@ class EBookcatagorylist(LoginRequiredMixin, ListView):
     context_object_name = 'ebooks'
 
     def get_queryset(self):
-        catagory = get_object_or_404(Catagory, catagory=self.kwargs.get('catagory'))
+        catagory = get_object_or_404(Catagory, 
+            catagory=self.kwargs.get('catagory'))
         return Ebooks.objects.filter(catagory = catagory)
 
 
@@ -491,7 +499,8 @@ class Bookcatagorylist(LoginRequiredMixin, ListView):
     context_object_name = 'books'
 
     def get_queryset(self):
-        catagory = get_object_or_404(Catagory, catagory=self.kwargs.get('catagory'))
+        catagory = get_object_or_404(Catagory, 
+            catagory=self.kwargs.get('catagory'))
         return AddBooks.objects.filter(catagory = catagory)
 
 
@@ -538,7 +547,8 @@ def StdDetail(request, id):
                 returned=False)
         issue_rec=IssueBooks.objects.filter(student=std, 
             returned=False)
-        notify=NotifyMeModel.objects.filter(student=std)
+        notify=NotifyMeModel.objects.filter(student=std, 
+            notified=False, cancelled=False)
         message=Message.objects.filter(posted_to=std).order_by('Posted_on')[::-1]
     except (TypeError, ValueError, OverflowError, User.DoesNotExist):
         return redirect('scanerror')
@@ -568,7 +578,8 @@ class DetailBook(LoginRequiredMixin, DetailView):
         book=AddBooks.objects.get(pk=self.kwargs.get('pk'))
         issued=IssueBooks.objects.filter(book=book, 
             returned=False)
-        notifyme=NotifyMeModel.objects.filter(book=book)
+        notifyme=NotifyMeModel.objects.filter(book=book, 
+            notified=False, cancelled=False)
         context.update({
             'book':book,
             'issued':issued,
@@ -636,7 +647,6 @@ def Search(request):
         ebookrecords=[]
         bookrecords=[]
         query=[]
-    print(stdrecord)
     return render(request, 'operations/search.html', 
         {'stdrecord':stdrecord,
         'ebookrecords':ebookrecords,
@@ -695,7 +705,7 @@ class EbookActivities(ListView, LoginRequiredMixin):
     queryset=EbookRequestHistory.objects.all().order_by('-requested_date')
 
     def get_context_data(self, *args, **kwargs):
-        context=super(EbookActivities,self).get_context_data(*args, **kwargs)
+        context=super(EbookActivities, self).get_context_data(*args, **kwargs)
         activities=self.get_queryset()
         context.update({
             'activities':activities,
@@ -716,6 +726,20 @@ def MYFine(request):
         'issue_rec':issue_rec, 
         'sum':sum})
 
+
+@login_required
+@role_required(allowed_roles=['Librarian'])
+def RenewBooks(request, id):
+    renew_item=IssueBooks.objects.get(id=id)
+    if renew_item.renewed==False:
+        renew_item.renewed=True
+        renew_item.renewed_date=datetime.datetime.utcnow().replace(
+            tzinfo=pytz.UTC)
+        renew_item.return_date=renew_item.return_date+datetime.timedelta(
+            days=30)
+        renew_item.renewed_by=request.user
+        renew_item.save()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
         

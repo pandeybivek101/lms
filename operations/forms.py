@@ -11,7 +11,7 @@ class MessageForm(forms.ModelForm):
 		attrs={
 		'class':'form-control', 
 		'placeholder':'Enter Title',
-		}), required=True, max_length=30)
+		}), required=True, max_length=120)
 	Description=forms.CharField(widget=forms.Textarea(
 		attrs={
 		"class":"form-control", 
@@ -51,6 +51,14 @@ class AddBooksForm(forms.ModelForm):
 			raise forms.ValidationError('Quantity cannot be smaller then 0')
 		else:
 			return books_quantity
+
+	def clean_cover_image(self):
+		img=self.cleaned_data['books_image']
+		if img.name.endswith('.png') or img.name.endswith('.jpeg') or img.name.endswith('.jpeg'):
+			return img
+		else:
+			raise forms.ValidationError('only png, jpeg, gif format supported')
+
 	
 
 class IssuebookForm(forms.ModelForm):
@@ -133,12 +141,23 @@ class EbooksForm(forms.ModelForm):
 		model=Ebooks
 		fields=['name', 'book', 'cover_image', 'author_name', 'catagory']
 
-	'''def clean_book(self):
+	def clean_book(self):
 		book=self.cleaned_data['book']
-		if not book.name.endswith('.pdf') or not book.name.endswith('.epub'):
-			raise forms.ValidationError('Unsupported format')
+		if book.name.endswith('.pdf') or book.name.endswith('.pdf'):
+			return book
 		else:
-			return book'''
+			raise forms.ValidationError('only pdf or epub format supported')
+
+	def clean_cover_image(self):
+		cover=self.cleaned_data['cover_image']
+		if cover.name.endswith('.png') or cover.name.endswith('.jpeg') or cover.name.endswith('.jpeg'):
+			return cover
+		else:
+			raise forms.ValidationError('only png, jpeg, gif format supported')
+
+
+
+
 
 
 

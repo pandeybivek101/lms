@@ -11,7 +11,7 @@
 				<form action="{% url 'issuebooks'%}" method="POST" class="col-lg-8" enctype="multipart/form-data" id="issform" onkeyup="barcodeScanCheck();">
 					{% csrf_token %}
 					{{form|crispy}}
-					<input type="submit" name="submit" class="btn btn-primary" id="issbtn">
+					<input type="submit" name="submit" class="btn btn-primary col-md-12" id="issbtn">
 
 				</form>
 			</div>
