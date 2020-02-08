@@ -235,7 +235,7 @@
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-md-6">
-                               2016 - 2019 &copy; Adminto theme by <a href="">Coderthemes</a> 
+                               Powered By <a href="https://softechpark.com/">Softtechpark</a> 
                            </div>
                            <div class="col-md-6">
                             <div class="text-md-right footer-links d-none d-sm-block">
@@ -331,7 +331,7 @@
         </div> <!-- end inbox-widget -->
         {% endif %}
 
-        {% if request.user.Role == 'Librarian'%}
+        {% if request.user.Role == 'Librarian' or request.user.Role == 'Admin'%}
         <h5 class="pl-3 pr-3">Scan</h5>
         <hr class="mb-0" />
         <a href="{% url 'scan'%}"><img  style="" src="{% static 'assets/images/scanner.png' %}" width="250" height="200"></a>

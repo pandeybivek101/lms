@@ -20,8 +20,6 @@ from django.conf.urls import url
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
-    path('uregister/', views.URegister, name='uregister'),
-    path('sinfo/', views.StudentInfo, name='sinfo'),
     path('login/' ,views.LoginView, name='login'),
     path('logout', views.Logout, name='logout'),
     path('profile/', views.Profile, name='profile'),

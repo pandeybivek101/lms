@@ -6,15 +6,15 @@
 
 		<div class="text-center mb-4">
 			<h4 class="text-uppercase mt-0">Confirm Delete</h4>
-			<p>student:{{object.get_full_name}}</p>
+			<p>catagory:{{catagory.catagory}}</p>
 		</div>
 
-		<form action="{% url 'deletestd' object.id %}" method="POST">
+		<form action="{% url 'catagory-delete' catagory.id %}" method="POST">
 			{% csrf_token %}
 			<input type="" name="" hidden="">
 			<div class="text-center mb-4">
 			<p><button class="btn btn-danger">delete</button>
-				<a class="btn btn-primary" href="{% url 'liststd' %}">Cancel</a>
+				<a class="btn btn-primary" href="{% url 'catagory-list' %}">Cancel</a>
 			</p>
 			</div>
 		</form>

@@ -18,46 +18,11 @@ from django.template.loader import render_to_string
 from .tokens import account_activation_token
 from account.models import User
 from django.core.mail import EmailMessage
+from operations.decorators import *
+
 
 
 # Create your views here.
-
-def URegister(request):
-	if request.method=="POST":
-		form=UserRegistrationForm(request.POST, request.FILES)
-		if form.is_valid():
-			Role=form.cleaned_data['Role']
-			email=form.cleaned_data['email']
-			user=form.save(commit=False)
-			user.is_active = False
-			user.save()
-			sendemail(request, user, email)
-			if Role == "Student":
-			    return redirect('sinfo')
-			return render(request, 'account/user_confirmation.html')
-	else:
-		form=UserRegistrationForm()
-	return render(request, 'account/uregistration.html', {'form':form})
-
-
-
-def StudentInfo(request):
-	if request.method=="POST":
-		form1=StudentForm(request.POST)
-		if form1.is_valid():
-			data=form1.save(commit=False)
-			data.student=User.objects.filter().latest('id')
-			data.save()
-			if request.user.is_authenticated:
-				return redirect('home')
-			elif not request.user.is_active:
-			    return render(request, 'account/user_confirmation.html')
-			else:
-				return redirect('login')
-	else:
-		form1=StudentForm()
-	return render(request, 'account/sinfo.html', {'form1':form1})
-
 
 def LoginView(request):
 	if request.method=="POST":
@@ -70,9 +35,6 @@ def LoginView(request):
 				login(request, user)
 				if not request.POST.get('rememberme'):
 					request.session.set_expiry(0)
-				if request.user.Role == "Student":
-					if not Student.objects.filter(student=request.user).exists():
-						return redirect('sinfo')
 				return redirect('home')
 			else:
 				messages.error(request, 'Invalid Username or password')
@@ -114,34 +76,31 @@ def Profile(request):
 
 @login_required
 def ChangeProfile(request):
-	if request.user.Role=='Student':
+	if request.user.Role=='Student' or request.user.Role=="Librarian":
 		if request.method == 'POST':
-			form1 = UserUpdateForm(request.POST, request.FILES, 
+			form1 = StdLibProfileForm(request.POST, request.FILES, 
 				instance=request.user)
-			form2=StudentForm(request.POST, instance=request.user.student)
-			if form1.is_valid() and form2.is_valid():
+			if form1.is_valid():
 				form1.save()
-				form2.save()
 				return redirect('profile')
 
 		else:
-			form1 = UserUpdateForm(instance=request.user)
-			form2=StudentForm(instance=request.user.student)
+			form1 = StdLibProfileForm(instance=request.user)
 		return render(request, 'account/change-profile.html', 
 			{'form1': form1,
-			'form2':form2
 			})
 	else:
+		
 		if request.method == 'POST':
 			form1 = UserUpdateForm(request.POST, 
-				request.FILES, instance=request.user)
+					request.FILES, instance=request.user)
 			if form1.is_valid():
 				form1.save()
 				return redirect('profile')
 		else:
 			form1 = UserUpdateForm(instance=request.user)
 		return render(request, 'account/change-profile.html', 
-			{'form1': form1,
+				{'form1': form1,
 			})
 
 
@@ -168,7 +127,7 @@ def Supuser(request):
 		if form.is_valid():
 			email=form.cleaned_data['email']
 			user=form.save(commit=False)
-			user.Role='Librarian'
+			user.Role='Admin'
 			user.is_active=False
 			user.is_superuser=True
 			user.is_staff=True

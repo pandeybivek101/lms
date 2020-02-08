@@ -18,7 +18,7 @@
           <a href="{% url 'ebook-catagory' item.catagory  %}" class="dropdown-item">{{item.catagory}}</a>
           {% endfor %}
         </div>
-        {% if request.user.Role == 'Librarian' %}
+        {% if request.user.Role == 'Librarian' or request.user.Role == 'Admin' %}
         <div class="mx-2">
           <a href="{% url 'add-ebooks' %}" class="btn btn-lg btn-success font-16 btn-block waves-effect waves-light">
           <i class="fa fa-plus mr-1"></i> Create New
@@ -39,7 +39,7 @@
             <th>ID</th>
             <th>Books Name</th>
             <th>Author Name</th>
-            {% if request.user.Role == 'Librarian'%}
+           {% if request.user.Role == 'Librarian' or request.user.Role == 'Admin'%}
             <th>Book File</th>
             <th>Action</th>
             {% endif %}
@@ -58,7 +58,7 @@
             <td>{{book.name}}</td>
             <td>{{book.author_name}}</td>
 
-            {% if request.user.Role == 'Librarian'%}
+            {% if request.user.Role == 'Librarian' or request.user.Role == 'Admin'%}
             <td>
               <form method="POST" action="{% url 'view' book.id %}">
                 {% csrf_token %}

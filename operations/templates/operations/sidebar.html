@@ -7,114 +7,156 @@
 
         <li>
             <a href="{% url 'home' %}">
-               <i class="dripicons-home"></i>
-                <span> Dashboard </span>
-            </a>
-        </li>
+             <i class="dripicons-home"></i>
+             <span> Dashboard </span>
+         </a>
+     </li>
 
-        <li>
-            <a href="{% url 'displaybooks'%}">
-                <i class="mdi mdi-view-list"></i>
-                <span> Book List </span>
-            </a>
-        </li>
+     <li>
+        <a href="{% url 'displaybooks'%}">
+            <i class="mdi mdi-view-list"></i>
+            <span> Book List </span>
+        </a>
+    </li>
 
-        <li>
-            <a href="{% url 'list-ebooks'%}">
-                <i class="mdi mdi-view-list"></i>
-                <span> EBook List </span>
-            </a>
-        </li>
+    <li>
+        <a href="{% url 'list-ebooks'%}">
+            <i class="mdi mdi-view-list"></i>
+            <span> EBook List </span>
+        </a>
+    </li>
 
-        {% if request.user.Role == 'Student' %}
-        <li>
-            <a href="{% url 'readable-book'%}">
-                <i class="mdi mdi-view-list"></i>
-                <span>MY Readable Ebooks</span>
-            </a>
-        </li>
+    {% if request.user.Role == 'Student' %}
+    <li>
+        <a href="{% url 'readable-book'%}">
+            <i class="mdi mdi-view-list"></i>
+            <span>MY Readable Ebooks</span>
+        </a>
+    </li>
 
-        <li>
-            <a href="{% url 'myissuedbook'%}">
-                <i class="mdi mdi-view-list"></i>
-                <span>My Issued Books</span>
-            </a>
-        </li>
+    <li>
+        <a href="{% url 'myissuedbook'%}">
+            <i class="mdi mdi-view-list"></i>
+            <span>My Issued Books</span>
+        </a>
+    </li>
 
-        <li>
-            <a href="{% url 'my_fine'%}">
-                <i class="fas fa-money-bill-alt"></i>
-                <span>My Fine Amount</span>
-            </a>
-        </li>
-
-        {% endif %}
-
-        {% if request.user.Role == 'Librarian' %}
-        <li>
-            <a href="{% url 'addbooks'%}">
-                <i class="mdi mdi-texture"></i>
-                <span>Add Books</span>
-            </a>
-        </li>
-
-        <li>
-            <a href="{% url 'add-ebooks'%}">
-                <i class="mdi mdi-texture"></i>
-                <span>Add Ebooks</span>
-            </a>
-        </li>
-
-        <li>
-            <a href="{% url 'view-ebook-request'%}">
-                <i class="mdi mdi-format-font"></i>
-                <span>Ebook Requests</span>
-                {%if issue_requests %}
-                <span class="badge badge-danger float-right">{{issue_requests}}</span>
-                {% endif %}
-            </a>
-        </li>
-
-        <li>
-            <a href="{% url 'issuebooks'%}">
-                <i class="mdi mdi-format-font"></i>
-                <span>Issue Books</span>
-            </a>
-        </li>
-
-        <li>
-            <a href="{% url 'ebook-activities'%}">
-                <i class="dripicons-view-list-large"></i>
-                <span> EBook Records </span>
-            </a>
-        </li>
-
-        <li>
-            <a href="{% url 'issue-activities'%}">
-                <i class="mdi mdi-page-layout-sidebar-left"></i>
-                <span> Issue Records </span>
-            </a>
-        </li>
-
-        <li>
-            <a href="{% url 'issuedbooks'%}">
-                <i class="mdi mdi-format-font"></i>
-                <span>Return Books</span>
-            </a>
-        </li>
+    <li>
+        <a href="{% url 'my_fine'%}">
+            <i class="fas fa-money-bill-alt"></i>
+            <span>My Fine Amount</span>
+        </a>
+    </li>
 
 
-        <li>
-            <a href="{% url 'liststd'%}">
-                <i class="mdi mdi-format-font"></i>
-                <span> All Student Info </span>
-            </a>
-        </li>
+    {% else %}
+
+    {% if request.user.Role == 'Admin' %}
+    <li>
+        <a href="javascript: void(0);">
+            <i class="mdi mdi-google-pages"></i>
+            <span> Catagory </span>
+            <span class="menu-arrow"></span>
+        </a>
+        <ul class="nav-second-level" aria-expanded="false">
+            <li><a href="{% url 'addcatagory' %}">Add Catagory</a></li>
+            <li><a href="{% url 'catagory-list'%}">List Catagory</a></li>
+        </ul>
+    </li>
+
+    <li>
+        <a href="javascript: void(0);">
+            <i class="mdi mdi-google-pages"></i>
+            <span> Librarian </span>
+            <span class="menu-arrow"></span>
+        </a>
+        <ul class="nav-second-level" aria-expanded="false">
+            <li><a href="{% url 'member-add'%}">Add Librarian</a></li>
+            <li><a href="{% url 'listlib' %}">List Librarian</a></li>
+        </ul>
+    </li>
+
+    <li>
+        <a href="javascript: void(0);">
+            <i class="mdi mdi-google-pages"></i>
+            <span> Students </span>
+            <span class="menu-arrow"></span>
+        </a>
+        <ul class="nav-second-level" aria-expanded="false">
+            <li><a href="{% url 'add-student'%}">Add Students</a></li>
+            <li><a href="{% url 'liststd'%}">List Students</a></li>
+        </ul>
+    </li>
+
+    {% endif %}
 
 
+    <li>
+        <a href="{% url 'addbooks'%}">
+            <i class="mdi mdi-texture"></i>
+            <span>Add Books</span>
+        </a>
+    </li>
 
-        {% endif %}
-    </ul>
+    <li>
+        <a href="{% url 'add-ebooks'%}">
+            <i class="mdi mdi-texture"></i>
+            <span>Add Ebooks</span>
+        </a>
+    </li>
+
+    <li>
+        <a href="{% url 'view-ebook-request'%}">
+            <i class="mdi mdi-format-font"></i>
+            <span>Ebook Requests</span>
+            {%if issue_requests %}
+            <span class="badge badge-danger float-right">{{issue_requests}}</span>
+            {% endif %}
+        </a>
+    </li>
+
+    <li>
+        <a href="{% url 'issuebooks'%}">
+            <i class="mdi mdi-format-font"></i>
+            <span>Issue Books</span>
+        </a>
+    </li>
+
+    <li>
+        <a href="{% url 'ebook-activities'%}">
+            <i class="dripicons-view-list-large"></i>
+            <span> EBook Records </span>
+        </a>
+    </li>
+
+    <li>
+        <a href="{% url 'issue-activities'%}">
+            <i class="mdi mdi-page-layout-sidebar-left"></i>
+            <span> Issue Records </span>
+        </a>
+    </li>
+
+    <li>
+        <a href="{% url 'issuedbooks'%}">
+            <i class="mdi mdi-format-font"></i>
+            <span>Return Books</span>
+        </a>
+    </li>
+
+
+{% if request.user.Role == 'Librarian' %}    
+<li>
+        <a href="{% url 'liststd'%}">
+            <i class="mdi mdi-format-font"></i>
+            <span> All Student Info </span>
+        </a>
+    </li>
+
+{% endif %}
+
+
+    {% endif %}
+</ul>
 </li>
 </ul>
 </li>

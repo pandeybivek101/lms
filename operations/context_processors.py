@@ -17,7 +17,7 @@ def my_context_processor(request):
 
 
 def get_all_catagory(request):
-    catagories=Catagory.objects.all()
+    catagories=Catagory.objects.all().order_by('catagory')
     return {'catagories':catagories}
 
 

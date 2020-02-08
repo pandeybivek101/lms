@@ -9,6 +9,9 @@ from account.models import User
 
 class Catagory(models.Model):
 	catagory = models.CharField(max_length=100)
+	catagory_added_by=models.ForeignKey(settings.AUTH_USER_MODEL, 
+		on_delete=models.CASCADE, null=True)
+	created_on=models.DateTimeField(auto_now_add=True, null=True)
 
 	def __str__(self):
 		return self.catagory
@@ -53,6 +56,7 @@ class IssueBooks(models.Model):
 
 	def count_issued(self):
 		count=self.object.count()
+		return count
 
 
 	def __init__(self, *args ,**kwargs):

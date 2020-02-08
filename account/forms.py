@@ -2,38 +2,51 @@ from django import forms
 from .models import *
 from account.models import User
 from django.contrib.auth.forms import UserCreationForm
-
-class UserRegistrationForm(UserCreationForm):
+ 
+	
+class UserRegistrationForm(forms.ModelForm):
 	class Meta:
 		model=User
-		fields=[
-		'username', 
-		'email',
-		'password1',
-		'password2',
-		'first_name',
-		'last_name',
-		'Role',
-		'profile_pic',
-		'contact'
-		]
-		exclude=('password',)
+		fields=['first_name', 
+		'last_name', 
+		'email', 
+		'contact', 
+		'profile_pic']
 
-	def clean_email(self):
+
+	'''def clean_email(self):
 		email=self.cleaned_data['email']
 		if User.objects.filter(email=email).exists():
 			raise forms.ValidationError('Email Already Taken')
+		else:
+			return email'''
+
+	def clean_email(self):
+		email=self.cleaned_data['email']
+		usr=User.objects.filter(email=email)
+		if usr.exists():
+			usr_check=usr.first()
+			if usr_check.id==self.instance.pk:
+				return email
+			else:
+			    raise forms.ValidationError('Email Already Taken')
 		else:
 			return email
 
 	def clean_contact(self):
 		contact=self.cleaned_data['contact']
-		if User.objects.filter(contact=contact).exists():
-			raise forms.ValidationError('Contact Already Taken')
+		usr=User.objects.filter(contact=contact)
+		if usr.exists():
+			usr_check=usr.first()
+			if usr_check.id==self.instance.pk:
+				return contact
+			else:
+			    raise forms.ValidationError('Contact Already Taken')
 		elif not contact.isdigit():
 			raise forms.ValidationError('Contact cannot be Alphabet')
 		else:
-			return contact	
+			return contact
+
 
 class StudentForm(forms.ModelForm):
 	class Meta:
@@ -85,3 +98,24 @@ class SupUserRegistrationForm(UserCreationForm):
 		'contact',
 		]
 		exclude=('password',)
+
+	def clean_contact(self):
+		contact=self.cleaned_data['contact']
+		usr=User.objects.filter(contact=contact)
+		if usr.exists():
+			usr_check=usr.first()
+			if usr_check.id==self.instance.pk:
+				return contact
+			else:
+			    raise forms.ValidationError('Contact Already Taken')
+		elif not contact.isdigit():
+			raise forms.ValidationError('Contact cannot be Alphabet')
+		else:
+			return contact
+
+
+class StdLibProfileForm(forms.ModelForm):
+	class Meta:
+		model=User
+		fields=['profile_pic','username']
+

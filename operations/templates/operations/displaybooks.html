@@ -4,7 +4,7 @@
 <div class="row">
   <div class="col-12">
     <div class="card-box table-responsive">
-      <h4 class="mt-0 header-title">Multi item selection</h4>
+      <h4 class="mt-0 header-title">Book Lists</h4>
 
       <div class="btn-group dropdown mt-1">
         <button type="button" class="btn btn-success waves-effect waves-light">Catagories</button>
@@ -16,7 +16,7 @@
           <a href="{% url 'book-catagory' item.catagory  %}" class="dropdown-item">{{item.catagory}}</a>
           {% endfor %}
         </div>
-        {% if request.user.Role == 'Librarian' %}
+        {% if request.user.Role == 'Librarian' or request.user.Role == 'Admin'%}
         <div class="mx-2">
           <a href="{% url 'addbooks' %}" class="btn btn-lg btn-success font-16 btn-block waves-effect waves-light">
           <i class="fa fa-plus mr-1"></i> Create New
@@ -40,7 +40,7 @@
               <th>Books Image</th>
               <th>Author Name</th>
               <th>Publication Name</th>
-              {% if request.user.Role == 'Librarian' %}
+              {% if request.user.Role == 'Librarian' or request.user.Role == 'Admin' %}
               <th>Total Quantity</th>
               <th>Available Quantity</th>
               <th>Barcode</th>
@@ -63,7 +63,7 @@
               <td>{{book.books_author_name}}</td>
               <td>{{book.books_publication_name}}</td>
 
-              {% if request.user.Role == 'Librarian'%}
+              {% if request.user.Role == 'Librarian' or request.user.Role == 'Admin'%}
               <td>{{book.books_quantity}}</td> 
               <td>{{book.available_quantity}}</td> 
               {% if book.barcode %}

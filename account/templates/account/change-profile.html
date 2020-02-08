@@ -12,7 +12,7 @@
 					{% csrf_token %}
 					{{form1|crispy}}
 					{% if request.user.Role == "Student" %}
-					{{form2|crispy}}
+					{{form1|crispy}}
 					{% endif %}
 					<button class="btn btn-primary btn-rounded waves-effect waves-light">Change Profile</button>
 				</form> 

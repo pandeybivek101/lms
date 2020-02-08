@@ -1,0 +1,25 @@
+{% extends 'operations/index.html'%}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="card">
+
+    <div class="card-body p-4">
+
+        <div class="text-center mb-4">
+            <h4 class="text-uppercase mt-0">Add Student</h4>
+        </div>
+
+        <form  method="POST" action="{% url 'add-student'%}" enctype="multipart/form-data" id='regform' onsubmit="checkForm();">
+            {% csrf_token %}
+            {{form1|crispy}}
+            {{form2|crispy}}
+            <div class="form-group mb-0 text-center">
+                <button class="btn btn-primary btn-block" type="submit"> Add </button>
+            </div>
+
+        </form>
+
+    </div> <!-- end card-body -->
+</div>
+<!-- end card -->
+{% endblock %}

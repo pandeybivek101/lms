@@ -32,7 +32,19 @@ urlpatterns = [
         views.ViewMessageDetail, name='view-msg-detail'),
     
     path('direct-view/<int:id>/', views.DirectView, name='direct-view'),
+
     path('search', views.Search, name='search'),
+
+    path('add-librarian/', views.Addmember, name='member-add'),
+    path('add-student/', views.AddStudent, name='add-student'),
+
+    path('addcatagory/', views.AddCatagory, name='addcatagory'),
+    path('catagory-list/', views.ListCatagory, name='catagory-list'),
+    path('catagory-list/<int:pk>/edit', EditCatagory.as_view(), 
+        name='catagory-edit'),
+    path('catagory-list/<int:pk>/delete', DeleteCatagory.as_view(), 
+        name='catagory-delete'),
+    #path('sinfo/', views.StudentInfo, name='sinfo'),
 
 
     path('issuebooks', views.IssueBook, name='issuebooks'),
@@ -49,12 +61,20 @@ urlpatterns = [
     path('addbooks', views.AddBook, name='addbooks'),
 
     path('liststd', ListStd.as_view(), name='liststd'),
+    path('list-librarian', views.LibrarianView, name='listlib'),
+    path('list-librarian/<int:id>/edit', views.EditLibrarian, 
+        name='editlib'),
+
     #path('liststd/<int:pk>/delete', DeleteStd.as_view(), name='deletestd'),
     path('liststd/<int:id>/active', views.Activatestd, name='activate'),
     path('liststd/<int:id>/inactive', views.InActivatestd, name='inactivate'),
     path('liststd/<str:id>/std-barcode', views.printBarCode, name='st-barcode'),
     path('liststd/<int:id>/detail', views.StdDetail, name='std-detail'),
     path('liststd/<int:id>/detail/message', views.Messagestd, name='msg_std'),
+    path('liststd/<int:id>/edit', views.EditStudent, 
+       name='editstd'),
+    path('liststd/<int:pk>/delete', DeleteStd.as_view(), 
+        name='deletestd'),
 
     path('displaybooks', DisplayBooks.as_view(), name='displaybooks'),
     path('displaybooks/<str:catagory>', Bookcatagorylist.as_view(), name='book-catagory'),

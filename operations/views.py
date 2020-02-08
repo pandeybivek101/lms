@@ -26,6 +26,7 @@ from itertools import chain
 from django.utils.decorators import method_decorator
 from twilio.rest import Client
 from twilio.rest import TwilioRestClient
+from account.forms import *
 
 
 
@@ -38,16 +39,23 @@ def Home(request):
 
     
 @login_required
-@role_required(allowed_roles=['Librarian'])
+@role_required(allowed_roles=['Librarian', 'Admin'])
 def Scan(request):
     return render(request, 'operations/quagga.html',
         {})
 
 
 @login_required
-@role_required(allowed_roles=['Librarian'])
+@role_required(allowed_roles=['Librarian', 'Admin'])
 def ScanError(request):
     return render(request, 'operations/notfound.html',
+        {})
+
+
+@login_required
+@role_required(allowed_roles=['Admin'])
+def ListCatagory(request):
+    return render(request, 'operations/list-catagory.html',
         {})
 
 
@@ -97,7 +105,7 @@ class ListEbooks(LoginRequiredMixin, ListView):
         return context
 
 
-@method_decorator(role_required(allowed_roles=['Librarian']), 
+@method_decorator(role_required(allowed_roles=['Librarian', 'Admin']), 
     name='dispatch')
 class ListStd(LoginRequiredMixin, ListView):
     template_name='operations/liststd.html'
@@ -106,7 +114,7 @@ class ListStd(LoginRequiredMixin, ListView):
 
 
 @login_required
-@role_required(allowed_roles=['Librarian'])
+@role_required(allowed_roles=['Librarian', 'Admin'])
 def AddBook(request):
     if request.method=='POST':
         form=AddBooksForm(request.POST, request.FILES)
@@ -151,7 +159,7 @@ class DisplayBooks(LoginRequiredMixin, ListView):
 
 
 
-@method_decorator(role_required(allowed_roles=['Librarian']), 
+@method_decorator(role_required(allowed_roles=['Librarian', 'Admin']), 
     name='dispatch')
 class DeleteBook(LoginRequiredMixin, DeleteView):
     model = AddBooks
@@ -162,7 +170,7 @@ class DeleteBook(LoginRequiredMixin, DeleteView):
 
 
 
-@method_decorator(role_required(allowed_roles=['Librarian']), 
+@method_decorator(role_required(allowed_roles=['Librarian', 'Admin']), 
     name='dispatch')
 class EditBook(LoginRequiredMixin, UpdateView):
     model = AddBooks
@@ -182,7 +190,7 @@ class EditBook(LoginRequiredMixin, UpdateView):
 
 
 
-
+@role_required(allowed_roles=['Librarian', 'Admin'])
 def Messagestd(request, id):
     msg_std=User.objects.get(id=id)
     if request.method=='POST':
@@ -202,36 +210,26 @@ def Messagestd(request, id):
 
 
 
-@method_decorator(role_required(allowed_roles=['Librarian']), 
-    name='dispatch')
-class DeleteStd(LoginRequiredMixin, DeleteView):
-    model = User
-    template_name = 'operations/deletestd.html'
-    
-    def get_success_url(self):
-        return reverse_lazy("liststd")
-
-
 @login_required
-@role_required(allowed_roles=['Librarian'])
+@role_required(allowed_roles=['Librarian', 'Admin'])
 def Activatestd(request, id):
     std=User.objects.get(id=id)
     std.is_active=True
     std.save()
-    return redirect('liststd')
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 @login_required
-@role_required(allowed_roles=['Librarian'])
+@role_required(allowed_roles=['Librarian', 'Admin'])
 def InActivatestd(request, id):
     std=User.objects.get(id=id)
     std.is_active=False
     std.save()
-    return redirect('liststd')
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 @login_required
-@role_required(allowed_roles=['Librarian'])
+@role_required(allowed_roles=['Librarian', 'Admin'])
 def EditStudent(request, id):
     student=SRegistration.objects.get(id=id)
     form=form1(request.POST or None, instance=student)
@@ -247,7 +245,7 @@ def EditStudent(request, id):
 
 from django.contrib import messages
 @login_required
-@role_required(allowed_roles=['Librarian'])
+@role_required(allowed_roles=['Librarian', 'Admin'])
 def IssueBook(request):
     if request.method=="POST":
         form=IssuebookForm(request.POST)
@@ -267,7 +265,7 @@ def IssueBook(request):
 
 
 @login_required
-@role_required(allowed_roles=['Librarian'])
+@role_required(allowed_roles=['Librarian', 'Admin'])
 def IssueBookconfirm(request):
     studentinfo=User.objects.get(id=request.session['issue_std_id'])
     bookinfo=AddBooks.objects.get(id=request.session['issue_book_id'])
@@ -296,7 +294,7 @@ def IssueBookconfirm(request):
 
 
 @login_required
-@role_required(allowed_roles=['Librarian'])
+@role_required(allowed_roles=['Librarian', 'Admin'])
 def ReturnBooks(request, pk):
     rtnbook=IssueBooks.objects.get(pk=pk)
     rtnbook.returned=True
@@ -339,7 +337,7 @@ def ReturnBooks(request, pk):
         )
 
 @login_required
-@role_required(allowed_roles=['Librarian'])
+@role_required(allowed_roles=['Librarian', 'Admin'])
 def IssuedBook(request):
     issueditems=IssueBooks.objects.filter(returned=False)
     return render(request, 
@@ -349,7 +347,7 @@ def IssuedBook(request):
 
 
 @login_required
-@role_required(allowed_roles=['Librarian'])
+@role_required(allowed_roles=['Librarian', 'Admin'])
 def AddEbooks(request):
     if request.method == 'POST':
         form = EbooksForm(request.POST, request.FILES)
@@ -364,7 +362,7 @@ def AddEbooks(request):
 
 
 @login_required
-@role_required(allowed_roles=['Librarian'])
+@role_required(allowed_roles=['Librarian', 'Admin'])
 def printBarCode(request, id):
     std=User.objects.get(id=id)
     if not std.barcode:
@@ -407,7 +405,7 @@ def EBookRequest(request, id):
 
 
 @login_required
-@role_required(allowed_roles=['Librarian'])
+@role_required(allowed_roles=['Librarian', 'Admin'])
 def ViewEbookRequest(request):
     requests=EbookRequest.objects.all()
     return render(request, 'operations/ebook-request.html', 
@@ -415,7 +413,7 @@ def ViewEbookRequest(request):
 
 
 @login_required
-@role_required(allowed_roles=['Librarian'])
+@role_required(allowed_roles=['Librarian', 'Admin'])
 def View_Ebook_Request_allow(request, id):
     req=EbookRequest.objects.get(id=id)
     ebook_record=Ebooks.objects.get(id=req.ebook.id)
@@ -434,7 +432,7 @@ def View_Ebook_Request_allow(request, id):
 
 
 @login_required
-@role_required(allowed_roles=['Librarian'])
+@role_required(allowed_roles=['Librarian', 'Admin'])
 def View_Ebook_Request_deny(request, id):
     req=EbookRequest.objects.get(id=id)
     ebook_record=Ebooks.objects.get(id=req.ebook.id)
@@ -454,7 +452,7 @@ def View_Ebook_Request_deny(request, id):
 
 
 @login_required
-@role_required(allowed_roles=['Librarian'])
+@role_required(allowed_roles=['Librarian', 'Admin'])
 def BookprintBarCode(request, id):
     book=AddBooks.objects.get(id=id)
     if not book.barcode:
@@ -505,7 +503,7 @@ class Bookcatagorylist(LoginRequiredMixin, ListView):
 
 
 
-@method_decorator(role_required(allowed_roles=['Librarian']), 
+@method_decorator(role_required(allowed_roles=['Librarian', 'Admin']), 
     name='dispatch')
 class DeleteEBooks(LoginRequiredMixin, DeleteView):
     model = Ebooks
@@ -516,7 +514,7 @@ class DeleteEBooks(LoginRequiredMixin, DeleteView):
 
 
 
-@method_decorator(role_required(allowed_roles=['Librarian']), 
+@method_decorator(role_required(allowed_roles=['Librarian', 'Admin']), 
     name='dispatch')
 class EditEbooks(LoginRequiredMixin, UpdateView):
     model = Ebooks
@@ -537,7 +535,7 @@ def NotifyMe(request, id):
 
 
 @login_required
-@role_required(allowed_roles=['Librarian'])
+@role_required(allowed_roles=['Librarian', 'Admin'])
 def StdDetail(request, id):
     total=0
     try:
@@ -681,7 +679,7 @@ def ViewMessageDetail(request, id):
         )
 
 
-@method_decorator(role_required(allowed_roles=['Librarian']), 
+@method_decorator(role_required(allowed_roles=['Librarian', 'Admin']), 
     name='dispatch')
 class IssueActivities(ListView, LoginRequiredMixin):
     template_name='operations/issue-activities.html'
@@ -698,7 +696,7 @@ class IssueActivities(ListView, LoginRequiredMixin):
 
 
 
-@method_decorator(role_required(allowed_roles=['Librarian']), 
+@method_decorator(role_required(allowed_roles=['Librarian', 'Admin']), 
     name='dispatch')
 class EbookActivities(ListView, LoginRequiredMixin):
     template_name='operations/ebook-activities.html'
@@ -728,7 +726,7 @@ def MYFine(request):
 
 
 @login_required
-@role_required(allowed_roles=['Librarian'])
+@role_required(allowed_roles=['Librarian', 'Admin'])
 def RenewBooks(request, id):
     renew_item=IssueBooks.objects.get(id=id)
     if renew_item.renewed==False:
@@ -742,7 +740,135 @@ def RenewBooks(request, id):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
-        
+
+@login_required
+@role_required(allowed_roles=['Admin'])
+def Addmember(request):
+    if request.method=="POST":
+        form = UserRegistrationForm(request.POST)
+        if form.is_valid():
+            email=form.cleaned_data['email']
+            data=form.save(commit=False)
+            data.username=email.split('@')[0]
+            data.Role="Librarian"
+            data.is_active=True
+            data.save()
+            return redirect('home')
+    else:
+        form = UserRegistrationForm()
+    return render(request,'operations/addmember.html', {'form':form})
+
+@login_required
+@role_required(allowed_roles=['Admin'])
+def AddCatagory(request):
+    if request.method=="POST":
+        form=AddCatagoryForm(request.POST)
+        if form.is_valid():
+            catg=form.save(commit=False)
+            catg.catagory_added_by=request.user
+            catg.save()
+            return redirect('home')
+    else:
+        form=AddCatagoryForm()
+    return render(request, 'operations/addcatagory.html',{'form':form})
+
+
+@login_required
+@role_required(allowed_roles=['Admin'])
+def AddStudent(request):
+    if request.method=="POST":
+        form1=UserRegistrationForm(request.POST)
+        form2=StudentForm(request.POST)
+        if form1.is_valid() and form2.is_valid():
+            email=form1.cleaned_data['email']
+            year= form2.cleaned_data['year']
+            enrollment=form2.cleaned_data['Enrollment']
+            data=form1.save(commit=False)
+            splitted_email=email.split('@')[0]
+            data.username=splitted_email
+            data.Role="Student"
+            data.is_active=True
+            data.save()
+            instance=User.objects.filter(username=splitted_email).first()
+            std_rec=Student.objects.filter(student=instance).first()
+            std_rec.year=year
+            std_rec.Enrollment=enrollment
+            std_rec.save()
+            return redirect('home')
+    else:
+        form1=UserRegistrationForm()
+        form2=StudentForm()
+    return render(request, 'operations/addstudent.html', {'form1':form1,
+        'form2':form2})
+
+
+@login_required
+@role_required(allowed_roles=['Admin'])
+def LibrarianView(request):
+    librarians=User.objects.filter(Role="Librarian")
+    return render(request, 'operations/librarian-list.html', 
+        {'librarians':librarians})
+
+
+@method_decorator(role_required(allowed_roles=['Admin']), 
+    name='dispatch')
+class EditCatagory(LoginRequiredMixin, UpdateView):
+    model = Catagory
+    form_class = AddCatagoryForm
+    template_name = 'operations/editcatagory.html'
+    context_object_name = 'catagory'
+    success_url = reverse_lazy("catagory-list")
+
+
+@method_decorator(role_required(allowed_roles=['Admin']), 
+    name='dispatch')
+class DeleteCatagory(LoginRequiredMixin, DeleteView):
+    model = Catagory
+    template_name = 'operations/delete-catagory.html'
+    context_object_name = 'catagory'
+    success_url = reverse_lazy("catagory-list")
+
+
+@method_decorator(role_required(allowed_roles=['Admin']), 
+    name='dispatch')
+class DeleteStd(LoginRequiredMixin, DeleteView):
+    model = User
+    template_name = 'operations/deletestd.html'
+    
+    def get_success_url(self):
+        return reverse_lazy("home")
+
+
+@login_required
+@role_required(allowed_roles=['Librarian', 'Admin'])
+def EditLibrarian(request, id):
+    librarian=User.objects.get(id=id)
+    form=UserRegistrationForm(request.POST or None, instance=librarian)
+    if form.is_valid():
+        form.save()
+        return redirect("listlib")
+    else:
+        return render(request,'operations/edit-librarian.html', 
+            {'librarian':librarian,
+             'form':form})
+
+@login_required
+@role_required(allowed_roles=['Librarian', 'Admin'])
+def EditStudent(request, id):
+    usr=User.objects.get(id=id)
+    std=Student.objects.filter(student=usr).first()
+    form1=UserRegistrationForm(request.POST or None, instance=usr)
+    form2=StudentForm(request.POST or None, instance=std)
+    if form1.is_valid() and form2.is_valid():
+        form1.save()
+        form2.save()
+        return redirect("liststd")
+    else:
+        return render(request,'operations/edit-std.html', 
+            {'usr':usr,
+            'std':std,
+            'form2':form2,
+             'form1':form1})
 
 
 

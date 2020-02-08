@@ -2,11 +2,11 @@
 {% load static %}
 {% block content %}
 
-{% if stdrecord%}
+{% if librarians%}
 <div class="row">
   <div class="col-12">
     <div class="card-box table-responsive">
-      <h4 class="mt-0 header-title">All Student Information</h4>
+      <h4 class="mt-0 header-title">All Librarian Information</h4>
       <p class="text-muted font-14 mb-3"></p>
 
 
@@ -18,25 +18,19 @@
            <th> Lastname </th>
            <th> Username</th>
            <th> Contact</th>
-           <th>Get Barcode</th>
            <th>Status</th>
            <th>detail</th>
            <th>Action</th>
          </tr>
        </thead>
        <tbody>
-         {% for std in stdrecord.all %}
+         {% for std in librarians.all %}
          <tr>
           <td>{{std.id}}</td>
           <td>{{std.first_name}}</td>
           <td>{{std.last_name}}</td>
           <td>{{std.username}}</td>
           <td>{{std.contact}}</td>
-          {% if std.barcode %}
-          <td><button onClick="printJS('{{std.barcode.url}}', 'image')" class="btn btn-secondary"><i class="fa fa-print" aria-hidden="true"></i></button></td>
-          {%else %}
-          <td><a href="{% url 'st-barcode' std.id %}"><button class="btn btn-warning">BarCode</button></a></td>
-          {% endif %}
           <td>
           {%if std.is_active == True %}
             <a href="{% url 'inactivate' std.id%}">
@@ -50,16 +44,14 @@
           </td>
           <td><a href="{% url 'std-detail' std.id%}">
           <button class="btn btn-info">detail</button></a></td>
-          <td>
-            {% if request.user.Role == 'Admin'%}
-            <a href="{%url 'deletestd' std.id%}"><button class="btn btn-danger"><i class="fas fa-trash"></i></button></a>
-            {% endif  %}
 
-            {% if request.user.Role == 'Admin' or request.user.Role == 'Librarian'%}
-            <a href="{%url 'editstd' std.id%}"><button class="btn btn-warning"><i class="fas fa-edit"></i></button></a>
-            {% endif %}
+          <td>
+            <a href="{%url 'deletestd' std.id%}"><button class="btn btn-danger"><i class="fas fa-trash"></i></button></a>
+  
+            <a href="{%url 'editlib' std.id%}"><button class="btn btn-warning"><i class="fas fa-edit"></i></button></a>
           </td>
           {% endfor %}
+
         </tr>
       </tbody>                                 
     </table>

@@ -1,12 +1,15 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
+from django.dispatch import receiver 
+from django.db.models.signals import post_save
 
 # Create your models here.
 class User(AbstractUser):
 	CHOICES = (
         ('Librarian', 'Librarian'),
         ('Student', 'Student'),
+        ('Admin', 'Admin'),
     )
 	Role=models.CharField(max_length=20, 
 		choices=CHOICES, 
@@ -17,31 +20,8 @@ class User(AbstractUser):
 	contact=models.CharField(max_length=100)
 	is_active=models.BooleanField(default=False)
 
-
-class StudentModel(models.Model):
-	first_name=models.CharField(max_length=100)
-	middle_name=models.CharField(max_length=100, blank=True, null=True)
-	last_name=models.CharField(max_length=100)
-	email=models.EmailField()
-	contact=models.CharField(max_length=15)
-	gender=(
-		('Male', 'Male'),
-		('Female', 'Female'),
-		)
-	gender=models.CharField(max_length=100, choices=gender)
-	DOB=models.DateField()
-	Faculty=models.CharField(max_length=100)
-	year=models.CharField(max_length=100)
-	Course=models.CharField(max_length=100)
-	section=models.CharField(max_length=100)
-	barcode=models.ImageField(blank=True, null=True)
-	student=models.OneToOneField(settings.AUTH_USER_MODEL, 
-		on_delete=models.CASCADE, 
-		blank=True,
-		null=True)
-
-	def __str__(self):
-		return self.first_name
+	#def __str__(self):
+		#return self.username
 	
 
 
@@ -60,4 +40,27 @@ class Student(models.Model):
 	year=models.CharField(max_length=20, choices=year)
 	student=models.OneToOneField(settings.AUTH_USER_MODEL, 
 		on_delete=models.CASCADE, null=True)
-	
+
+	#def __str__(self):
+		#return self.student
+
+
+
+@receiver(post_save, sender = User)
+def create_user_profile(sender, instance, created, **kwargs):
+	if created:
+		Student.objects.create(student = instance)
+
+
+'''@receiver(post_save, sender = User)
+def save_user_profile(sender, instance, **kwargs):
+	instance.student.save()'''
+
+
+
+
+
+
+
+
+

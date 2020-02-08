@@ -8,7 +8,46 @@
 <h2>Dashboard</h2>
 </div>
 </div>
-{% if request.user.Role == 'Librarian'%}
+
+{% if request.user.Role == 'Student'%}
+<div class="row">
+    <div class="col-xl-6">
+        <div class="card-box">
+            <div class="text-center mb-4">
+            <h4 class="header-title mt-0 mb-3">Ebook Request Records of {{request.user.get_full_name}}</h4>
+            </div>
+            <div class="chartjs-line">
+               <canvas id="line-chart" width="800" height="450"></canvas>
+            </div>
+        </div>
+    </div><!-- end col-->
+
+    <div class="col-xl-6">
+        <div class="card-box">
+            <div class="text-center mb-4">
+            <h4 class="header-title mt-0 mb-3">
+            My fined and Non-fined Records
+            </h4>
+            </div>
+            <div class="chartjs-chart">
+                <canvas id="doughnut1" height="170"></canvas>
+            </div>
+        </div>
+    </div><!-- end col-->
+</div>
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card-box">
+        <div class="text-center mb-4">
+            <h4 class="header-title mt-0 mb-3">Issue And Return Record in Fiseal Year {{curr_date.year}} of {{request.user.username}}</h4>
+            </div>
+            <div class="chartjs-chart">
+               <canvas id="bar-chart-grouped" width="800" height="500"></canvas>
+            </div>
+        </div>
+    </div>
+</div> 
+{% else %}
     <div class="row">
 
         <div class="col-xl-3 col-md-6">
@@ -41,14 +80,14 @@
 
                 <div class="widget-box-2">
                     <div class="widget-detail-2 text-right">
-                        <span class="badge badge-success badge-pill float-left mt-3">32% <i class="mdi mdi-trending-up"></i> </span>
+                        <span class="badge badge-success badge-pill float-left mt-3">0% <i class="mdi mdi-trending-up"></i> </span>
                         <h2 class="font-weight-normal mb-1"> {{ returned_today}} </h2>
                         <p class="text-muted mb-3">Returned today</p>
                     </div>
                     <div class="progress progress-bar-alt-success progress-sm">
                         <div class="progress-bar bg-success" role="progressbar"
                         aria-valuenow="77" aria-valuemin="0" aria-valuemax="100"
-                        style="width: 77%;">
+                        style="width: 1%;">
                         <span class="sr-only">77% Complete</span>
                     </div>
                 </div>
@@ -65,7 +104,7 @@
             <div class="widget-chart-1">
                 <div class="widget-chart-box-1 float-left" dir="ltr">
                     <input data-plugin="knob" data-width="80" data-height="80" data-fgColor="#ffbd4a"
-                    data-bgColor="#FFE6BA" value="80"
+                    data-bgColor="#FFE6BA" value="1"
                     data-skin="tron" data-angleOffset="180" data-readOnly=true
                     data-thickness=".15"/>
                 </div>
@@ -84,14 +123,14 @@
 
             <div class="widget-box-2">
                 <div class="widget-detail-2 text-right">
-                    <span class="badge badge-pink badge-pill float-left mt-3">32% <i class="mdi mdi-trending-up"></i> </span>
+                    <span class="badge badge-pink badge-pill float-left mt-3">0.01% <i class="mdi mdi-trending-up"></i> </span>
                     <h2 class="font-weight-normal mb-1"> {{returned_monthly}} </h2>
                     <p class="text-muted mb-3">Monthly Return</p>
                 </div>
                 <div class="progress progress-bar-alt-pink progress-sm">
                     <div class="progress-bar bg-pink" role="progressbar"
                     aria-valuenow="77" aria-valuemin="0" aria-valuemax="100"
-                    style="width: 77%;">
+                    style="width: 1%;">
                     <span class="sr-only">77% Complete</span>
                 </div>
             </div>
@@ -138,46 +177,6 @@
         </div>
     </div><!-- end col-->
 </div> <!-- container -->
-{% endif %}
-
-{% if request.user.Role == 'Student'%}
-<div class="row">
-    <div class="col-xl-6">
-        <div class="card-box">
-            <div class="text-center mb-4">
-            <h4 class="header-title mt-0 mb-3">Ebook Request Records of {{request.user.get_full_name}}</h4>
-            </div>
-            <div class="chartjs-line">
-               <canvas id="line-chart" width="800" height="450"></canvas>
-            </div>
-        </div>
-    </div><!-- end col-->
-
-    <div class="col-xl-6">
-        <div class="card-box">
-            <div class="text-center mb-4">
-            <h4 class="header-title mt-0 mb-3">
-            My fined and Non-fined Records
-            </h4>
-            </div>
-            <div class="chartjs-chart">
-                <canvas id="doughnut1" height="170"></canvas>
-            </div>
-        </div>
-    </div><!-- end col-->
-</div>
-<div class="row">
-    <div class="col-xl-12">
-        <div class="card-box">
-        <div class="text-center mb-4">
-            <h4 class="header-title mt-0 mb-3">Issue And Return Record in Fiseal Year {{curr_date.year}} of {{request.user.username}}</h4>
-            </div>
-            <div class="chartjs-chart">
-               <canvas id="bar-chart-grouped" width="800" height="500"></canvas>
-            </div>
-        </div>
-    </div>
-</div> 
 {% endif %}
 
 </div> 

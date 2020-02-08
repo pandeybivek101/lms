@@ -38,6 +38,18 @@ class AddBooksForm(forms.ModelForm):
 			'catagory'
 			]
 
+	def clean_books_name(self):
+		books_name=self.cleaned_data['books_name']
+		bookname=AddBooks.objects.filter(books_name=books_name)
+		if bookname.exists():
+			bk_name=bookname.first()
+			if bk_name.id==self.instance.pk:
+				return books_name.title()
+			else:
+			    raise forms.ValidationError('Book Name already exists')
+		else:
+			return books_name.title()
+
 	def clean_books_price(self):
 		books_price=self.cleaned_data['books_price']
 		if books_price <= 0:
@@ -141,6 +153,23 @@ class EbooksForm(forms.ModelForm):
 		model=Ebooks
 		fields=['name', 'book', 'cover_image', 'author_name', 'catagory']
 
+
+	def clean_name(self):
+		name=self.cleaned_data['name']
+		name_query=Ebooks.objects.filter(name=name)
+		if name==None:
+			raise forms.ValidationError('Cannot be empty')
+		if name_query.exists():
+			name_check=name_query.first()
+			if name_check.id==self.instance.pk:
+				return name
+			else:
+			    raise forms.ValidationError("Name of Ebook already Exists")
+		else:
+			return name
+
+
+
 	def clean_book(self):
 		book=self.cleaned_data['book']
 		if book.name.endswith('.pdf') or book.name.endswith('.pdf'):
@@ -148,13 +177,26 @@ class EbooksForm(forms.ModelForm):
 		else:
 			raise forms.ValidationError('only pdf or epub format supported')
 
-	def clean_cover_image(self):
-		cover=self.cleaned_data['cover_image']
-		if cover.name.endswith('.png') or cover.name.endswith('.jpeg') or cover.name.endswith('.jpeg'):
-			return cover
-		else:
-			raise forms.ValidationError('only png, jpeg, gif format supported')
 
+class AddCatagoryForm(forms.ModelForm):
+	class Meta:
+		model=Catagory
+		fields=['catagory']
+		
+
+	def clean_catagory(self):
+		catagory=self.cleaned_data['catagory']
+		catagory_query=Catagory.objects.filter(catagory=catagory)
+		if catagory_query.exists():
+			catagory_check=catagory_query.first()
+			if catagory_check.id==self.instance.pk:
+				return catagory.title()
+			else:
+			    raise forms.ValidationError('Catagory name aalready exists')
+		else:
+			return catagory.title()
+
+			
 
 
 
