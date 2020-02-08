@@ -26,6 +26,7 @@ urlpatterns = [
 
     path('notify-available/<int:id>/cancel', 
         views.CancelNotify, name='cancelnotify'),
+    #path('user-blocked/' ,views.BlockView, name='blocked'),
     
     path('Xab/sup-user', views.Supuser, name='supuser'),
     path('change-profile/', views.ChangeProfile, name='change-profile'),

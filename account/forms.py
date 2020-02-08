@@ -13,14 +13,6 @@ class UserRegistrationForm(forms.ModelForm):
 		'contact', 
 		'profile_pic']
 
-
-	'''def clean_email(self):
-		email=self.cleaned_data['email']
-		if User.objects.filter(email=email).exists():
-			raise forms.ValidationError('Email Already Taken')
-		else:
-			return email'''
-
 	def clean_email(self):
 		email=self.cleaned_data['email']
 		usr=User.objects.filter(email=email)

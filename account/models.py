@@ -52,11 +52,6 @@ def create_user_profile(sender, instance, created, **kwargs):
 		Student.objects.create(student = instance)
 
 
-'''@receiver(post_save, sender = User)
-def save_user_profile(sender, instance, **kwargs):
-	instance.student.save()'''
-
-
 
 
 

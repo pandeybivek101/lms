@@ -40,6 +40,16 @@ INSTALLED_APPS = [
     'operations',
     'crispy_forms',
     'django.contrib.admin',
+    'axes',
+]
+
+
+AUTHENTICATION_BACKENDS = [
+    # AxesBackend should be the first backend in the AUTHENTICATION_BACKENDS list.
+    'axes.backends.AxesBackend',
+
+    # Django ModelBackend is the default authentication backend.
+    'django.contrib.auth.backends.ModelBackend',
 ]
 
 
@@ -52,6 +62,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'axes.middleware.AxesMiddleware',
 ]
 
 ROOT_URLCONF = 'lms.urls'
@@ -174,5 +186,14 @@ DJANGO_TWILIO_BLACKLIST_CHECK = True
 DJANGO_TWILIO_FORGERY_PROTECTION = False
 
 
+SILENCED_SYSTEM_CHECKS = ['axes.W003']
+
+AXES_FAILURE_LIMIT = 6
+AXES_ENABLED=True
+AXES_COOLOFF_TIME=24
+AXES_LOCK_OUT_BY_COMBINATION_USER_AND_IP=True
+AXES_LOCKOUT_TEMPLATE='account/blocked.html'
+AXES_NEVER_LOCKOUT_WHITELIST=True
+AXES_RESET_ON_SUCCESS=True
 
 

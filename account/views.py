@@ -24,13 +24,17 @@ from operations.decorators import *
 
 # Create your views here.
 
+
 def LoginView(request):
 	if request.method=="POST":
 		form=LoginForm(request.POST)
 		if form.is_valid():
 			username=form.cleaned_data['username']
 			password=form.cleaned_data['password']
-			user=authenticate(username=username, password=password)
+			user=authenticate(
+				request=request,
+				username=username, 
+				password=password)
 			if user is not None and user.is_active==True:
 				login(request, user)
 				if not request.POST.get('rememberme'):
@@ -41,6 +45,7 @@ def LoginView(request):
 	else:
 		form=LoginForm()
 	return render(request, 'account/login.html', {'form':form})
+
 
 
 @login_required

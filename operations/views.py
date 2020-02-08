@@ -618,7 +618,7 @@ def ViewEbook(request, id):
 def Search(request):
     query=request.POST.get('qs')
     if query:
-        if request.user.Role=='Librarian':
+        if request.user.Role=='Librarian' or request.user.Role=='Admin':
             stdrecord=User.objects.filter((
                 Q(username__icontains = query) 
                 | Q(first_name__icontains = query) | 
