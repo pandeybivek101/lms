@@ -469,12 +469,9 @@ def BookprintBarCode(request, id):
 @login_required
 @role_required(allowed_roles=['Student'])
 def View_my_readable_book(request):
-    change=EbookRequestHistory.objects.filter(requested_by=request.user)
-    for i in change:
-        if i.readable_upto<datetime.datetime.utcnow().replace(tzinfo=pytz.UTC):
-            i.readable=False
-            i.save()
-    readable_book=EbookRequestHistory.objects.filter(requested_by=request.user, readable=True)
+    readable_book=EbookRequestHistory.objects.filter(requested_by=request.user, 
+        readable=True)
+    print(readable_book)
     return render(request, 'operations/my-readable-book.html', {
         'readable_book':readable_book
         })
@@ -767,7 +764,7 @@ def AddCatagory(request):
             catg=form.save(commit=False)
             catg.catagory_added_by=request.user
             catg.save()
-            return redirect('home')
+            #return redirect('home')
     else:
         form=AddCatagoryForm()
     return render(request, 'operations/addcatagory.html',{'form':form})
@@ -782,7 +779,8 @@ def AddStudent(request):
         if form1.is_valid() and form2.is_valid():
             email=form1.cleaned_data['email']
             year= form2.cleaned_data['year']
-            enrollment=form2.cleaned_data['Enrollment']
+            faculty=form2.cleaned_data['faculty']
+            course=form2.cleaned_data['course']
             data=form1.save(commit=False)
             splitted_email=email.split('@')[0]
             data.username=splitted_email
@@ -792,14 +790,15 @@ def AddStudent(request):
             instance=User.objects.filter(username=splitted_email).first()
             std_rec=Student.objects.filter(student=instance).first()
             std_rec.year=year
-            std_rec.Enrollment=enrollment
+            std_rec.faculty=faculty
+            std_rec.course=course
             std_rec.save()
             return redirect('home')
     else:
         form1=UserRegistrationForm()
         form2=StudentForm()
     return render(request, 'operations/addstudent.html', {'form1':form1,
-        'form2':form2})
+        'form2':form2,})
 
 
 @login_required
@@ -869,6 +868,14 @@ def EditStudent(request, id):
             'std':std,
             'form2':form2,
              'form1':form1})
+
+
+def load_courses(request):
+    faculty_id = request.GET.get('faculty')
+    courses = Course.objects.filter(
+        belonged_faculty=faculty_id).order_by('name')
+    return render(request, 'operations/course_dropdown.html', 
+        {'courses': courses})
 
 
 

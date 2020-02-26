@@ -5,11 +5,9 @@
 
     <div class="card-body p-4">
 
-        <div class="text-center mb-4">
             <h4 class="text-uppercase mt-0">Add Student</h4>
-        </div>
 
-        <form  method="POST" action="{% url 'add-student'%}" enctype="multipart/form-data" id='regform' onsubmit="checkForm();">
+        <form  method="POST" action="{% url 'add-student'%}" enctype="multipart/form-data" id='regform' class="col-lg-8" onsubmit="checkForm();" data-cities-url="{% url 'ajax_load_courses' %}">
             {% csrf_token %}
             {{form1|crispy}}
             {{form2|crispy}}
@@ -22,4 +20,6 @@
     </div> <!-- end card-body -->
 </div>
 <!-- end card -->
+
+
 {% endblock %}

@@ -1,15 +1,17 @@
-{% extends 'operations/index.html'%}
+
+{%extends 'operations/index.html'%}
+{% load static %}
 {% load crispy_forms_tags %}
-{% block content %}
-<div class="card">
 
-    <div class="card-body p-4">
+{% block content%}
+<div class="container-fluid">
 
-        <div class="text-center mb-4">
-            <h4 class="text-uppercase mt-0">Add Member</h4>
-        </div>
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card-box">
 
-        <form  method="POST" action="{% url 'member-add'%}" enctype="multipart/form-data" id='regform' onsubmit="checkForm();">
+                <h4 class="header-title mt-0 mb-3">Add Librarian</h4>
+                <form  method="POST" action="{% url 'member-add'%}" enctype="multipart/form-data" class="col-lg-8" id='regform' onsubmit="checkForm();">
             {% csrf_token %}
             {{form|crispy}}
             <div class="form-group mb-0 text-center">
@@ -17,8 +19,11 @@
             </div>
 
         </form>
+            </div>
+        </div>
+    </div>  
+    {%endblock%}
 
-    </div> <!-- end card-body -->
-</div>
-<!-- end card -->
-{% endblock %}
+{% block title %}
+   <title>Add Librarian-Library Management System</title>
+ {% endblock title %}

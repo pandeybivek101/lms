@@ -10,10 +10,10 @@
 			<div class="card-box">
 
 				<h4 class="header-title mt-0 mb-3">Add Catagory</h4>
-				<form method="POST" action="{%url 'addcatagory'%}" class="col-lg-8">
+				<form method="POST" id="form-catagory-add" action="{%url 'addcatagory'%}" class="col-lg-8 form-catagory-add1">
 					{% csrf_token %}
 					{{form|crispy}}
-					<button class="btn btn-primary col-lg-12">ADD</button>
+					<button type="submit" class="btn btn-primary col-lg-12">ADD</button>
 				</form> 
 			</div>
 		</div>
@@ -23,3 +23,62 @@
 	{% block title %}
 	<title>AddEBooks-Library Management System</title>
 	{% endblock title %}
+
+	{% block js%}
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script
+  src="https://code.jquery.com/jquery-3.4.1.js"
+  integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+  crossorigin="anonymous"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			var catagoryForm=$(".form-catagory-add1")
+
+			catagoryForm.submit(function(event){
+				event.preventDefault();
+
+				
+
+				var thisForm = $(this)
+				var actionEndpoint = thisForm.attr('action');
+				var httpMethod = thisForm.attr('method');
+				var formData = thisForm.serialize();
+
+
+
+				$.ajax({
+					url:actionEndpoint,
+					method:httpMethod,
+					data:formData,
+					success:function(data){
+						Catagoryadded()
+						catagoryForm[0].reset();
+
+
+					},
+					error: function(errorData){
+						console.log('failed');
+						console.log('error', errorData);
+					},
+
+
+				})
+
+			})
+		})
+
+
+		function Catagoryadded(){
+			Swal.fire({
+				type: 'success',
+				text:'catagory has been added successfully',
+				timer:5000,
+				showConfirmButton:!1,
+
+			})
+		}
+
+	</script>
+
+	{%endblock js%}

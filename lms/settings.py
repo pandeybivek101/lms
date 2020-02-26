@@ -45,6 +45,7 @@ INSTALLED_APPS = [
 
 
 AUTHENTICATION_BACKENDS = [
+
     # AxesBackend should be the first backend in the AUTHENTICATION_BACKENDS list.
     'axes.backends.AxesBackend',
 
@@ -180,7 +181,6 @@ EMAIL_USE_SSL=False
 TWILIO_ACCOUNT_SID = ''
 TWILIO_AUTH_TOKEN = ''
 
-phone_num=''
 
 DJANGO_TWILIO_BLACKLIST_CHECK = True
 DJANGO_TWILIO_FORGERY_PROTECTION = False
@@ -195,5 +195,9 @@ AXES_LOCK_OUT_BY_COMBINATION_USER_AND_IP=True
 AXES_LOCKOUT_TEMPLATE='account/blocked.html'
 AXES_NEVER_LOCKOUT_WHITELIST=True
 AXES_RESET_ON_SUCCESS=True
+
+
+
+
 
 

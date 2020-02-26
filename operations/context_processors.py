@@ -2,6 +2,7 @@ from .models import *
 import calendar
 import datetime
 
+
 def my_context_processor(request):
     if request.user.is_authenticated:
         count=Message.objects.filter(posted_to=request.user, read=False).count()
@@ -21,6 +22,7 @@ def get_all_catagory(request):
     return {'catagories':catagories}
 
 
+
 def issue_requests(request):
     issue_requests=EbookRequest.objects.all().count()
     return {'issue_requests':issue_requests}
@@ -35,7 +37,9 @@ def chart(request):
         my_issued=[]
         my_returned=[]
         curr_date=datetime.datetime.utcnow().replace(tzinfo=pytz.UTC)
-
+        issued_t=IssueBooks.objects.filter(
+            issued_date__day=curr_date.day)
+        print(issued_t)
         for i in range(1, 13):
 
             returned_result=IssueBooks.objects.filter(

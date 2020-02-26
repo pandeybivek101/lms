@@ -33,8 +33,7 @@
 
       <div class="bg-picture card-box" id="printdiv">
         <div class="profile-info-name">
-
-
+  
 
           <div class="card-box">
             <table class="main" width="100%" cellpadding="0" cellspacing="0" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; border-radius: 3px;  margin: 0; border: none;">
@@ -98,8 +97,7 @@
                   </tbody></table>
                 </div>
 
-
-
+  
                 <div class="d-print-none">
                   <div class="float-right">
                     <button onclick="printJS('printdiv', 'html')" class="btn btn-dark waves-effect waves-light"><i class="fa fa-print"></i></button> 
@@ -109,7 +107,6 @@
                 <div class="clearfix"></div>
               </div>
             </div>
-
 
             <div class="card-box">
               <h4 class="header-title mt-0 mb-3"><i class="mdi mdi-notification-clear-all mr-1"></i>Messages</h4>
@@ -160,8 +157,12 @@
                   <td>{{std.contact}}</td>
                 </tr> 
                 <tr>
-                  <td>Enrollment</td>
-                  <td>{{course.Enrollment}}</td>
+                  <td>Faculty</td>
+                  <td>{{course.faculty}}</td>
+                </tr>
+                <tr>
+                  <td>Course</td>
+                  <td>{{course.course}}</td>
                 </tr>
                 <tr>
                   <td>Year</td>

@@ -21,7 +21,7 @@
         <form method='POST' action="{% url 'login' %}">
             {% csrf_token %}
             <div class="form-group mb-3">
-                <label for="emailaddress">Username</label>
+                <label for="emailaddress">Username or Email</label>
                 {{form.username}}
             </div>
 

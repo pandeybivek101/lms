@@ -27,6 +27,7 @@ class UserRegistrationForm(forms.ModelForm):
 
 	def clean_contact(self):
 		contact=self.cleaned_data['contact']
+		str_contact=str(contact)
 		usr=User.objects.filter(contact=contact)
 		if usr.exists():
 			usr_check=usr.first()
@@ -34,21 +35,25 @@ class UserRegistrationForm(forms.ModelForm):
 				return contact
 			else:
 			    raise forms.ValidationError('Contact Already Taken')
-		elif not contact.isdigit():
+		elif contact.isalpha():
 			raise forms.ValidationError('Contact cannot be Alphabet')
+		elif len(str_contact) != 10:
+			raise forms.ValidationError('Contact must be of 10 characters')
+		elif str_contact[:2] != "98":
+			raise forms.ValidationError('Contact numbers must starts with 98')
 		else:
 			return contact
 
 
-class StudentForm(forms.ModelForm):
+'''class StudentForm(forms.ModelForm):
 	class Meta:
 		model=Student
-		fields=['Enrollment', 'year']
+		fields=['Enrollment', 'year']'''
 
 class LoginForm(forms.Form):
 	username=forms.CharField(widget=forms.TextInput(
 		attrs={'class':'form-control', 
-		'placeholder':'Enter your Username',
+		'placeholder':'Enter your Username or Email',
 		'id':'username'
 		}), 
 	required=True, max_length=30)
@@ -77,7 +82,7 @@ class UserUpdateForm(forms.ModelForm):
 class StudentForm(forms.ModelForm):
 	class Meta:
 		model=Student
-		fields=['year', 'Enrollment']
+		fields=['year', 'faculty', 'course']
 
 class SupUserRegistrationForm(UserCreationForm):
 	class Meta:
@@ -93,6 +98,7 @@ class SupUserRegistrationForm(UserCreationForm):
 
 	def clean_contact(self):
 		contact=self.cleaned_data['contact']
+		str_contact=str(contact)
 		usr=User.objects.filter(contact=contact)
 		if usr.exists():
 			usr_check=usr.first()
@@ -102,6 +108,10 @@ class SupUserRegistrationForm(UserCreationForm):
 			    raise forms.ValidationError('Contact Already Taken')
 		elif not contact.isdigit():
 			raise forms.ValidationError('Contact cannot be Alphabet')
+		elif len(str_contact) != 10:
+			raise forms.ValidationError('Contact must be of 10 characters')
+		elif str_contact[:2] != "98":
+			raise forms.ValidationError('Contact numbers must starts with 98')
 		else:
 			return contact
 

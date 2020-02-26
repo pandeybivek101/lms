@@ -29,8 +29,13 @@ def LoginView(request):
 	if request.method=="POST":
 		form=LoginForm(request.POST)
 		if form.is_valid():
-			username=form.cleaned_data['username']
+			usr=form.cleaned_data['username']
 			password=form.cleaned_data['password']
+			if '@' in usr:
+				query_set=User.objects.filter(email=usr).first()
+				username=query_set.username
+			else:
+				username=usr
 			user=authenticate(
 				request=request,
 				username=username, 
@@ -40,6 +45,7 @@ def LoginView(request):
 				if not request.POST.get('rememberme'):
 					request.session.set_expiry(0)
 				return redirect('home')
+
 			else:
 				messages.error(request, 'Invalid Username or password')
 	else:

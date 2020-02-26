@@ -37,6 +37,8 @@ urlpatterns = [
 
     path('add-librarian/', views.Addmember, name='member-add'),
     path('add-student/', views.AddStudent, name='add-student'),
+    path('add-student/load-courses/', views.load_courses, 
+        name='ajax_load_courses'),
 
     path('addcatagory/', views.AddCatagory, name='addcatagory'),
     path('catagory-list/', views.ListCatagory, name='catagory-list'),

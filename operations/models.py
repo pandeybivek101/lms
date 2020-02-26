@@ -54,10 +54,6 @@ class IssueBooks(models.Model):
 	renewed_by=models.ForeignKey(settings.AUTH_USER_MODEL, 
 		on_delete=models.CASCADE, null=True, related_name='renewser') 
 
-	def count_issued(self):
-		count=self.object.count()
-		return count
-
 
 	def __init__(self, *args ,**kwargs):
 		super(IssueBooks ,self).__init__(*args, **kwargs)
@@ -90,7 +86,8 @@ class EbookRequest(models.Model):
 
 
 class EbookRequestHistory(models.Model):
-	ebook=models.ForeignKey(Ebooks, on_delete=models.CASCADE,blank=True, null=True)
+	ebook=models.ForeignKey(Ebooks, on_delete=models.CASCADE,blank=True, 
+		null=True)
 	action=models.CharField(max_length=100)
 	requested_by=models.ForeignKey(settings.AUTH_USER_MODEL, 
 		on_delete=models.CASCADE, null=True)
@@ -98,7 +95,15 @@ class EbookRequestHistory(models.Model):
 	action_date=models.DateTimeField()
 	readable_upto=models.DateTimeField(null=True)
 	readable=models.BooleanField()
-				
+
+	def __init__(self, *args, **kwargs):
+		super(EbookRequestHistory ,self).__init__(*args, **kwargs)
+		current_time=datetime.datetime.utcnow().replace(tzinfo=pytz.UTC)
+		if self.readable_upto<current_time:
+			self.readable=False
+			self.save()
+
+			
 
 class Message(models.Model):
 	title=models.CharField(max_length=120)
