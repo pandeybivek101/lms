@@ -37,9 +37,9 @@ def chart(request):
         my_issued=[]
         my_returned=[]
         curr_date=datetime.datetime.utcnow().replace(tzinfo=pytz.UTC)
-        issued_t=IssueBooks.objects.filter(
-            issued_date__day=curr_date.day)
-        print(issued_t)
+        #issued_t=IssueBooks.objects.filter(
+            #issued_date__day=curr_date.day)
+        #print(issued_t)
         for i in range(1, 13):
 
             returned_result=IssueBooks.objects.filter(

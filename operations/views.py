@@ -16,6 +16,8 @@ from django.contrib.auth.decorators import login_required
 from account.models import User
 from .decorators import role_required
 import barcode
+from django.contrib import messages
+from django.contrib.messages.views import SuccessMessageMixin
 from django.conf import settings
 from django.urls import reverse_lazy
 from django.db.models import Q
@@ -200,6 +202,7 @@ def Messagestd(request, id):
             msg.posted_to=msg_std
             msg.posted_by=request.user
             msg.save()
+            messages.success(request, f'Message sent SuccessFully')
             return redirect("/liststd/{}/detail".format(id))
     else:
         form=MessageForm()
@@ -216,6 +219,7 @@ def Activatestd(request, id):
     std=User.objects.get(id=id)
     std.is_active=True
     std.save()
+    messages.success(request, f'Account activation success')
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
@@ -225,6 +229,7 @@ def InActivatestd(request, id):
     std=User.objects.get(id=id)
     std.is_active=False
     std.save()
+    messages.success(request, f'Account Deactivation Success')
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
@@ -235,6 +240,7 @@ def EditStudent(request, id):
     form=form1(request.POST or None, instance=student)
     if form.is_valid():
         form.save()
+        messages.success(request, f'Successfully edited Student Record')
         return redirect("liststd")
     else:
         return render(request,'SRegistration.html', 
@@ -286,6 +292,7 @@ def IssueBookconfirm(request):
         bookinfo.save()
         del request.session['issue_std_id']
         del request.session['issue_book_id']
+        messages.success(request, f'Book Issued Successfully')
         return redirect('issuedbooks')
     return render(request, 'operations/confirm_issue_book.html', {
         'studentinfo':studentinfo,
@@ -353,6 +360,7 @@ def AddEbooks(request):
         form = EbooksForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
+            messages.success(request, f'EBook Added Successfully')
             return redirect('list-ebooks')
     else:
         form = EbooksForm()
@@ -502,9 +510,10 @@ class Bookcatagorylist(LoginRequiredMixin, ListView):
 
 @method_decorator(role_required(allowed_roles=['Librarian', 'Admin']), 
     name='dispatch')
-class DeleteEBooks(LoginRequiredMixin, DeleteView):
+class DeleteEBooks(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
     model = Ebooks
     template_name = 'operations/delete-ebooks.html'
+    success_message = 'Ebooks deleted successfully!!!!'
     
     def get_success_url(self):
         return reverse_lazy("list-ebooks")
@@ -513,10 +522,11 @@ class DeleteEBooks(LoginRequiredMixin, DeleteView):
 
 @method_decorator(role_required(allowed_roles=['Librarian', 'Admin']), 
     name='dispatch')
-class EditEbooks(LoginRequiredMixin, UpdateView):
+class EditEbooks(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Ebooks
     form_class = EbooksForm
     template_name = "operations/ebook-update.html"
+    success_message = 'Ebooks Updated successfully!!!!'
 
 
     def get_success_url(self):
@@ -750,6 +760,7 @@ def Addmember(request):
             data.Role="Librarian"
             data.is_active=True
             data.save()
+            messages.success(request, f'Librarian Added Successfully')
             return redirect('home')
     else:
         form = UserRegistrationForm()
@@ -793,6 +804,7 @@ def AddStudent(request):
             std_rec.faculty=faculty
             std_rec.course=course
             std_rec.save()
+            messages.success(request, f'Student Added Successfully')
             return redirect('home')
     else:
         form1=UserRegistrationForm()
@@ -811,20 +823,22 @@ def LibrarianView(request):
 
 @method_decorator(role_required(allowed_roles=['Admin']), 
     name='dispatch')
-class EditCatagory(LoginRequiredMixin, UpdateView):
+class EditCatagory(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Catagory
     form_class = AddCatagoryForm
     template_name = 'operations/editcatagory.html'
     context_object_name = 'catagory'
+    success_message = 'Catagory updated successfully!!!!'
     success_url = reverse_lazy("catagory-list")
 
 
 @method_decorator(role_required(allowed_roles=['Admin']), 
     name='dispatch')
-class DeleteCatagory(LoginRequiredMixin, DeleteView):
+class DeleteCatagory(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
     model = Catagory
     template_name = 'operations/delete-catagory.html'
     context_object_name = 'catagory'
+    SuccessMessageMixin='Catagory deleted successfully!!!!'
     success_url = reverse_lazy("catagory-list")
 
 
@@ -845,6 +859,7 @@ def EditLibrarian(request, id):
     form=UserRegistrationForm(request.POST or None, instance=librarian)
     if form.is_valid():
         form.save()
+        messages.success(request, f'Updated Successfully')
         return redirect("listlib")
     else:
         return render(request,'operations/edit-librarian.html', 
@@ -861,6 +876,7 @@ def EditStudent(request, id):
     if form1.is_valid() and form2.is_valid():
         form1.save()
         form2.save()
+        messages.success(request, f'Updated Successfully')
         return redirect("liststd")
     else:
         return render(request,'operations/edit-std.html', 

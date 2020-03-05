@@ -8,11 +8,14 @@
 			<div class="card-box">
 
 				<h4 class="header-title mt-0 mb-3">Change Profile</h4>
-				<form action="{% url 'change-profile' %}" method="POST" class="col-lg-8" enctype="multipart/form-data" onsubmit="timeralert()">
+				<form action="{% url 'change-profile' %}" method="POST" class="col-lg-8" enctype="multipart/form-data" onsubmit="">
 					{% csrf_token %}
 					{{form1|crispy}}
-					{% if request.user.Role == "Student" %}
-					{{form1|crispy}}
+					{% if request.user.Role == "Student" or request.user.Role == "Librarian" %}
+					{% endif %}
+
+					{% if request.user.Role == "Admin" %}
+					{{form2|crispy}}
 					{% endif %}
 					<button class="btn btn-primary btn-rounded waves-effect waves-light">Change Profile</button>
 				</form> 

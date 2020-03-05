@@ -93,6 +93,7 @@ def ChangeProfile(request):
 				instance=request.user)
 			if form1.is_valid():
 				form1.save()
+				messages.success(request, f'Profile Changed Successfully')
 				return redirect('profile')
 
 		else:
@@ -103,15 +104,16 @@ def ChangeProfile(request):
 	else:
 		
 		if request.method == 'POST':
-			form1 = UserUpdateForm(request.POST, 
+			form2 = UserUpdateForm(request.POST, 
 					request.FILES, instance=request.user)
-			if form1.is_valid():
-				form1.save()
+			if form2.is_valid():
+				form2.save()
+				messages.success(request, f'Profile Changed Successfully')
 				return redirect('profile')
 		else:
-			form1 = UserUpdateForm(instance=request.user)
+			form2 = UserUpdateForm(instance=request.user)
 		return render(request, 'account/change-profile.html', 
-				{'form1': form1,
+				{'form2': form2,
 			})
 
 
@@ -122,6 +124,7 @@ def change_password(request):
 		if form.is_valid():
 			user = form.save()
 			update_session_auth_hash(request, user)
+			messages.success(request, f'Password Changed Successfully')
 			return redirect('profile')
 
 	else:
@@ -143,6 +146,7 @@ def Supuser(request):
 			user.is_superuser=True
 			user.is_staff=True
 			user.save()
+			messages.success(request, f'Account creation successful')
 			sendemail(request, user, email)
 			return render(request, 'account/user_confirmation.html')
 	else:
@@ -189,5 +193,6 @@ def CancelNotify(request, id):
 	if record.notified == False:
 		record.cancelled=True
 		record.save()
+		messages.success(request, f'Reservation canceled Successfully')
 	return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 

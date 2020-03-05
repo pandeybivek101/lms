@@ -20,8 +20,8 @@
       <th>ID</th>
       <th>Books Name</th>
       <th>Author Name</th>
-      <th>Name</th>
       <th>Action date</th>
+      <th>Name</th>
       <th>UserName</th>
       <th>Action</th>
       </tr>
@@ -33,7 +33,7 @@
         <td>{{book.ebook.name}}</td>
         <td>{{book.ebook.author_name}}</td>
         <td>{{book.action_date|date:"M d, Y"}}</td>
-        <td>{{book.requested_by.first_name}} {{book.requested_by.first_name}}</td>
+        <td>{{book.requested_by.first_name}} {{book.requested_by.last_name}}</td>
         <td>{{book.requested_by.username}}</td>
         {% if book.action == 'Allowed' %}
         <td style="color: blue;"><b>Allowed</b></td>
