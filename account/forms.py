@@ -14,41 +14,10 @@ class UserRegistrationForm(forms.ModelForm):
 		'profile_pic']
 
 	def clean_email(self):
-		email=self.cleaned_data['email']
-		usr=User.objects.filter(email=email)
-		if usr.exists():
-			usr_check=usr.first()
-			if usr_check.id==self.instance.pk:
-				return email
-			else:
-			    raise forms.ValidationError('Email Already Taken')
-		else:
-			return email
+		return validate_email(self)
 
 	def clean_contact(self):
-		contact=self.cleaned_data['contact']
-		str_contact=str(contact)
-		usr=User.objects.filter(contact=contact)
-		if usr.exists():
-			usr_check=usr.first()
-			if usr_check.id==self.instance.pk:
-				return contact
-			else:
-			    raise forms.ValidationError('Contact Already Taken')
-		elif contact.isalpha():
-			raise forms.ValidationError('Contact cannot be Alphabet')
-		elif len(str_contact) != 10:
-			raise forms.ValidationError('Contact must be of 10 characters')
-		elif str_contact[:2] != "98":
-			raise forms.ValidationError('Contact numbers must starts with 98')
-		else:
-			return contact
-
-
-'''class StudentForm(forms.ModelForm):
-	class Meta:
-		model=Student
-		fields=['Enrollment', 'year']'''
+		return validate_contact(self)
 
 class LoginForm(forms.Form):
 	username=forms.CharField(widget=forms.TextInput(
@@ -79,35 +48,10 @@ class UserUpdateForm(forms.ModelForm):
 		'contact'
 		]
 	def clean_email(self):
-		email=self.cleaned_data['email']
-		usr=User.objects.filter(email=email)
-		if usr.exists():
-			usr_check=usr.first()
-			if usr_check.id==self.instance.pk:
-				return email
-			else:
-			    raise forms.ValidationError('Email Already Taken')
-		else:
-			return email
+		return validate_email(self)
 
 	def clean_contact(self):
-		contact=self.cleaned_data['contact']
-		str_contact=str(contact)
-		usr=User.objects.filter(contact=contact)
-		if usr.exists():
-			usr_check=usr.first()
-			if usr_check.id==self.instance.pk:
-				return contact
-			else:
-			    raise forms.ValidationError('Contact Already Taken')
-		elif not contact.isdigit():
-			raise forms.ValidationError('Contact cannot be Alphabet')
-		elif len(str_contact) != 10:
-			raise forms.ValidationError('Contact must be of 10 characters')
-		elif str_contact[:2] != "98":
-			raise forms.ValidationError('Contact numbers must starts with 98')
-		else:
-			return contact
+		return validate_contact(self)
 
 class StudentForm(forms.ModelForm):
 	class Meta:
@@ -127,27 +71,43 @@ class SupUserRegistrationForm(UserCreationForm):
 		exclude=('password',)
 
 	def clean_contact(self):
-		contact=self.cleaned_data['contact']
-		str_contact=str(contact)
-		usr=User.objects.filter(contact=contact)
-		if usr.exists():
-			usr_check=usr.first()
-			if usr_check.id==self.instance.pk:
-				return contact
-			else:
-			    raise forms.ValidationError('Contact Already Taken')
-		elif not contact.isdigit():
-			raise forms.ValidationError('Contact cannot be Alphabet')
-		elif len(str_contact) != 10:
-			raise forms.ValidationError('Contact must be of 10 characters')
-		elif str_contact[:2] != "98":
-			raise forms.ValidationError('Contact numbers must starts with 98')
-		else:
-			return contact
+		return validate_contact(self)
 
 
 class StdLibProfileForm(forms.ModelForm):
 	class Meta:
 		model=User
 		fields=['profile_pic', 'username']
+		
 
+def validate_contact(self):
+	contact=self.cleaned_data['contact']
+	str_contact=str(contact)
+	usr=User.objects.filter(contact=contact)
+	if usr.exists():
+		usr_check=usr.first()
+		if usr_check.id==self.instance.pk:
+			return contact
+		else:
+		    raise forms.ValidationError('Contact Already Taken')
+	elif contact.isalpha():
+		raise forms.ValidationError('Contact cannot be Alphabet')
+	elif len(str_contact) != 10:
+		raise forms.ValidationError('Contact must be of 10 characters')
+	elif str_contact[:2] != "98":
+		raise forms.ValidationError('Contact numbers must starts with 98')
+	else:
+		return contact
+
+
+def validate_email(self):
+	email=self.cleaned_data['email']
+	usr=User.objects.filter(email=email)
+	if usr.exists():
+		usr_check=usr.first()
+		if usr_check.id==self.instance.pk:
+			return email
+		else:
+		    raise forms.ValidationError('Email Already Taken')
+	else:
+		return email

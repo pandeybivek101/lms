@@ -1,18 +1,19 @@
 {%extends 'operations/index.html'%}
 {% load static %}
+{% load crispy_forms_tags %}
 {% block content %}
 <div class="container-fluid">
   <div class="row">
     <div class="col-sm-8">
       <div class="bg-picture card-box">
-      <h4 class="header-title mt-0 mb-3">Book Detail</h4>
+        <h4 class="header-title mt-0 mb-3">Book Detail</h4>
         <div class="profile-info-name">
           <img src="{{book.books_image.url}}" class="rounded-circle avatar-xl img-thumbnail float-left mr-3" alt="profile-image">
 
           <div class="profile-info-detail overflow-hidden">
             <h4 class="m-0">{{book.books_name}}</h4>
             <p class="text-muted"><i>{{book.catagory}}</i></p>
-            <p class="font-13">Hi {{book.books_name}},has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type.Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature it over 2000 years to popular belief Ipsum is not simplyrandom text.</p>
+            <p class="font-13">Description: N/A</p>
 
           </div>
 
@@ -28,7 +29,7 @@
            <td style="text-align: center;"><b>Image</b></td>
          </tr>
          <tr>
-         <td style="text-align: center;"><img src="{{book.books_image.url}}" height="300" width="300"></td>
+           <td style="text-align: center;"><img src="{{book.books_image.url}}" height="300" width="300"></td>
          </tr>
          <table class='table table-bordered'>
            <p style="text-align: center;"><b>Book Information</b></p>
@@ -93,66 +94,94 @@
 
   </div>
 
- {% if request.user.Role == 'Librarian' %}
-  <div class="col-sm-4">
- 
-    <div class="card-box">
-      <h4 class="header-title mt-0 mb-3">Issued To</h4>
-      <hr>
-      <ul class="list-group mb-0 user-list">
-        {% if issued %}
-        {% for item in issued %}
-        <li class="list-group-item">
-          <a href="#" class="user-list-item">
-            <div class="user avatar-sm float-left mr-2">
-              <img src="{{item.student.profile_pic.url}}" alt="" class="img-fluid rounded-circle">
-            </div>
-            <div class="user-desc">
-              <h5 class="name mt-0 mb-1">{{item.student.get_full_name}}</h5>
-              <p class="desc text-muted mb-0 font-12">{{item.student.username}}</p>
-            </div>
-          </a>
-        </li>
-        {% endfor %}
-        {% else %}
-        <p>Issued to No one</p>
-        {% endif %}
+  {% if request.user.Role == 'Librarian' %}
+  <!-- flash model data-dismiss="modal"-->
 
-      </ul>
+  <div class="modal fade" id="reservebook" tabindex="-1" role="dialog"
+  aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+      <h4 class="modal-title" id="exampleModalScrollableTitle">Reservation Form</h4>
+      </div>
+      <div class="modal-body">
+        <form action="{% url 'reservation' book.id%}" method="POST" class="form-catagory-add1" enctype="multipart/form-data">
+          {% csrf_token %}
+          {{form1|crispy}}
+          <input type="submit" name="submit" class="btn btn-primary col-md-12">
+        </form>
+      </div>
+      <div class="modal-footer">
+        <a href=""><button class="btn btn-secondary">Close</button></a>
+      </div>
     </div>
-
-    <div class="card-box">
-
-      <h4 class="header-title mt-0 mb-3">Notify Requests By</h4>
-      <hr>
-      <ul class="list-group mb-0 user-list">
-        {% if notifyme %}
-        {% for item in notifyme %}
-        <li class="list-group-item">
-          <a href="#" class="user-list-item">
-            <div class="user avatar-sm float-left mr-2">
-              <img src="{{item.student.profile_pic.url}}" alt="" class="img-fluid rounded-circle">
-            </div>
-            <div class="user-desc">
-              <h5 class="name mt-0 mb-1">{{item.student.get_full_name}}</h5>
-              <p class="desc text-muted mb-0 font-12">{{item.student.username}}</p>
-            </div>
-          </a>
-        </li>
-
-        {% endfor %}
-        {% else %}
-        <p>No Notifyme request for this book</p>
-        {% endif %}
-
-      </ul>
-
-    </div>
-    
-
-
   </div>
-  {% endif %}
+</div>
+
+<!-- end flash model -->
+<div class="col-sm-4">
+ <div class="card-box">
+  <h4 class="header-title mt-0 mb-3">Reservation</h4>
+  <a href="" class="text-dark" data-target="#reservebook" data-toggle="modal"><button type="button" class="btn btn-block btn--md btn-primary waves-effect waves-light">Reserve</button></a>
+</div>
+
+<div class="card-box">
+  <h4 class="header-title mt-0 mb-3">Issued To</h4>
+  <hr>
+  <ul class="list-group mb-0 user-list">
+    {% if issued %}
+    {% for item in issued %}
+    <li class="list-group-item">
+      <a href="#" class="user-list-item">
+        <div class="user avatar-sm float-left mr-2">
+          <img src="{{item.student.profile_pic.url}}" alt="" class="img-fluid rounded-circle">
+        </div>
+        <div class="user-desc">
+          <h5 class="name mt-0 mb-1">{{item.student.get_full_name}}</h5>
+          <p class="desc text-muted mb-0 font-12">{{item.student.username}}</p>
+        </div>
+      </a>
+    </li>
+    {% endfor %}
+    {% else %}
+    <p>Issued to No one</p>
+    {% endif %}
+
+  </ul>
+</div>
+
+<div class="card-box">
+
+  <h4 class="header-title mt-0 mb-3">Notify Requests By</h4>
+  <hr>
+  <ul class="list-group mb-0 user-list">
+    {% if notifyme %}
+    {% for item in notifyme %}
+    <li class="list-group-item">
+      <a href="#" class="user-list-item">
+        <div class="user avatar-sm float-left mr-2">
+          <img src="{{item.student.profile_pic.url}}" alt="" class="img-fluid rounded-circle">
+        </div>
+        <div class="user-desc">
+          <h5 class="name mt-0 mb-1">{{item.student.get_full_name}}</h5>
+          <p class="desc text-muted mb-0 font-12">{{item.student.username}}</p>
+        </div>
+      </a>
+    </li>
+
+    {% endfor %}
+    {% else %}
+    <p>No Notifyme request for this book</p>
+    {% endif %}
+
+  </ul>
+
+</div>
+
+
+
+</div>
+{% endif %}
 </div>        
 
 </div>
@@ -160,8 +189,8 @@
 
 
 {% block title %}
-   <title>Book Detail-Library Management System</title>
- {% endblock title %}
+<title>Book Detail-Library Management System</title>
+{% endblock title %}
 
 
 

@@ -5,7 +5,6 @@ from account.models import User
 from django.core.validators import FileExtensionValidator
 
 
-
 class MessageForm(forms.ModelForm):
 	title=forms.CharField(widget=forms.TextInput(
 		attrs={
@@ -51,18 +50,10 @@ class AddBooksForm(forms.ModelForm):
 			return books_name.title()
 
 	def clean_books_price(self):
-		books_price=self.cleaned_data['books_price']
-		if books_price <= 0:
-			raise forms.ValidationError('price cannot be smaller then 0')
-		else:
-			return books_price
+		return validate_quantity(self.cleaned_data['books_price'])
 
 	def clean_books_quantity(self):
-		books_quantity=self.cleaned_data['books_quantity']
-		if books_quantity <= 0:
-			raise forms.ValidationError('Quantity cannot be smaller then 0')
-		else:
-			return books_quantity
+		return validate_quantity(self.cleaned_data['books_quantity'])
 
 	def clean_cover_image(self):
 		img=self.cleaned_data['books_image']
@@ -115,13 +106,18 @@ class IssuebookForm(forms.ModelForm):
 		if not std_qs.exists():
 			raise forms.ValidationError('Student with this Id doesnot exists')
 		else:
+			sets=AdminSettings.objects.first()
 			iss_record=IssueBooks.objects.filter(student=std_qs.first(), 
 				returned=False)
 			iss_fine=IssueBooks.objects.filter(student=std_qs.first(), 
 				returned=False, fine__gt=0)
 			if iss_record.exists():
-				if iss_record.count()>=2:
-					raise forms.ValidationError("Already Issued Two books")
+				if sets:
+					available_quota=sets.book_allowed
+				else:
+					available_quota=2
+				if iss_record.count()>=available_quota:
+					raise forms.ValidationError("Maximum issue quota exceeded")
 				if iss_fine.exists():
 					raise forms.ValidationError('Student Has a Fine Amount to pay')
 				else:
@@ -195,6 +191,43 @@ class AddCatagoryForm(forms.ModelForm):
 			    raise forms.ValidationError('Catagory name aalready exists')
 		else:
 			return catagory.title()
+
+
+class ReserveForm(forms.ModelForm):
+	class Meta:
+		model=User
+		fields=['email', 'contact']
+
+def validate_quantity(data):
+		if data<=0:
+			raise forms.ValidationError('Cannot be smaller then 1')
+		else:
+			return data
+
+class SettingForm(forms.ModelForm):
+	class Meta:
+		model=AdminSettings
+		fields=['book_allowed', 'issue_days', 'ebook_allowed_days', 'fine_amount']
+
+
+	def clean_book_allowed(self):
+		return validate_quantity(self.cleaned_data['book_allowed'])	
+
+	def clean_issue_days(self):
+		return validate_quantity(self.cleaned_data['issue_days'])
+
+	def clean_ebook_allowed_days(self):
+		return validate_quantity(self.cleaned_data['ebook_allowed_days'])
+
+	def clean_fine_amount(self):
+		return validate_quantity(self.cleaned_data['fine_amount'])
+
+
+			
+
+		
+
+
 
 			
 

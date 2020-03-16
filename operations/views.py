@@ -174,9 +174,10 @@ class DeleteBook(LoginRequiredMixin, DeleteView):
 
 @method_decorator(role_required(allowed_roles=['Librarian', 'Admin']), 
     name='dispatch')
-class EditBook(LoginRequiredMixin, UpdateView):
+class EditBook(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = AddBooks
     template_name = 'operations/updatebooks.html'
+    success_message = 'Books Updated successfully!!!!'
     form_class=AddBooksForm
 
     def form_valid(self, form):
@@ -275,9 +276,14 @@ def IssueBook(request):
 def IssueBookconfirm(request):
     studentinfo=User.objects.get(id=request.session['issue_std_id'])
     bookinfo=AddBooks.objects.get(id=request.session['issue_book_id'])
+    sets=AdminSettings.objects.first()
+    if sets:
+        time=sets.issue_days
+    else:
+        time=30
     if request.method=="POST":
         return_date=datetime.datetime.utcnow().replace(
-            tzinfo=pytz.UTC) + datetime.timedelta(days=30)
+            tzinfo=pytz.UTC) + datetime.timedelta(days=time)
         mdl=IssueBooks.objects.create(
             student=studentinfo,
             book=bookinfo,
@@ -342,6 +348,7 @@ def ReturnBooks(request, pk):
     return render(request, 'operations/return_book.html', 
         {'rtnbook':rtnbook}
         )
+
 
 @login_required
 @role_required(allowed_roles=['Librarian', 'Admin'])
@@ -424,6 +431,11 @@ def ViewEbookRequest(request):
 @role_required(allowed_roles=['Librarian', 'Admin'])
 def View_Ebook_Request_allow(request, id):
     req=EbookRequest.objects.get(id=id)
+    sets=AdminSettings.objects.first()
+    if sets:
+        time=sets.ebook_allowed_days
+    else:
+        time=14
     ebook_record=Ebooks.objects.get(id=req.ebook.id)
     history=EbookRequestHistory.objects.create(
         ebook=ebook_record, 
@@ -431,7 +443,7 @@ def View_Ebook_Request_allow(request, id):
         requested_by=req.requested_by,
         requested_date=req.requested_date,
         action_date=datetime.datetime.utcnow().replace(tzinfo=pytz.UTC),
-        readable_upto=datetime.datetime.utcnow().replace(tzinfo=pytz.UTC) + datetime.timedelta(days=7),
+        readable_upto=datetime.datetime.utcnow().replace(tzinfo=pytz.UTC) + datetime.timedelta(days=time),
         readable=True
         )
     history.save()
@@ -573,7 +585,7 @@ def StdDetail(request, id):
             })
 
 
-class DetailBook(LoginRequiredMixin, DetailView):
+'''class DetailBook(LoginRequiredMixin, DetailView):
     template_name='operations/book-detail.html'
     model=AddBooks
 
@@ -581,6 +593,7 @@ class DetailBook(LoginRequiredMixin, DetailView):
         context = super(DetailBook, self).get_context_data(*args, 
             **kwargs)
         book=AddBooks.objects.get(pk=self.kwargs.get('pk'))
+        form1=ReserveForm()
         issued=IssueBooks.objects.filter(book=book, 
             returned=False)
         notifyme=NotifyMeModel.objects.filter(book=book, 
@@ -588,9 +601,66 @@ class DetailBook(LoginRequiredMixin, DetailView):
         context.update({
             'book':book,
             'issued':issued,
-            'notifyme':notifyme
+            'notifyme':notifyme,
+            'form1':form1,
             })
-        return context
+        return context'''
+
+@login_required
+def DetailBook(request, id):
+    book=AddBooks.objects.get(id=id)
+    issued=IssueBooks.objects.filter(book=book, 
+            returned=False)
+    notifyme=NotifyMeModel.objects.filter(book=book, 
+        notified=False, cancelled=False)
+    form1=ReserveForm()
+    '''if request.method=="POST":
+        form1=ReserveForm(request.POST)
+        email=form1.cleaned_data['email']
+        contact=form1.cleaned_data['contact']
+        print(email)
+        print(contact)
+        return redirect('home')
+    else:
+        form1=ReserveForm()'''
+    context={
+            'book':book,
+            'issued':issued,
+            'notifyme':notifyme,
+            'form1':form1,
+            }
+    template_name='operations/book-detail.html'
+    return render(request, template_name, context)
+
+
+@login_required
+@role_required(allowed_roles=['Librarian', 'Admin'])
+def Reservationbook(request, id):
+    form1=ReserveForm(request.POST)
+    template_name='operations/book-detail.html'
+    if request.method=='POST':
+        if form1.is_valid():
+            book=AddBooks.objects.get(id=id)
+            email=form1.cleaned_data['email']
+            contact=form1.cleaned_data['contact']
+            student=User.objects.filter(email=email, contact=contact).first()
+            if book.available_quantity<1:
+                if student:
+                    already_reserved=NotifyMeModel.objects.filter(student=student, 
+                        book=book, notified=False)
+                    if already_reserved:
+                        messages.error(request, f'Reservation Already performed')
+                    else:
+                        NotifyMeModel.objects.get_or_create(student=student, book=book)
+                        messages.success(request, f'Book Reserved Successfully')
+                else:
+                    messages.error(request, f'Failed to Reserve unregistered user')
+            else:
+                messages.error(request, f'Book is Available no need to perform reservation')
+            return redirect("/displaybooks/{}/detail".format(id))
+    else:
+        form1=ReserveForm()
+    return render(request, template_name, {'form1':form1})
 
 
 class DetailEBook(LoginRequiredMixin, DetailView):
@@ -893,17 +963,17 @@ def load_courses(request):
     return render(request, 'operations/course_dropdown.html', 
         {'courses': courses})
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+@login_required
+@role_required(allowed_roles=['Admin'])
+def SettingLMS(request):
+    sets=AdminSettings.objects.first()
+    if request.method=="POST":
+        form=SettingForm(request.POST, instance=sets)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f'Settings Updated Successfully')
+            return redirect('settings')
+    else:
+        form=SettingForm(instance=sets)
+    return render(request, 'operations/settings.html', 
+        {'sets':sets, 'form':form})

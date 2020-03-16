@@ -52,18 +52,23 @@ class IssueBooks(models.Model):
 	renewed=models.BooleanField(default=False)
 	renewed_date=models.DateTimeField(blank=True, null=True)
 	renewed_by=models.ForeignKey(settings.AUTH_USER_MODEL, 
-		on_delete=models.CASCADE, null=True, related_name='renewser') 
+		on_delete=models.CASCADE, null=True, related_name='renewser', blank=True) 
 
 
 	def __init__(self, *args ,**kwargs):
 		super(IssueBooks ,self).__init__(*args, **kwargs)
 		current_time=datetime.datetime.utcnow().replace(tzinfo=pytz.UTC)
+		sets=AdminSettings.objects.first()
+		if sets:
+			fine=sets.fine_amount
+		else:
+			fine=200
 		if self.return_date and not self.returned_date:
 		    if self.return_date < current_time:
 		    	diff= current_time - self.return_date
 		    	int_diff=int(diff.days)
 		    	ratio=int_diff//30
-		    	self.fine=(ratio+1)*200
+		    	self.fine=(ratio+1)*fine
 
 
 class Ebooks(models.Model):
@@ -124,4 +129,12 @@ class NotifyMeModel(models.Model):
 	notified=models.BooleanField(default=False)
 	notified_at=models.DateTimeField(blank=True, null=True)
 	cancelled=models.BooleanField(default=False)
+
+class AdminSettings(models.Model):
+	book_allowed=models.IntegerField(default=30)
+	issue_days=models.IntegerField(default=30)
+	ebook_allowed_days=models.IntegerField(default=14)
+	fine_amount=models.IntegerField(default=200)
+
+
 

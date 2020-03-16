@@ -19,7 +19,6 @@ from operations import views
 from operations.views import *
 from django.conf.urls import handler404, handler500
 
-
 urlpatterns = [
     path('', views.Home, name='home'),
     path('scan/', views.Scan, name='scan'),
@@ -83,8 +82,12 @@ urlpatterns = [
     path('displaybooks/<str:id>/book-barcode', views.BookprintBarCode, name='book-barcode'),
     path('displaybooks/<int:pk>/delete', DeleteBook.as_view(), name='deletebook'),
     path('displaybooks/<int:pk>/edit', EditBook.as_view(), name='editbook'),
-    path('displaybooks/<int:pk>/detail', DetailBook.as_view(), name='detail-book'),
+    #path('displaybooks/<int:pk>/detail', DetailBook.as_view(), name='detail-book'),
     path('displaybooks/<int:id>/notify', views.NotifyMe, name='notifyme'),
+    path('displaybooks/<int:id>/detail', 
+        views.DetailBook, name='detail-book'),
+    path('displaybooks/<int:id>/detail/reservation', 
+        views.Reservationbook, name='reservation'),
 
     path('my-issued-books/', views.myissuedbook, name='myissuedbook'),
 
@@ -105,5 +108,6 @@ urlpatterns = [
     path('view-ebook-request/<int:id>/allow', views.View_Ebook_Request_allow, name='allow'),
     path('view-ebook-request/<int:id>/deny', views.View_Ebook_Request_deny, name='deny'),
     path('readable-ebook/', views.View_my_readable_book, name='readable-book'),
+    path('settings/', views.SettingLMS, name='settings'),
   
 ]

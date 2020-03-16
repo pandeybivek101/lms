@@ -1,0 +1,54 @@
+{%extends 'operations/index.html'%}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content%}
+<div class="container-fluid">
+{% if sets %}
+
+	<div class="row">
+		<div class="col-xl-12">
+			<div class="card-box">
+
+				<h1 class="header-title mt-0 mb-3">Settings</h1>
+
+				<div class="col-xl-4">
+					<div class="text-center card-box">
+						<div>
+						<h1 class="header-title mt-0 mb-3">Record Set</h1>
+						<hr>
+							<div class="text-left">
+								<p class="text-muted font-13"><strong>Total Book Alloweded:</strong> <span class="ml-2">{{sets.book_allowed}}</span></p>
+
+								<p class="text-muted font-13"><strong>Due Date for book return:</strong><span class="ml-2">{{sets.issue_days}}</span></p>
+
+								<p class="text-muted font-13"><strong>Ebook Readable Days :</strong> <span class="ml-2">{{sets.ebook_allowed_days}}</span></p>
+
+								<p class="text-muted font-13"><strong>Fine Amount:</strong> <span class="ml-2">{{sets.fine_amount}}</span></p>
+							</div>
+
+						</div>
+
+					</div>
+
+				</div>
+				<h1 class="header-title mt-0 mb-3">Update Settings</h1>
+				<hr>
+				<form action="{% url 'settings' %}" method="POST" class="col-lg-8" enctype="multipart/form-data">
+					{% csrf_token %}
+					{{form|crispy}}
+					<button class="btn btn-info col-md-12">Update</button>
+				</form>
+
+
+			</div> 
+		</div>
+		{% endif %}
+	</div>  
+	{%endblock%}
+
+	{% block title %}
+	<title>Settings-Library Management System</title>
+	{% endblock title %}
+
+

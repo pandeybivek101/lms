@@ -11,7 +11,7 @@
             <div class="profile-info-detail overflow-hidden">
               <h4 class="m-0">{{ebook.name}}</h4>
               <p class="text-muted"><i>{{ebook.catagory}}</i></p>
-              <p class="font-13">Hi {{ebook.name}},has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type.Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature it over 2000 years to popular belief Ipsum is not simplyrandom text.</p>
+              <p class="font-13">Description: N/A</p>
 
             </div>
 
@@ -59,7 +59,7 @@
        <div class="col-sm-4">
 
         <div class="card-box">
-          <h4 class="header-title mt-0 mb-3">Issued To</h4>
+          <h4 class="header-title mt-0 mb-3">Readable To</h4>
           <hr>
           <ul class="list-group mb-0 user-list">
             {% if allowed %}
@@ -77,7 +77,7 @@
             </li>
             {% endfor %}
             {% else %}
-            <p>Allowed to No one</p>
+            <p>Readable to No one</p>
             {% endif %}
 
           </ul>

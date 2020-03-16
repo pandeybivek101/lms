@@ -36,4 +36,5 @@ class EBRHAdmin(admin.ModelAdmin):
 admin.site.register(EbookRequestHistory, EBRHAdmin)
 
 admin.site.register(Catagory)
+admin.site.register(AdminSettings)
 
